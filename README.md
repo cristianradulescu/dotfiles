@@ -8,6 +8,12 @@ Terminal Font: MesloLGS NF 11
 
 Setup
 -----
+MesloLGS NF font:
+https://raw.githubusercontent.com/romkatv/powerlevel10k-media/master/MesloLGS%20NF%20Regular.ttf
+https://raw.githubusercontent.com/romkatv/powerlevel10k-media/master/MesloLGS%20NF%20Bold.ttf
+https://raw.githubusercontent.com/romkatv/powerlevel10k-media/master/MesloLGS%20NF%20Italic.ttf
+https://raw.githubusercontent.com/romkatv/powerlevel10k-media/master/MesloLGS%20NF%20Bold%20Italic.ttf
+
 Dotfiles
 git clone https://github.com/cristianradulescu/dotfiles
 
