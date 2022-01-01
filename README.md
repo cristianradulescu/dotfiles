@@ -36,7 +36,7 @@ touch "$HOME/.cache/zshhistory"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 
 
-cp -v dotfiles/.local/share/fonts/* .local/share/fonts/ && fc-cache -rf
+mkdir -p .local/share/fonts/ && cp -v dotfiles/.local/share/fonts/* .local/share/fonts/ && fc-cache -rfv
 
 ln -s dotfiles/.zshrc .zshrc
 ln -s dotfiles/.p10k.zsh .p10k.zsh
@@ -44,14 +44,14 @@ ln -s dotfiles/.p10k.zsh .p10k.zsh
 
 Gnome Shell setup:
 ```sh
-cp -v dotfiles/.local/share/backgrounds/2021-12-31-15-24-13-mountain_silhouette.jpg .local/share/backgrounds/2021-12-31-15-24-13-mountain_silhouette.jpg
+mkdir -p .local/share/backgrounds/ && cp -v dotfiles/.local/share/backgrounds/2021-12-31-15-24-13-mountain_silhouette.jpg .local/share/backgrounds/2021-12-31-15-24-13-mountain_silhouette.jpg
 
 cat dotfiles/dconf/org_gnome.conf | dconf load /org/gnome/
 ```
 
 Termux setup:
 ```sh
-cd dotfiles
-
 cat dotfiles/dconf/com_gexperts_Tilix.conf | sed "s|placeholder_uuid|$(gsettings get com.gexperts.Tilix.ProfilesList default | sed "s#'##g")|g" | dconf load /com/gexperts/Tilix/
 ```
+
+!!! Reboot !!!
