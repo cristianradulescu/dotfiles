@@ -21,6 +21,7 @@ sudo apt install gnome-shell-extensions gnome-shell-extension-weather gnome-shel
 ZSH & dependencies:
 ```sh
 sudo apt install zsh zsh-syntax-highlighting zsh-autosuggestions autojump
+
 chsh -s /bin/zsh
 ```
 Clone dotfiles repo:
