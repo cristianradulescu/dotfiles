@@ -57,4 +57,5 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Tilix VTE conf (https://gnunn1.github.io/tilix-web/manual/vteconfig/)
-if [ $TILIX_ID ] || [ $VTE_VERSION ]; then source /etc/profile.d/vte.sh fi
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then source /etc/profile.d/vte-*.sh; fi
+
