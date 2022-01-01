@@ -52,6 +52,16 @@ cat dotfiles/dconf/org_gnome.conf | dconf load /org/gnome/
 Termux setup:
 ```sh
 cat dotfiles/dconf/com_gexperts_Tilix.conf | sed "s|placeholder_uuid|$(gsettings get com.gexperts.Tilix.ProfilesList default | sed "s#'##g")|g" | dconf load /com/gexperts/Tilix/
+
+# set as default terminal
+sudo update-alternatives --set x-terminal-emulator /usr/bin/tilix.wrapper
+```
+
+Google Chrome
+```sh
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+rm -v google-chrome-stable_current_amd64.deb
 ```
 
 !!! Reboot !!!
