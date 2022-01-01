@@ -55,3 +55,6 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Tilix VTE conf (https://gnunn1.github.io/tilix-web/manual/vteconfig/)
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then source /etc/profile.d/vte.sh fi
