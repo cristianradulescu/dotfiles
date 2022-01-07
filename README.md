@@ -10,7 +10,7 @@ Setup
 -----
 Common tools:
 ```sh
-sudo apt install git curl mc vim tilix lm-sensors
+sudo apt install git curl mc vim tilix lm-sensors copyq flameshot
 ```
 
 Gnome Shell extensions:
@@ -62,6 +62,12 @@ Google Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
 rm -v google-chrome-stable_current_amd64.deb
+```
+
+CopyQ
+```sh
+sudo apt install copyq
+mkdir -p .config/copyq && cp -rv dotfiles/.config/copyq/* .config/copyq/
 ```
 
 !!! Reboot !!!
