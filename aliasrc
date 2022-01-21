@@ -1,11 +1,9 @@
 export EDITOR=vim
 
 alias ls='ls --color=always'
-alias ll='ls -al --color=always'
+alias ll='ls -alh --color=always'
 
 alias zshrc='${=EDITOR} ~/.zshrc' # Quick access to the ~/.zshrc file
 
 alias grep='grep --color'
-alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
-
 alias ip='ip -c'
