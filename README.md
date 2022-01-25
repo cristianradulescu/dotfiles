@@ -15,7 +15,7 @@ sudo apt install git curl mc vim tilix lm-sensors copyq flameshot
 
 Gnome Shell extensions:
 ```sh
-sudo apt install gnome-shell-extensions gnome-shell-extension-weather gnome-shell-extension-sound-device-chooser gnome-shell-extension-system-monitor
+sudo apt install gnome-shell-extensions gnome-shell-extension-weather gnome-shell-extension-sound-device-chooser gnome-shell-extension-system-monitor gnome-shell-extension-no-annoyance
 ```
 
 ZSH & dependencies:
