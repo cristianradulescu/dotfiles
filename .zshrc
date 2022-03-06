@@ -59,6 +59,11 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 # Tilix VTE conf (https://gnunn1.github.io/tilix-web/manual/vteconfig/)
 if [ $TILIX_ID ] || [ $VTE_VERSION ]; then source /etc/profile.d/vte-*.sh; fi
 
+# Custom binaries
+PATH=$PATH:/home/cristian-radulescu/bin
+# pip 
+PATH=$PATH:/home/cristian-radulescu/.local/bin
+
 # Work profile (sensitive data that cannot be commited)
 [[ ! -f ~/.zshrc_work ]] || source ~/.zshrc_work
 
