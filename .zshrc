@@ -49,9 +49,11 @@ source /etc/zsh_command_not_found # suggest installation of unknown commands
 if [ $TILIX_ID ] || [ $VTE_VERSION ]; then source /etc/profile.d/vte-*.sh; fi
 
 # Custom binaries
-PATH=$PATH:/home/cristian-radulescu/bin
+PATH=$PATH:/home/$USER/bin
+PATH=$PATH:/home/$USER/Apps/
+
 # pip 
-PATH=$PATH:/home/cristian-radulescu/.local/bin
+PATH=$PATH:/home/$USER/.local/bin
 
 # Work profile (sensitive data that cannot be commited)
 [[ ! -f ~/.zshrc_work ]] || source ~/.zshrc_work
