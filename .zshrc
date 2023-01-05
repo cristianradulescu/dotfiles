@@ -36,11 +36,11 @@ bindkey '^ ' autosuggest-accept
 # Load aliases and shortcuts if existent.
 [ -f "$HOME/dotfiles/aliasrc" ] && source "$HOME/dotfiles/aliasrc"
 
-# Load ; should be last.
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 source /usr/share/autojump/autojump.zsh 2>/dev/null
 source ~/powerlevel10k/powerlevel10k.zsh-theme
+source /etc/zsh_command_not_found # suggest installation of unknown commands
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
