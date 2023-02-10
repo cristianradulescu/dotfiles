@@ -13,11 +13,13 @@ endif
 " Plugins
 call plug#begin('~/.vim/plugged')
 Plug 'joshdick/onedark.vim'
+Plug 'tomasiser/vim-code-dark'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
   let g:airline_poweline_fonts=1
-  let g:airline_theme='transparent'
+  "let g:airline_theme='onedark'
+  let g:airline_theme='codedark'
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
   augroup nerd_loader
@@ -49,12 +51,15 @@ Plug 'honza/dockerfile.vim'
 call plug#end()
 
 " Theme
-colorscheme onedark
+set t_Co=256
+"colorscheme onedark
+colorscheme codedark
 syntax on
 set termguicolors
 highlight Normal guibg=NONE ctermbg=NONE
-highlight LineNr ctermfg=DarkGrey
-highlight StatusLine guibg=NONE ctermbg=NONE
+highlight LineNr guibg=NONE ctermfg=DarkGrey
+"highlight StatusLine guibg=NONE ctermbg=NONE
+highlight CursorLine guibg=NONE ctermbg=NONE
 
 " General
 set nu "Show line numbers
@@ -62,6 +67,7 @@ set nowrap " No word wrap
 set shiftwidth=2 " Nb of autoindent spaces
 set expandtab " Spaces instead of tabs
 set softtabstop=2 " Nb of spaces per tab
+set cursorline
 
 " Advanced
 set ruler " Show row / col info
