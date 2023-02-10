@@ -70,4 +70,11 @@ sudo apt install copyq
 mkdir -p .config/copyq && cp -rv dotfiles/.config/copyq/* .config/copyq/
 ```
 
+TMUX
+Install plugin manager
+```
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+ln -s dotfiles/.tmux.conf .tmux.conf
+```
+
 !!! Reboot !!!

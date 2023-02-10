@@ -17,6 +17,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
   let g:airline_poweline_fonts=1
+  let g:airline_theme='transparent'
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
   augroup nerd_loader
@@ -51,12 +52,9 @@ call plug#end()
 colorscheme onedark
 syntax on
 set termguicolors
-highlight Normal ctermbg=None
+highlight Normal guibg=NONE ctermbg=NONE
 highlight LineNr ctermfg=DarkGrey
-
-" Transparent background for editor and status line
-hi Normal guibg=NONE ctermbg=NONE
-hi StatusLine ctermbg=NONE guibg=NONE
+highlight StatusLine guibg=NONE ctermbg=NONE
 
 " General
 set nu "Show line numbers
