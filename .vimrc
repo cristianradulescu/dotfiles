@@ -54,6 +54,10 @@ set termguicolors
 highlight Normal ctermbg=None
 highlight LineNr ctermfg=DarkGrey
 
+" Transparent background for editor and status line
+hi Normal guibg=NONE ctermbg=NONE
+hi StatusLine ctermbg=NONE guibg=NONE
+
 " General
 set nu "Show line numbers
 set nowrap " No word wrap
