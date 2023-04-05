@@ -50,7 +50,8 @@ if [ $TILIX_ID ] || [ $VTE_VERSION ]; then source /etc/profile.d/vte-*.sh; fi
 
 # Custom binaries
 PATH=$PATH:/home/$USER/bin
-PATH=$PATH:/home/$USER/Apps/
+PATH=$PATH:/home/$USER/Apps
+PATH=$PATH:/home/$USER/Development/tools/vendor/bin # Tools installed with composer
 
 # pip 
 PATH=$PATH:/home/$USER/.local/bin
