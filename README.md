@@ -3,19 +3,14 @@ My dotfile setup
 
 ```
 Shell: zsh
-Terminal Font: MesloLGS NF 11 
+Terminal Font: MesloLGS NF 
 ```
 
 Setup
 -----
 Common tools:
 ```sh
-sudo apt install git curl mc vim tilix lm-sensors copyq flameshot
-```
-
-Gnome Shell extensions:
-```sh
-sudo apt install gnome-shell-extensions gnome-shell-extension-weather gnome-shell-extension-sound-device-chooser gnome-shell-extension-system-monitor gnome-shell-extension-no-annoyance
+sudo apt install git curl mc vim tilix lm-sensors copyq flameshot xclip
 ```
 
 ZSH & dependencies:
@@ -34,7 +29,6 @@ Setup Powerlevel10k
 touch "$HOME/.cache/zshhistory"
 
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-
 
 mkdir -p .local/share/fonts/ && cp -v dotfiles/.local/share/fonts/* .local/share/fonts/ && fc-cache -rfv
 
@@ -72,9 +66,16 @@ mkdir -p .config/copyq && cp -rv dotfiles/.config/copyq/* .config/copyq/
 
 TMUX
 Install plugin manager
-```
+```sh
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ln -s dotfiles/.tmux.conf .tmux.conf
+```
+
+Neovim
+Snap version is newer
+```sh
+sudo snap install neovim
+sudo apt install ripgrep
 ```
 
 !!! Reboot !!!
