@@ -52,8 +52,8 @@ call plug#end()
 
 " Theme
 set t_Co=256
-"colorscheme onedark
-colorscheme codedark
+colorscheme onedark
+"colorscheme codedark
 syntax on
 set termguicolors
 highlight Normal guibg=NONE ctermbg=NONE
