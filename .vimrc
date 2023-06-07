@@ -59,7 +59,7 @@ set termguicolors
 highlight Normal guibg=NONE ctermbg=NONE
 highlight LineNr guibg=NONE ctermfg=DarkGrey
 "highlight StatusLine guibg=NONE ctermbg=NONE
-highlight CursorLine guibg=NONE ctermbg=NONE
+highlight CursorLine ctermbg=DarkGrey ctermbg=NONE
 
 " General
 set nu "Show line numbers
@@ -67,7 +67,8 @@ set nowrap " No word wrap
 set shiftwidth=2 " Nb of autoindent spaces
 set expandtab " Spaces instead of tabs
 set softtabstop=2 " Nb of spaces per tab
-set cursorline
+set cursorline " Highlight current line
+set relativenumber " Count line number starting from current line
 
 " Advanced
 set ruler " Show row / col info
