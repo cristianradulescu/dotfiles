@@ -29,7 +29,8 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
-  { -- LSP Configuration & Plugins
+  {
+    -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
@@ -45,15 +46,21 @@ require('lazy').setup({
     },
   },
 
-	{ -- Autocompletion
+	{
+    -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip'
+    },
   },
 
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim', opts = {} },
 
-  { -- Adds git releated signs to the gutter, as well as utilities for managing changes
+  {
+    -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
       -- See `:help gitsigns.txt`
@@ -67,16 +74,21 @@ require('lazy').setup({
     },
   },
 
-  { -- Theme
+  {
+    -- Theme
     'navarasu/onedark.nvim',
     priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
+    opts = {
+        -- style = 'darker',
+        transparent = true,
+        lualine = {
+          transparent = true,
+        }
+     },
    },
 
-
    {
+    -- Bottom info line
     'nvim-lualine/lualine.nvim',
     opts = {
       options = {
@@ -88,12 +100,13 @@ require('lazy').setup({
     },
   },
 
-  { -- Add indentation guides even on blank lines
+  {
+    -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
     opts = {
-      char = '┊',
+      char = '┆',
       show_trailing_blankline_indent = false,
     },
   },
@@ -102,7 +115,7 @@ require('lazy').setup({
   { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
-  { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
+  { 'nvim-telescope/telescope.nvim', version = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built.
   -- Only load if `make` is available. Make sure you have the system
@@ -117,13 +130,17 @@ require('lazy').setup({
     end,
   },
 
-  { -- Highlight, edit, and navigate code
+  {
+    -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ":TSUpdate",
   },
+
+  -- Show the context of the currently visible buffer contents
+  {'nvim-treesitter/nvim-treesitter-context'},
 
   { -- Neo tree
     'nvim-neo-tree/neo-tree.nvim',
@@ -140,6 +157,15 @@ require('lazy').setup({
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
+
+-- Transparent bg
+vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+--
+-- Color scheme
+-- vim.o.background = 'dark'
+vim.cmd.colorscheme 'onedark'
+--vim.cmd.colorscheme 'atrotheme'
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -181,12 +207,11 @@ vim.o.termguicolors = true
 
 vim.o.shiftwidth = 2 -- Nb of autoindent spaces
 vim.o.softtabstop = 2 -- Nb of spaces per tab
-vim.o.nowrap = true -- No word wrap
+vim.o.wrap = false -- No word wrap
 vim.o.expandtab = true --Spaces instead of tabs
 vim.o.cursorline = true -- Highlight cursor line
 vim.o.relativenumber = true
 vim.o.paste = true -- Don't break indentation on paste
-
 
 -- [[ Basic Keymaps ]]
 
@@ -237,7 +262,7 @@ vim.keymap.set('n', '<leader>/', function()
 end, { desc = '[/] Fuzzily search in current buffer' })
 
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
--- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+-- Search in all files including hidden and ignored by Git
 vim.keymap.set('n', '<leader>sf', function()
   require('telescope.builtin').find_files({ hidden = true, no_ignore = true })
 end, { desc = '[S]earch [F]iles' })
@@ -253,10 +278,29 @@ vim.keymap.set('n', '<leader>sds', require('telescope.builtin').lsp_document_sym
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim', 'php', 'markdown', 'javascript', 'json', 'bash', 'dockerfile', 'gitignore', 'gitattributes', 'html', 'make', 'css', 'scss', 'twig', 'yaml' },
+  ensure_installed = {
+    'lua',
+    'python',
+    'php',
+    'markdown',
+    'javascript',
+    'json',
+    'bash',
+    'dockerfile',
+    'gitignore',
+    'gitattributes',
+    'html',
+    'css',
+    'scss',
+    'twig',
+    'yaml'
+  },
+  sync_install = true,
+  ignore_install = {},
+  modules = {},
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = false,
+  auto_install = true,
 
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
@@ -343,7 +387,11 @@ local on_attach = function(_, bufnr)
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+  -- Hiding lines because we have the preview panel
+  nmap('gr', function()
+      require('telescope.builtin').lsp_references({ show_line=false })
+    end,
+    '[G]oto [R]eferences')
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
@@ -373,10 +421,7 @@ end
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
-  -- clangd = {},
-  -- gopls = {},
   pyright = {},
-  -- rust_analyzer = {},
   tsserver = {},
 
   lua_ls = {
@@ -387,7 +432,7 @@ local servers = {
   },
 
   phpactor = {},
-  intelephense = {},
+  -- intelephense = {},
   html = {},
   cssls = {},
   docker_compose_language_service = {},
@@ -395,7 +440,6 @@ local servers = {
   jsonls = {},
   marksman = {},
   sqlls = {},
-  -- yamlls = {},
   bashls = {}
 }
 
@@ -419,14 +463,20 @@ mason_lspconfig.setup_handlers {
       capabilities = capabilities,
       on_attach = on_attach,
       settings = servers[server_name],
+      filetypes = (servers[server_name] or {}).filetypes,
     }
   end,
+  -- ['phpactor'] = function()
+  --     require('lspconfig')['phpactor'].setup {
+  --       cmd = { 'phpactor', 'language-server', '-vvv' }
+  --     }
+  -- end,
 }
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
-
+require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
