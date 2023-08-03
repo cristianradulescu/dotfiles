@@ -71,6 +71,13 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      current_line_blame_formatter = '<committer> <committer_mail>, <author_time:%Y-%m-%d %H:%M> - <summary>',
+      on_attach = function(bufnr)
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
+        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+        vim.keymap.set('n', '<leader>gbt', require('gitsigns').toggle_current_line_blame, { desc = '[G]it [B]lame [T]oggle' })
+      end,
     },
   },
 
@@ -209,7 +216,7 @@ vim.o.shiftwidth = 2 -- Nb of autoindent spaces
 vim.o.softtabstop = 2 -- Nb of spaces per tab
 vim.o.wrap = false -- No word wrap
 vim.o.expandtab = true --Spaces instead of tabs
-vim.o.cursorline = true -- Highlight cursor line
+-- vim.o.cursorline = true -- Highlight cursor line
 vim.o.relativenumber = true
 vim.o.paste = true -- Don't break indentation on paste
 
