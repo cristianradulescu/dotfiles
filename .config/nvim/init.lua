@@ -56,6 +56,21 @@ require('lazy').setup({
     },
   },
 
+  {
+    -- Better diagnostics
+    'folke/trouble.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      on_attach = {
+        vim.keymap.set('n', '<leader>q', function()
+            require('trouble').open('document_diagnostics')
+          end,
+          { desc = 'Open diagnostics list' }
+        )
+      }
+    },
+  },
+
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim', opts = {} },
 
@@ -220,6 +235,9 @@ vim.o.expandtab = true --Spaces instead of tabs
 vim.o.relativenumber = true
 vim.o.paste = true -- Don't break indentation on paste
 
+-- Right vertical line
+vim.o.colorcolumn = '120'
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -370,7 +388,8 @@ require('nvim-treesitter.configs').setup {
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
+-- Replaced this with Trouble.nvim
+-- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 
 
 -- LSP settings.
