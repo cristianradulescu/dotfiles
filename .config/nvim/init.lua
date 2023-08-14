@@ -46,7 +46,7 @@ require('lazy').setup({
     },
   },
 
-	{
+  {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
@@ -63,8 +63,8 @@ require('lazy').setup({
     opts = {
       on_attach = {
         vim.keymap.set('n', '<leader>q', function()
-            require('trouble').open('document_diagnostics')
-          end,
+          require('trouble').open('document_diagnostics')
+        end,
           { desc = 'Open diagnostics list' }
         )
       }
@@ -101,15 +101,15 @@ require('lazy').setup({
     'navarasu/onedark.nvim',
     priority = 1000,
     opts = {
-        -- style = 'darker',
+      -- style = 'darker',
+      transparent = true,
+      lualine = {
         transparent = true,
-        lualine = {
-          transparent = true,
-        }
-     },
-   },
+      }
+    },
+  },
 
-   {
+  {
     -- Bottom info line
     'nvim-lualine/lualine.nvim',
     opts = {
@@ -420,8 +420,8 @@ local on_attach = function(_, bufnr)
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   -- Hiding lines because we have the preview panel
   nmap('gr', function()
-      require('telescope.builtin').lsp_references({ show_line=false })
-    end,
+    require('telescope.builtin').lsp_references({ show_line=false })
+  end,
     '[G]oto [R]eferences')
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
