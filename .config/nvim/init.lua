@@ -179,6 +179,15 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
       'nvim-tree/nvim-web-devicons',
       'MunifTanjim/nui.nvim'
+    },
+    opts = {
+      filesystem = {
+        filtered_items = {
+          visible = true,
+          show_hidden_count = true,
+          hide_dotfiles = false,
+        }
+      }
     }
   }
 
@@ -195,7 +204,6 @@ vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 -- Color scheme
 -- vim.o.background = 'dark'
 vim.cmd.colorscheme 'onedark'
---vim.cmd.colorscheme 'atrotheme'
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -304,6 +312,7 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]resume' })
 vim.keymap.set('n', '<leader>sds', require('telescope.builtin').lsp_document_symbols, { desc = '[S]earch [D]oc [S]ymbols' })
 
 
