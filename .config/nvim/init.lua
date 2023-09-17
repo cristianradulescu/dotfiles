@@ -91,10 +91,24 @@ require('lazy').setup({
       },
       current_line_blame_formatter = '<committer> <committer_mail>, <author_time:%Y-%m-%d %H:%M> - <summary>',
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+        -- vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        -- vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
+        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[H]unk [P]review' })
         vim.keymap.set('n', '<leader>gbt', require('gitsigns').toggle_current_line_blame, { desc = '[G]it [B]lame [T]oggle' })
+
+        -- don't override the built-in and fugitive keymaps
+        local gs = package.loaded.gitsigns
+        vim.keymap.set({'n', 'v'}, ']c', function()
+          if vim.wo.diff then return ']c' end
+          vim.schedule(function() gs.next_hunk() end)
+          return '<Ignore>'
+        end, {expr=true, buffer = bufnr, desc = "Jump to next hunk"})
+        vim.keymap.set({'n', 'v'}, '[c', function()
+          if vim.wo.diff then return '[c' end
+          vim.schedule(function() gs.prev_hunk() end)
+          return '<Ignore>'
+        end, {expr=true, buffer = bufnr, desc = "Jump to previous hunk"})
+
       end,
     },
   },
@@ -113,12 +127,19 @@ require('lazy').setup({
   },
 
   {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    priority = 1000,
+  },
+
+  {
     -- Bottom info line
     'nvim-lualine/lualine.nvim',
     opts = {
       options = {
         icons_enabled = true,
-        theme = 'onedark',
+        -- theme = 'onedark',
+        theme = 'catppuccin',
         component_separators = '|',
         section_separators = '',
       },
@@ -198,12 +219,13 @@ require('lazy').setup({
 -- See `:help vim.o`
 
 -- Transparent bg
-vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
---
+-- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+-- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+-- --
 -- Color scheme
 -- vim.o.background = 'dark'
-vim.cmd.colorscheme 'onedark'
+--[[ vim.cmd.colorscheme 'onedark' ]]
+vim.cmd.colorscheme 'catppuccin'
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -435,7 +457,8 @@ local on_attach = function(_, bufnr)
     require('telescope.builtin').lsp_references({ show_line=false })
   end,
     '[G]oto [R]eferences')
-  nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+  -- nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+  nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
