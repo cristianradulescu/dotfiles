@@ -45,6 +45,9 @@ cat dotfiles/dconf/org_gnome.conf | dconf load /org/gnome/
 
 Kitty setup:
 ```sh
+# Change theme (if necessary)
+kitty +kitten themes --reload-in=all Catppuccin-Mocha
+
 # set as default terminal
 sudo update-alternatives --set x-terminal-emulator /usr/bin/kitty
 ```
