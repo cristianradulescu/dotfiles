@@ -10,7 +10,7 @@ Setup
 -----
 Common tools:
 ```sh
-sudo apt install git curl mc vim tilix lm-sensors copyq flameshot xclip
+sudo apt install git curl mc vim copyq flameshot xclip
 ```
 
 ZSH & dependencies:
@@ -43,12 +43,10 @@ mkdir -p .local/share/backgrounds/ && cp -v dotfiles/.local/share/backgrounds/20
 cat dotfiles/dconf/org_gnome.conf | dconf load /org/gnome/
 ```
 
-Termux setup:
+Kitty setup:
 ```sh
-cat dotfiles/dconf/com_gexperts_Tilix.conf | sed "s|placeholder_uuid|$(gsettings get com.gexperts.Tilix.ProfilesList default | sed "s#'##g")|g" | dconf load /com/gexperts/Tilix/
-
 # set as default terminal
-sudo update-alternatives --set x-terminal-emulator /usr/bin/tilix.wrapper
+sudo update-alternatives --set x-terminal-emulator /usr/bin/kitty
 ```
 
 Google Chrome
