@@ -114,22 +114,12 @@ require('lazy').setup({
   },
 
   {
-    -- Theme
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    opts = {
-      -- style = 'darker',
-      transparent = true,
-      lualine = {
-        transparent = true,
-      }
-    },
-  },
-
-  {
     'catppuccin/nvim',
     name = 'catppuccin',
     priority = 1000,
+    opts = {
+      transparent_background = true,
+    }
   },
 
   {
@@ -138,7 +128,6 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = true,
-        -- theme = 'onedark',
         theme = 'catppuccin',
         component_separators = '|',
         section_separators = '',
@@ -151,9 +140,11 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
+    main = 'ibl',
     opts = {
-      char = '┆',
-      show_trailing_blankline_indent = false,
+      indent = {
+        char = '┆',
+      }
     },
   },
 
@@ -210,8 +201,24 @@ require('lazy').setup({
         }
       }
     }
-  }
+  },
 
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = {
+      { 'tpope/vim-dadbod', lazy = true },
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql' }, lazy = true },
+    },
+    cmd = {
+      'DBUI',
+      'DBUIToggle',
+      'DBUIAddConnection',
+      'DBUIFindBuffer',
+    },
+    init = function()
+      vim.g.db_ui_use_nerd_fonts = 1
+    end,
+  }
 
 }, {})
 
@@ -219,12 +226,11 @@ require('lazy').setup({
 -- See `:help vim.o`
 
 -- Transparent bg
--- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
--- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 -- --
 -- Color scheme
--- vim.o.background = 'dark'
---[[ vim.cmd.colorscheme 'onedark' ]]
+vim.o.background = 'dark'
 vim.cmd.colorscheme 'catppuccin'
 
 -- Set highlight on search
@@ -269,12 +275,12 @@ vim.o.shiftwidth = 2 -- Nb of autoindent spaces
 vim.o.softtabstop = 2 -- Nb of spaces per tab
 vim.o.wrap = false -- No word wrap
 vim.o.expandtab = true --Spaces instead of tabs
--- vim.o.cursorline = true -- Highlight cursor line
-vim.o.relativenumber = true
+vim.o.cursorline = true -- Highlight cursor line
+--vim.o.relativenumber = true
 vim.o.paste = true -- Don't break indentation on paste
 
 -- Right vertical line
-vim.o.colorcolumn = '120'
+--vim.o.colorcolumn = '120'
 
 -- [[ Basic Keymaps ]]
 
@@ -334,7 +340,7 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]resume' })
+vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 vim.keymap.set('n', '<leader>sds', require('telescope.builtin').lsp_document_symbols, { desc = '[S]earch [D]oc [S]ymbols' })
 
 
