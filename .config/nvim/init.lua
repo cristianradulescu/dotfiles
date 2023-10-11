@@ -123,6 +123,19 @@ require('lazy').setup({
   },
 
   {
+    'SmiteshP/nvim-navic',
+    lazy = true,
+    opts = function()
+      return {
+        separator = " ",
+        highlight = true,
+        depth_limit = 5,
+        lazy_update_context = true,
+      }
+    end,
+  },
+
+  {
     -- Bottom info line
     'nvim-lualine/lualine.nvim',
     opts = {
@@ -131,7 +144,21 @@ require('lazy').setup({
         theme = 'catppuccin',
         component_separators = '|',
         section_separators = '',
+        -- do not show it for Neotree (or use extensions)
+        -- disabled_filetypes = { statusline = { 'neo-tree' } }
       },
+      extensions = { 'neo-tree', 'lazy' },
+      sections = {
+          lualine_c = {
+            { 'filetype', icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+            { 'filename', path = 1 },
+            -- stylua: ignore
+            {
+              function() return require("nvim-navic").get_location() end,
+              cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
+            },
+          },
+       },
     },
   },
 
@@ -443,7 +470,7 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open float
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -489,6 +516,10 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
+  if client.server_capabilities.documentSymbolProvider then
+    require('nvim-navic').attach(client, bufnr)
+  end
 end
 
 -- Enable the following language servers
