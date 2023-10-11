@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 -- See `:help mapleader`
 -- Set <space> as the leader key
@@ -185,41 +186,45 @@ require('lazy').setup({
 
   { -- Neo tree
     'nvim-neo-tree/neo-tree.nvim',
-    version = 'v2.x',
+    version = 'v3.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-tree/nvim-web-devicons',
       'MunifTanjim/nui.nvim'
     },
+    init = function()
+      -- autostart Neotree when Neovim starts in a directory
+      if vim.fn.argc() == 1 then
+        local stat = vim.loop.fs_stat(vim.fn.argv(0))
+        if stat and stat.type == 'directory' then
+          require('neo-tree')
+        end
+      end
+    end,
+    deactivate = function()
+      vim.cmd([[Neotree close]])
+    end,
     opts = {
+      sources = { 'filesystem', 'git_status', 'document_symbols' },
+      open_files_do_not_replace_types = { 'terminal', 'Trouble' },
       filesystem = {
         filtered_items = {
           visible = true,
           show_hidden_count = true,
           hide_dotfiles = false,
-        }
+        },
+        bind_to_cwd = true,
+        follow_curent_file = { enabled = true },
+        use_libuv_file_watcher = true,
+      },
+      source_selector = {
+        winbar = true,
+        statusline = false,
       }
     }
   },
 
-  {
-    'kristijanhusak/vim-dadbod-ui',
-    dependencies = {
-      { 'tpope/vim-dadbod', lazy = true },
-      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql' }, lazy = true },
-    },
-    cmd = {
-      'DBUI',
-      'DBUIToggle',
-      'DBUIAddConnection',
-      'DBUIFindBuffer',
-    },
-    init = function()
-      vim.g.db_ui_use_nerd_fonts = 1
-    end,
-  }
-
-}, {})
+  }, {})
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -597,7 +602,15 @@ cmp.setup {
 }
 
 
--- [[ neo-tree keymaps ]]
+-- Neotree keymaps
+vim.keymap.set('n', '<leader>e', function()
+    require('neo-tree.command').execute({ toggle = true, reveal = true, dir = vim.loop.cwd() })
+  end, { desc = 'Toggle file [e]xplorer' }
+)
+vim.keymap.set('n', '<leader>ef', function()
+    require('neo-tree.command').execute({ reveal = true, dir = vim.loop.cwd() })
+  end, { desc = 'Reveal file in [e]xplorer' }
+)
 
 
 -- vim: ts=2 sts=2 sw=2 et
