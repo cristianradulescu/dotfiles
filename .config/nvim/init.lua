@@ -55,6 +55,8 @@ require('lazy').setup({
     'hrsh7th/nvim-cmp',
     dependencies = {
       'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip'
     },
@@ -211,6 +213,22 @@ require('lazy').setup({
   -- Show the context of the currently visible buffer contents
   {'nvim-treesitter/nvim-treesitter-context'},
 
+  -- auto pairs
+  --[[ {
+    'echasnovski/mini.pairs',
+    event = 'VeryLazy',
+    opts = {},
+    keys = {
+      {
+        "<leader>up",
+        function()
+          vim.g.minipairs_disable = not vim.g.minipairs_disable
+        end,
+        desc = "Toggle auto pairs",
+      },
+    },
+  },
+ ]]
   { -- Neo tree
     'nvim-neo-tree/neo-tree.nvim',
     version = 'v3.x',
@@ -344,6 +362,8 @@ require('telescope').setup {
         ['<C-d>'] = false,
       },
     },
+    -- Search in non-vcs and hidden files (--no-ignore-vcs, --hidden)
+    vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--no-ignore-vcs', '--hidden' }
   },
 }
 
@@ -628,6 +648,14 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'path' },
+  }, {
+    { name = 'buffer' },
+  },
+  experimental = {
+    ghost_text = {
+      hl_group = 'CmpGhostText',
+    },
   },
 }
 
