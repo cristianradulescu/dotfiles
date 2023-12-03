@@ -12,14 +12,12 @@ endif
 
 " Plugins
 call plug#begin('~/.vim/plugged')
-Plug 'joshdick/onedark.vim'
-Plug 'tomasiser/vim-code-dark'
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
   let g:airline_poweline_fonts=1
-  "let g:airline_theme='onedark'
-  let g:airline_theme='codedark'
+  let g:airline_theme='catppuccin_mocha'
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
   augroup nerd_loader
@@ -52,8 +50,7 @@ call plug#end()
 
 " Theme
 set t_Co=256
-colorscheme onedark
-"colorscheme codedark
+colorscheme catppuccin_mocha
 syntax on
 set termguicolors
 highlight Normal guibg=NONE ctermbg=NONE
