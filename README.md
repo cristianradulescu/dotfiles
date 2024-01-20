@@ -24,23 +24,18 @@ Clone dotfiles repo:
 git clone https://github.com/cristianradulescu/dotfiles
 ```
 
-Setup Powerlevel10k
+Setup OhMyZsh
 ```sh
-touch "$HOME/.cache/zshhistory"
-
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-
-mkdir -p .local/share/fonts/ && cp -v dotfiles/.local/share/fonts/* .local/share/fonts/ && fc-cache -rfv
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 ln -s dotfiles/.zshrc .zshrc
-ln -s dotfiles/.p10k.zsh .p10k.zsh
 ```
 
-Gnome Shell setup:
+TMUX
+Install plugin manager
 ```sh
-mkdir -p .local/share/backgrounds/ && cp -v dotfiles/.local/share/backgrounds/2021-12-31-15-24-13-mountain_silhouette.jpg .local/share/backgrounds/2021-12-31-15-24-13-mountain_silhouette.jpg
-
-cat dotfiles/dconf/org_gnome.conf | dconf load /org/gnome/
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+ln -s dotfiles/.tmux.conf .tmux.conf
 ```
 
 Kitty setup:
@@ -63,13 +58,6 @@ CopyQ
 ```sh
 sudo apt install copyq
 mkdir -p .config/copyq && cp -rv dotfiles/.config/copyq/* .config/copyq/
-```
-
-TMUX
-Install plugin manager
-```sh
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-ln -s dotfiles/.tmux.conf .tmux.conf
 ```
 
 Neovim
