@@ -19,21 +19,6 @@ Plug 'vim-airline/vim-airline-themes'
   let g:airline_poweline_fonts=1
   let g:airline_theme='catppuccin_mocha'
 
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-  augroup nerd_loader
-    autocmd!
-    autocmd VimEnter * silent! autocmd! FileExplorer
-    autocmd BufEnter,BufNew *
-      \  if isdirectory(expand('<amatch>'))
-      \|  call plug#load('nerdtree')
-      \|  execute 'autocmd! nerd_loader'
-      \| endif
-  augroup END
-
-  let NERDTreeShowHidden=1
-  nnoremap <C-f> :NERDTreeFind %<CR>
-  nnoremap <C-n> :NERDTreeToggle <CR>
-
 Plug 'scrooloose/syntastic'
   let g:syntastic_auto_loc_list=1
   let g:syntastic_check_on_open=0
@@ -43,8 +28,6 @@ Plug 'scrooloose/syntastic'
 
 Plug 'airblade/vim-gitgutter'
   let g:gitgutter_updatetime=1000
-
-Plug 'honza/dockerfile.vim'
 
 call plug#end()
 
