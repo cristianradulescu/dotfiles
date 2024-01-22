@@ -57,8 +57,8 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip'
+      -- 'L3MON4D3/LuaSnip',
+      -- 'saadparwaiz1/cmp_luasnip'
     },
   },
 
@@ -124,18 +124,18 @@ require('lazy').setup({
     }
   },
 
-  {
-    'SmiteshP/nvim-navic',
-    lazy = true,
-    opts = function()
-      return {
-        separator = " ",
-        highlight = true,
-        depth_limit = 5,
-        lazy_update_context = true,
-      }
-    end,
-  },
+--  {
+--    'SmiteshP/nvim-navic',
+--    lazy = true,
+--    opts = function()
+--      return {
+--        separator = " ",
+--        highlight = true,
+--        depth_limit = 5,
+--        lazy_update_context = true,
+--      }
+--    end,
+--  },
 
   {
     -- Bottom info line
@@ -155,10 +155,10 @@ require('lazy').setup({
             { 'filetype', icon_only = true, separator = "", padding = { left = 1, right = 0 } },
             { 'filename', path = 1 },
             -- stylua: ignore
-            {
-              function() return require("nvim-navic").get_location() end,
-              cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
-            },
+--            {
+--              function() return require("nvim-navic").get_location() end,
+--              cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
+--            },
           },
        },
     },
@@ -400,21 +400,21 @@ vim.keymap.set('n', '<leader>sds', require('telescope.builtin').lsp_document_sym
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = {
-    'lua',
+--    'lua',
     'python',
     'php',
-    'markdown',
-    'javascript',
+--    'markdown',
+--    'javascript',
     'json',
     'bash',
-    'dockerfile',
-    'gitignore',
-    'gitattributes',
-    'html',
-    'css',
-    'scss',
-    'twig',
-    'yaml'
+--    'dockerfile',
+--    'gitignore',
+--    'gitattributes',
+--    'html',
+--    'css',
+--    'scss',
+--    'twig',
+--    'yaml'
   },
   sync_install = true,
   ignore_install = {},
@@ -536,9 +536,9 @@ local on_attach = function(client, bufnr)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
 
-  if client.server_capabilities.documentSymbolProvider then
-    require('nvim-navic').attach(client, bufnr)
-  end
+--  if client.server_capabilities.documentSymbolProvider then
+--    require('nvim-navic').attach(client, bufnr)
+--  end
 end
 
 -- Enable the following language servers
@@ -548,24 +548,24 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   pyright = {},
-  tsserver = {},
+--  tsserver = {},
 
-  lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-    },
-  },
+--  lua_ls = {
+--    Lua = {
+--      workspace = { checkThirdParty = false },
+--      telemetry = { enable = false },
+--    },
+--  },
 
   phpactor = {},
-  -- intelephense = {},
-  html = {},
-  cssls = {},
-  docker_compose_language_service = {},
-  dockerls = {},
+--  intelephense = {},
+--  html = {},
+--  cssls = {},
+--  docker_compose_language_service = {},
+--  dockerls = {},
   jsonls = {},
-  marksman = {},
-  sqlls = {},
+--  marksman = {},
+--  sqlls = {},
   bashls = {}
 }
 
@@ -606,9 +606,9 @@ mason_lspconfig.setup_handlers {
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
-local luasnip = require 'luasnip'
-require('luasnip.loaders.from_vscode').lazy_load()
-luasnip.config.setup {}
+--local luasnip = require 'luasnip'
+--require('luasnip.loaders.from_vscode').lazy_load()
+--luasnip.config.setup {}
 
 cmp.setup {
   snippet = {
@@ -629,8 +629,8 @@ cmp.setup {
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
+--      elseif luasnip.expand_or_jumpable() then
+--        luasnip.expand_or_jump()
       else
         fallback()
       end
@@ -638,8 +638,8 @@ cmp.setup {
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
+--      elseif luasnip.jumpable(-1) then
+--        luasnip.jump(-1)
       else
         fallback()
       end
@@ -647,7 +647,7 @@ cmp.setup {
   },
   sources = {
     { name = 'nvim_lsp' },
-    { name = 'luasnip' },
+--    { name = 'luasnip' },
     { name = 'path' },
   }, {
     { name = 'buffer' },
