@@ -57,8 +57,6 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
-      -- 'L3MON4D3/LuaSnip',
-      -- 'saadparwaiz1/cmp_luasnip'
     },
   },
 
@@ -94,8 +92,6 @@ require('lazy').setup({
       },
       current_line_blame_formatter = '<committer> <committer_mail>, <author_time:%Y-%m-%d %H:%M> - <summary>',
       on_attach = function(bufnr)
-        -- vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-        -- vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[H]unk [P]review' })
         vim.keymap.set('n', '<leader>gbt', require('gitsigns').toggle_current_line_blame, { desc = '[G]it [B]lame [T]oggle' })
 
@@ -124,19 +120,6 @@ require('lazy').setup({
     }
   },
 
---  {
---    'SmiteshP/nvim-navic',
---    lazy = true,
---    opts = function()
---      return {
---        separator = " ",
---        highlight = true,
---        depth_limit = 5,
---        lazy_update_context = true,
---      }
---    end,
---  },
-
   {
     -- Bottom info line
     'nvim-lualine/lualine.nvim',
@@ -154,11 +137,6 @@ require('lazy').setup({
           lualine_c = {
             { 'filetype', icon_only = true, separator = "", padding = { left = 1, right = 0 } },
             { 'filename', path = 1 },
-            -- stylua: ignore
---            {
---              function() return require("nvim-navic").get_location() end,
---              cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
---            },
           },
        },
     },
@@ -213,22 +191,6 @@ require('lazy').setup({
   -- Show the context of the currently visible buffer contents
   {'nvim-treesitter/nvim-treesitter-context'},
 
-  -- auto pairs
-  --[[ {
-    'echasnovski/mini.pairs',
-    event = 'VeryLazy',
-    opts = {},
-    keys = {
-      {
-        "<leader>up",
-        function()
-          vim.g.minipairs_disable = not vim.g.minipairs_disable
-        end,
-        desc = "Toggle auto pairs",
-      },
-    },
-  },
- ]]
   { -- Neo tree
     'nvim-neo-tree/neo-tree.nvim',
     version = 'v3.x',
@@ -400,21 +362,10 @@ vim.keymap.set('n', '<leader>sds', require('telescope.builtin').lsp_document_sym
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = {
---    'lua',
     'python',
     'php',
---    'markdown',
---    'javascript',
     'json',
     'bash',
---    'dockerfile',
---    'gitignore',
---    'gitattributes',
---    'html',
---    'css',
---    'scss',
---    'twig',
---    'yaml'
   },
   sync_install = true,
   ignore_install = {},
@@ -484,9 +435,6 @@ require('nvim-treesitter.configs').setup {
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
--- Replaced this with Trouble.nvim
--- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
-
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
@@ -535,10 +483,6 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
-
---  if client.server_capabilities.documentSymbolProvider then
---    require('nvim-navic').attach(client, bufnr)
---  end
 end
 
 -- Enable the following language servers
@@ -548,24 +492,7 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   pyright = {},
---  tsserver = {},
-
---  lua_ls = {
---    Lua = {
---      workspace = { checkThirdParty = false },
---      telemetry = { enable = false },
---    },
---  },
-
   phpactor = {},
---  intelephense = {},
---  html = {},
---  cssls = {},
---  docker_compose_language_service = {},
---  dockerls = {},
-  jsonls = {},
---  marksman = {},
---  sqlls = {},
   bashls = {}
 }
 
@@ -597,18 +524,10 @@ mason_lspconfig.setup_handlers {
       filetypes = (servers[server_name] or {}).filetypes,
     }
   end,
-  -- ['phpactor'] = function()
-  --     require('lspconfig')['phpactor'].setup {
-  --       cmd = { 'phpactor', 'language-server', '-vvv' }
-  --     }
-  -- end,
 }
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
---local luasnip = require 'luasnip'
---require('luasnip.loaders.from_vscode').lazy_load()
---luasnip.config.setup {}
 
 cmp.setup {
   snippet = {
@@ -629,8 +548,6 @@ cmp.setup {
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
---      elseif luasnip.expand_or_jumpable() then
---        luasnip.expand_or_jump()
       else
         fallback()
       end
@@ -638,8 +555,6 @@ cmp.setup {
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
---      elseif luasnip.jumpable(-1) then
---        luasnip.jump(-1)
       else
         fallback()
       end
@@ -669,6 +584,5 @@ vim.keymap.set('n', '<leader>ef', function()
     require('neo-tree.command').execute({ reveal = true, dir = vim.loop.cwd() })
   end, { desc = 'Reveal file in [e]xplorer' }
 )
-
 
 -- vim: ts=2 sts=2 sw=2 et

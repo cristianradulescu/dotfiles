@@ -96,6 +96,7 @@ export PATH=$PATH:/home/$USER/bin:/home/$USER/.local/bin
 # else
 #   export EDITOR='mvim'
 # fi
+export EDITOR='nvim'
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
