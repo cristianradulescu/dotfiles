@@ -5,7 +5,9 @@ Target OS: Ubuntu
 
 Setup
 -----
+
 ZSH + base:
+
 ```sh
 sudo apt install \
   zsh \
@@ -20,17 +22,20 @@ sudo apt install \
   xclip \
   fzf \
   ripgrep \
-  fd-find
+  fd-find \
+  tree
 
 chsh -s /bin/zsh
 ```
 
 Dotfiles repo:
+
 ```sh
 git clone https://github.com/cristianradulescu/dotfiles
 ```
 
 OhMyZsh
+
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
@@ -39,6 +44,7 @@ ln -s ~/dotfiles/.zshrc ~/.zshrc
 
 TMUX
 Install plugin manager
+
 ```sh
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ln -s ~/dotfiles/.tmux.conf .tmux.conf
@@ -46,6 +52,7 @@ ln -s ~/dotfiles/.tmux.conf .tmux.conf
 
 Neovim + LazyVim
 Snap version is newer
+
 ```sh
 sudo snap install neovim
 
@@ -58,4 +65,3 @@ git clone https://github.com/LazyVim/starter ~/.config/nvim && rm -rf ~/.config/
 
 ln -s ~/dotfiles/.config/nvim/lua/plugins/init.lua .config/nvim/lua/plugins/init.lua
 ```
-
