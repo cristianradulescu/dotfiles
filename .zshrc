@@ -102,11 +102,7 @@ export EDITOR='nvim'
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-[ -f "$HOME/dotfiles/aliasrc" ] && source "$HOME/dotfiles/aliasrc"
+[ -f "$HOME/dotfiles/.aliases" ] && source "$HOME/dotfiles/.aliases"
 
 # Work profile (sensitive data that cannot be commited)
 [[ ! -f ~/.zshrc_work ]] || source ~/.zshrc_work
