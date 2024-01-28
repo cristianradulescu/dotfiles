@@ -1,70 +1,61 @@
 My dotfile setup
 ================
 
-```
-Shell: zsh
-Terminal Font: MesloLGS NF 
-```
+Target OS: Ubuntu
 
 Setup
 -----
-Common tools:
+ZSH + base:
 ```sh
-sudo apt install git curl mc vim copyq flameshot xclip
-```
-
-ZSH & dependencies:
-```sh
-sudo apt install zsh zsh-syntax-highlighting zsh-autosuggestions autojump
+sudo apt install \
+  zsh \
+  zsh-syntax-highlighting \
+  zsh-autosuggestions \
+  autojump \
+  git \
+  curl \
+  mc \
+  vim \
+  tmux \
+  xclip \
+  fzf \
+  ripgrep \
+  fd-find
 
 chsh -s /bin/zsh
 ```
-Clone dotfiles repo:
+
+Dotfiles repo:
 ```sh
 git clone https://github.com/cristianradulescu/dotfiles
 ```
 
-Setup OhMyZsh
+OhMyZsh
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-ln -s dotfiles/.zshrc .zshrc
+ln -s ~/dotfiles/.zshrc ~/.zshrc
 ```
 
 TMUX
 Install plugin manager
 ```sh
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-ln -s dotfiles/.tmux.conf .tmux.conf
+ln -s ~/dotfiles/.tmux.conf .tmux.conf
 ```
 
-Kitty setup:
-```sh
-# Change theme (if necessary)
-kitty +kitten themes --reload-in=all Catppuccin-Mocha
-
-# set as default terminal
-sudo update-alternatives --set x-terminal-emulator /usr/bin/kitty
-```
-
-Google Chrome
-```sh
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo dpkg -i google-chrome-stable_current_amd64.deb
-rm -v google-chrome-stable_current_amd64.deb
-```
-
-CopyQ
-```sh
-sudo apt install copyq
-mkdir -p .config/copyq && cp -rv dotfiles/.config/copyq/* .config/copyq/
-```
-
-Neovim
+Neovim + LazyVim
 Snap version is newer
 ```sh
 sudo snap install neovim
-sudo apt install ripgrep
+
+LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+tar xf lazygit.tar.gz lazygit
+sudo install lazygit /usr/local/bin
+
+git clone https://github.com/LazyVim/starter ~/.config/nvim && rm -rf ~/.config/nvim/.git
+
+ln -s ~/dotfiles/.config/nvim/lua/plugins/init.lua .config/nvim/lua/plugins/init.lua
 ```
 
-!!! Reboot !!!
