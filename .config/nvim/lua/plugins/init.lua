@@ -1,5 +1,9 @@
 return {
+  -- Disable/enable plugins
+  -- { "folke/noice.nvim", enabled = false },
+  -- { "rcarriga/nvim-notify", enabled = false },
 
+  -- Custom config
   {
     "catppuccin/nvim",
     name = "catppuccin",
@@ -24,6 +28,19 @@ return {
           visible = true,
           show_hidden_count = true,
           hide_dotfiles = false,
+        },
+      },
+      window = {
+        mappings = {
+          ["<space>"] = "none",
+        },
+      },
+      default_component_configs = {
+        indent = {
+          with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
+          expander_collapsed = "",
+          expander_expanded = "",
+          expander_highlight = "NeoTreeExpander",
         },
       },
     },
