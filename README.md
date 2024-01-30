@@ -10,10 +10,7 @@ ZSH + base:
 
 ```sh
 sudo apt install \
-  zsh \
-  zsh-syntax-highlighting \
-  zsh-autosuggestions \
-  autojump \
+  zsh zsh-syntax-highlighting zsh-autosuggestions autojump \
   git \
   curl \
   mc \
@@ -23,7 +20,10 @@ sudo apt install \
   fzf \
   ripgrep \
   fd-find \
-  tree
+  tree \
+  sqlite3 libsqlite3-dev \
+  nodejs npm \
+  php-cli composer
 
 chsh -s /bin/zsh
 ```
@@ -51,17 +51,26 @@ ln -s ~/dotfiles/.tmux.conf .tmux.conf
 ```
 
 Neovim + LazyVim
-Snap version is newer
 
 ```sh
-sudo snap install neovim
+NEOVIM_VERSION=$(curl -s "https://api.github.com/repos/neovim/neovim/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -Lo nvim-linux64.tar.gz "https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim-linux64.tar.gz"
+tar xf nvim-linux64.tar.gz
+sudo ln -s ~/nvim-linux64/bin/nvim /usr/local/bin
+rm -rf nvim-linux64.tar.gz
 
+git clone https://github.com/LazyVim/starter ~/.config/nvim && rm -rf ~/.config/nvim/.git
+
+ln -s ~/dotfiles/.config/nvim/lazyvim.json .config/nvim/lazyvim.json
+ln -s ~/dotfiles/.config/nvim/lua/plugins/init.lua .config/nvim/lua/plugins/init.lua
+```
+
+LazyGit
+
+```sh
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
 curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
 tar xf lazygit.tar.gz lazygit
 sudo install lazygit /usr/local/bin
-
-git clone https://github.com/LazyVim/starter ~/.config/nvim && rm -rf ~/.config/nvim/.git
-
-ln -s ~/dotfiles/.config/nvim/lua/plugins/init.lua .config/nvim/lua/plugins/init.lua
+rm -rf lazygit lazygit.tar.gz
 ```
