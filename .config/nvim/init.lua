@@ -93,6 +93,9 @@ require('lazy').setup({
       current_line_blame_formatter = '<committer> <committer_mail>, <author_time:%Y-%m-%d %H:%M> - <summary>',
       on_attach = function(bufnr)
         vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[H]unk [P]review' })
+        vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk, { buffer = bufnr, desc = '[H]unk [R]eset' })
+        vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk, { buffer = bufnr, desc = '[H]unk [S]tage' })
+        vim.keymap.set('n', '<leader>hus', require('gitsigns').undo_stage_hunk, { buffer = bufnr, desc = '[H]unk [Undo] [S]tage' })
         vim.keymap.set('n', '<leader>gbt', require('gitsigns').toggle_current_line_blame, { desc = '[G]it [B]lame [T]oggle' })
 
         -- don't override the built-in and fugitive keymaps
