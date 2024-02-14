@@ -270,7 +270,7 @@ vim.o.mouse = 'a'
 vim.o.clipboard = 'unnamedplus'
 
 -- Enable break indent
-vim.o.breakindent = false
+vim.o.breakindent = true 
 
 -- Save undo history
 vim.o.undofile = true
