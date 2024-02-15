@@ -298,7 +298,7 @@ vim.o.softtabstop = 2 -- Nb of spaces per tab
 vim.o.wrap = false -- No word wrap
 vim.o.expandtab = true --Spaces instead of tabs
 vim.o.cursorline = true -- Highlight cursor line
-vim.o.relativenumber = true
+vim.o.relativenumber = false 
 vim.o.paste = true -- Don't break indentation on paste
 
 -- Right vertical line
