@@ -1,4 +1,4 @@
----@diagnostic disable: missing-fields
+---@diagnostic disable: missing-fields, undefined-global
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 -- See `:help mapleader`
 -- Set <space> as the leader key
@@ -298,8 +298,12 @@ vim.o.softtabstop = 2 -- Nb of spaces per tab
 vim.o.wrap = false -- No word wrap
 vim.o.expandtab = true --Spaces instead of tabs
 vim.o.cursorline = true -- Highlight cursor line
-vim.o.relativenumber = false 
+vim.o.relativenumber = false -- Line numbers start from current line 
 vim.o.paste = true -- Don't break indentation on paste
+
+-- Split directions - go right and bottom
+vim.o.splitright = true
+vim.o.splitbelow = true
 
 -- Right vertical line
 --vim.o.colorcolumn = '120'
@@ -596,5 +600,30 @@ vim.keymap.set('n', '<leader>ef', function()
     require('neo-tree.command').execute({ reveal = true, dir = vim.loop.cwd() })
   end, { desc = 'Reveal file in [e]xplorer' }
 )
+
+---
+--- Parse json content using jq. Run with ":lua JqPars()".
+---
+--- @param jq_expr? string The JQ expression. Default: true
+--- @param jq_use_raw? boolean Use raw format. default: false
+function JqParse(jq_expr, jq_use_raw)
+  jq_expr = jq_expr or '.'
+  jq_use_raw = jq_use_raw or false
+
+  local jq_raw = ''
+  if (jq_use_raw == true) then
+    jq_raw = '-r'
+  end
+
+  local current_buffer_content = vim.fn.getline(1, '$')
+  local temp_file_path = '/tmp/nvim_jq_parse_' .. os.date("%YmdHMS")
+  vim.fn.writefile(current_buffer_content, temp_file_path)
+
+  local jq_parsed = vim.fn.systemlist('jq '.. jq_raw .. ' "' .. jq_expr .. '" ' .. temp_file_path)
+
+  vim.api.nvim_command('vnew')
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, jq_parsed)
+  vim.fn.delete(temp_file_path)
+end
 
 -- vim: ts=2 sts=2 sw=2 et
