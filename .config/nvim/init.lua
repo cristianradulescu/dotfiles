@@ -602,7 +602,7 @@ vim.keymap.set('n', '<leader>ef', function()
 )
 
 ---
---- Parse json content using jq. Run with ":lua JqPars()".
+--- Parse json content using jq. Run with ":lua JqParse()".
 ---
 --- @param jq_expr? string The JQ expression. Default: true
 --- @param jq_use_raw? boolean Use raw format. default: false
