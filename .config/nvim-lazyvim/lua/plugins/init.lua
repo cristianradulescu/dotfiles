@@ -1,7 +1,7 @@
 return {
   -- Disable/enable plugins
   { "folke/noice.nvim", enabled = false },
-  { "rcarriga/nvim-notify", enabled = false },
+  -- { "rcarriga/nvim-notify", enabled = false },
 
   -- Custom config
   {
@@ -50,11 +50,42 @@ return {
     "nvim-lualine/lualine.nvim",
     opts = {
       options = {
-        component_separators = "|",
+        component_separators = "⎟",
         section_separators = "",
       },
       sections = {
-        lualine_z = {},
+        lualine_a = { "mode" },
+        lualine_b = {
+          { "filetype", icon_only = true, sepratator = "", padding = { right = 0, left = 1 } },
+          { "filename", path = 1 },
+        },
+        lualine_c = {},
+        lualine_x = {
+          { "diagnostics" },
+          {
+            "diff",
+            source = function()
+              local gitsigns = vim.b.gitsigns_status_dict
+              if gitsigns then
+                return {
+                  added = gitsigns.added,
+                  modified = gitsigns.changed,
+                  removed = gitsigns.removed,
+                }
+              end
+            end,
+          },
+          { "branch" },
+        },
+        lualine_y = {
+          { "encoding" },
+          { "fileformat" },
+          { "filetype" },
+        },
+        lualine_z = {
+          { "progress", separator = " ", padding = { left = 1, right = 0 } },
+          { "location", padding = { left = 0, right = 1 } },
+        },
       },
     },
   },

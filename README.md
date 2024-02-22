@@ -60,6 +60,13 @@ sudo ln -s ~/nvim-linux64/bin/nvim /usr/local/bin
 rm -rf nvim-linux64.tar.gz
 ```
 
+Neovim nightly
+
+```sh
+git clone https://github.com/neovim/neovim.git neovim-nigtly
+
+cd neovim-nightly &&  make CMAKE_BUILD_TYPE=RelWithDebInfo && cd build && cpack -G DEB && sudo dpkg -i nvim-linux64.deb
+```
 
 LazyVim
 
