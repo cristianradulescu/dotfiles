@@ -29,7 +29,7 @@ vim.o.mouse = 'a'
 vim.o.clipboard = 'unnamedplus'
 
 -- Enable break indent
-vim.o.breakindent = true 
+vim.o.breakindent = true
 
 -- Save undo history
 vim.o.undofile = true
@@ -63,7 +63,6 @@ vim.o.wrap = false -- No word wrap
 
 vim.o.cursorline = true -- Highlight cursor line
 vim.o.relativenumber = true -- Line numbers start from current line 
-vim.o.paste = true -- Don't break indentation on paste
 
 -- Split directions - go right and bottom
 vim.o.splitright = true
