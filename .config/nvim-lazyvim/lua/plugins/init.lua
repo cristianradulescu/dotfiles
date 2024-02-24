@@ -56,7 +56,7 @@ return {
       sections = {
         lualine_a = { "mode" },
         lualine_b = {
-          { "filetype", icon_only = true, sepratator = "", padding = { right = 0, left = 1 } },
+          { "filetype", icon_only = true, separator = "", padding = { right = 0, left = 1 } },
           { "filename", path = 1 },
         },
         lualine_c = {},
