@@ -28,9 +28,7 @@ return {
           "hrsh7th/cmp-cmdline",
           "hrsh7th/cmp-buffer",
         },
-
       }
-
     },
 
     config = function()
@@ -53,7 +51,7 @@ return {
       -- Setup neovim lua config
       require("neodev").setup()
 
-      local on_attach = function(client, buffnr)
+      local on_attach = function(_, buffnr)
         -- Create a command `:Format` local to the LSP buffer
         vim.api.nvim_buf_create_user_command(buffnr, "Format", function(_)
           vim.lsp.buf.format()
@@ -135,20 +133,13 @@ return {
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-e>"] = cmp.mapping.abort(),
-          -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-          ["<S-CR>"] = cmp.mapping.confirm({
+          ["<Tab>"] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
-          }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-          ["<C-CR>"] = function(fallback)
-            cmp.abort()
-            fallback()
-          end,
+          }),
         },
 
       })
     end
   }
-
 }
