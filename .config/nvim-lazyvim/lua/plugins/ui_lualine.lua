@@ -1,4 +1,4 @@
--- local Util = require("lazyvim.util")
+local Util = require("lazyvim.util")
 
 return {
   {
@@ -11,18 +11,24 @@ return {
       sections = {
         lualine_a = { "mode" },
         lualine_b = {
-          -- {
-          --   function()
-          --     local current_path = vim.loop.cwd()
-          --     current_path = vim.fn.substitute(current_path, "\\/home\\/cristian", "~", "")
-          --     return "󱉭  " .. current_path
-          --   end,
-          --   color = Util.ui.fg("Special"),
-          -- },
-          { "filetype", icon_only = true, separator = "", padding = { right = 0, left = 1 } },
-          { "filename", path = 3 },
+          {
+            function()
+              local current_path = vim.loop.cwd() or ""
+              current_path = vim.fn.substitute(current_path, "\\/home\\/\\w*", "~", "")
+              return "󱉭 " .. current_path
+            end,
+          },
         },
-        lualine_c = {},
+        lualine_c = {
+          {
+            "filetype",
+            icon_only = true,
+            separator = "",
+            padding = { right = 0, left = 1 },
+            color = Util.ui.fg("Special"),
+          },
+          { "filename", path = 1, color = Util.ui.fg("Constant") },
+        },
         lualine_x = {
           { "diagnostics" },
           {
