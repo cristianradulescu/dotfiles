@@ -9,11 +9,11 @@ Setup
 ZSH + base:
 
 ```sh
-sudo apt install \
+sudo apt install -y \
   zsh zsh-syntax-highlighting zsh-autosuggestions autojump \
   git \
   curl \
-  mc \
+  mc ranger \
   vim \
   tmux \
   xclip \
@@ -22,10 +22,18 @@ sudo apt install \
   fd-find \
   tree \
   sqlite3 libsqlite3-dev \
-  nodejs npm \
-  php-cli composer
+  php-cli composer \
+  cmake gettext \
+  python3-neovim
 
 chsh -s /bin/zsh
+```
+
+More recent version for NodeJS
+```sh
+curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash - &&\
+sudo apt install -y nodejs
+sudo npm install -g neovim
 ```
 
 Dotfiles repo:
@@ -76,10 +84,10 @@ git clone https://github.com/LazyVim/starter ~/.config/nvim && rm -rf ~/.config/
 ln -s ~/dotfiles/.config/nvim-lazyvim/lua/plugins/init.lua .config/nvim/lua/plugins/init.lua
 ```
 
-Kickstarter Nvim
+Kickstarter-based Nvim
 
 ```sh
-ln -s ~/dotfiles/.config/nvim/init.lua .config/nvim/
+ln -s ~/dotfiles/.config/nvim ~/.config/nvim
 ```
 
 
