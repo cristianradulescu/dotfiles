@@ -23,7 +23,7 @@ sudo apt install -y \
   tree \
   sqlite3 libsqlite3-dev \
   php-cli composer \
-  cmake gettext \
+  cmake gettext g++\
   python3-neovim
 
 chsh -s /bin/zsh
