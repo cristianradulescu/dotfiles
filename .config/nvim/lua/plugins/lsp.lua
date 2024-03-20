@@ -66,6 +66,10 @@ return {
           vim.lsp.buf.format()
         end, { desc = "Format current buffer with LSP" })
 
+        vim.api.nvim_buf_create_user_command(buffnr, "PhpactorReindex", function(_)
+          vim.lsp.buf_notify(0, "phpactor/indexer/reindex", {})
+        end, { desc = "Phpactor reindex" })
+
         -- Create a function that lets us more easily define mappings specific
         -- for LSP related items. It sets the mode, buffer and description for us each time.
         local nmap = function(keys, func, desc)
