@@ -40,7 +40,15 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        phpactor = {},
+        -- phpactor = {
+        --   cmd = {
+        --     "env",
+        --     "XDEBUG_SESSION=1",
+        --     "php",
+        --     "/home/cristian/.local/share/nvim/mason/packages/phpactor/bin/phpactor",
+        --     "language-server",
+        --   },
+        -- },
       },
     },
   },
