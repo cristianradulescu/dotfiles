@@ -79,9 +79,7 @@ cd neovim-nightly &&  make CMAKE_BUILD_TYPE=RelWithDebInfo && cd build && cpack 
 LazyVim
 
 ```sh
-git clone https://github.com/LazyVim/starter ~/.config/nvim && rm -rf ~/.config/nvim/.git
-
-ln -s ~/dotfiles/.config/nvim-lazyvim/lua/plugins/init.lua .config/nvim/lua/plugins/init.lua
+ln -s ~/dotfiles/.config/nvim-lazyvim ~/.config/nvim
 ```
 
 Kickstarter-based Nvim
