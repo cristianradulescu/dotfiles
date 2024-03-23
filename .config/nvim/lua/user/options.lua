@@ -71,3 +71,7 @@ vim.o.splitbelow = true
 -- Right vertical line
 --vim.o.colorcolumn = '120'
 
+-- Fold with Treesitter
+vim.o.foldlevel = 99
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'nvim_treesitter#foldexpr()'

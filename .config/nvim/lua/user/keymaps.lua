@@ -19,13 +19,12 @@ vim.keymap.set('n', '<leader>ef', function()
 -- Gitsigns
 require("gitsigns").setup({
   on_attach = function(buffnr)
-    print("Gitsigns on_attach | buffnr=" .. buffnr)
-
-    vim.keymap.set("n", "<leader>hp", require("gitsigns").preview_hunk, { buffer = buffnr, desc = "[H]unk [P]review" })
-    vim.keymap.set("n", "<leader>hr", require("gitsigns").reset_hunk, { buffer = buffnr, desc = "[H]unk [R]eset" })
-    vim.keymap.set("n", "<leader>hs", require("gitsigns").stage_hunk, { buffer = buffnr, desc = "[H]unk [S]tage" })
-    vim.keymap.set("n", "<leader>hus", require("gitsigns").undo_stage_hunk, { buffer = buffnr, desc = "[H]unk [Undo] [S]tage" })
-    vim.keymap.set("n", "<leader>gbt", require("gitsigns").toggle_current_line_blame, { desc = "[G]it [B]lame [T]oggle" })
+    vim.keymap.set("n", "<leader>ghp", require("gitsigns").preview_hunk, { buffer = buffnr, desc = "[H]unk [P]review" })
+    vim.keymap.set("n", "<leader>ghr", require("gitsigns").reset_hunk, { buffer = buffnr, desc = "[H]unk [R]eset" })
+    vim.keymap.set("n", "<leader>ghR", require("gitsigns").reset_buffer, { buffer = buffnr, desc = "[H]unk buffer [R]eset" })
+    vim.keymap.set("n", "<leader>ghs", require("gitsigns").stage_hunk, { buffer = buffnr, desc = "[H]unk [S]tage" })
+    vim.keymap.set("n", "<leader>ghus", require("gitsigns").undo_stage_hunk, { buffer = buffnr, desc = "[H]unk [Undo] [S]tage" })
+    vim.keymap.set("n", "<leader>gbl", require("gitsigns").toggle_current_line_blame, { desc = "[G]it [B]lame [L]ine" })
     
     vim.keymap.set({"n", "v"}, "]c", function()
       if vim.wo.diff then return "]c" end
@@ -40,6 +39,9 @@ require("gitsigns").setup({
 
   end
 })
+
+-- Git
+vim.keymap.set("n", "<leader>gbf", "<cmd>Git blame<CR>", { desc = "[G]it [B]lame [F]ile" })
 
 -- Telescope
 -- See `:help telescope.builtin`
