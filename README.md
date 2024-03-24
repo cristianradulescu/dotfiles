@@ -55,10 +55,11 @@ Install plugin manager
 
 ```sh
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+~/.tmux/plugins/tpm/bin/install_plugins
 ln -s ~/dotfiles/.tmux.conf .tmux.conf
 ```
 
-Neovim 
+Neovim
 
 ```sh
 NEOVIM_VERSION=$(curl -s "https://api.github.com/repos/neovim/neovim/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
