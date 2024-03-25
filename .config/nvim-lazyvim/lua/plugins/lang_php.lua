@@ -24,7 +24,7 @@ return {
               -- search in project root
               "php-cs-fixer",
               "php-cs-fixer.phar",
-              -- search in bi from project root
+              -- search in bin from project root
               "bin/php-cs-fixer",
               "bin/php-cs-fixer.phar",
               --search in vendor/bin
@@ -45,7 +45,7 @@ return {
         --     "env",
         --     "XDEBUG_SESSION=1",
         --     "php",
-        --     "/home/cristian/.local/share/nvim/mason/packages/phpactor/bin/phpactor",
+        --     "~/.local/share/nvim/mason/packages/phpactor/bin/phpactor",
         --     "language-server",
         --   },
         -- },
