@@ -41,22 +41,23 @@ return {
     opts = {
       servers = {
         phpactor = {
-          cmd = {
-            -- -- Debug phpactor
-            -- "env",
-            -- "XDEBUG_SESSION=1",
-            -- "php",
-            -- "/home/cristian/.local/share/nvim/mason/packages/phpactor/bin/phpactor",
-            -- "language-server",
-            -- -- --
-            -- -- --
-            -- -- Run from local installation
-            -- "php",
-            -- "/home/cristian/Development/phpactor/bin/phpactor",
-            -- "language-server",
-            -- "-vvv",
-            -- -- --
-          },
+          -- INFO: Do not leave the "cmd" key empty
+          -- cmd = {
+          --   -- -- Debug phpactor
+          --   -- "env",
+          --   -- "XDEBUG_SESSION=1",
+          --   -- "php",
+          --   -- "/home/cristian/.local/share/nvim/mason/packages/phpactor/bin/phpactor",
+          --   -- "language-server",
+          --   -- -- --
+          --   -- -- --
+          --   -- -- Run from local installation
+          --   -- "php",
+          --   -- "/home/cristian/Development/phpactor/bin/phpactor",
+          --   -- "language-server",
+          --   -- "-vvv",
+          --   -- -- --
+          -- },
         },
       },
     },
