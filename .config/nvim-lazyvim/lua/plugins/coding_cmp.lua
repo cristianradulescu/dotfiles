@@ -7,7 +7,7 @@ return {
     opts.mapping = vim.tbl_extend("force", opts.mapping, {
       ["<Tab>"] = cmp.mapping.confirm({ select = true }),
     })
-    opts.mapping["<CR>"] = nil
+    -- opts.mapping["<CR>"] = nil
 
     opts.experimental = {
       ghost_text = false,
