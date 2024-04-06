@@ -1,0 +1,17 @@
+import = ["~/.config/alacritty/catppuccin-mocha.toml"]
+
+[env]
+
+[window]
+opacity = 0.9
+startup_mode = "Maximized"
+
+[scrolling]
+history = 50000
+
+[font]
+normal = { family = "Hack Nerd Font", style = "Regular" }
+size = 8
+
+[cursor]
+style = { shape = "Beam", blinking = "On" }
