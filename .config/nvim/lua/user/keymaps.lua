@@ -11,10 +11,6 @@ vim.keymap.set('n', '<leader>e', function()
     require('neo-tree.command').execute({ toggle = true, reveal = true, dir = vim.loop.cwd() })
   end, { desc = 'Toggle file [e]xplorer' }
 )
-vim.keymap.set('n', '<leader>ef', function()
-    require('neo-tree.command').execute({ reveal = true, dir = vim.loop.cwd() })
-  end, { desc = 'Reveal file in [e]xplorer' }
-)
 
 -- Gitsigns
 require("gitsigns").setup({
@@ -24,8 +20,9 @@ require("gitsigns").setup({
     vim.keymap.set("n", "<leader>ghR", require("gitsigns").reset_buffer, { buffer = buffnr, desc = "[H]unk buffer [R]eset" })
     vim.keymap.set("n", "<leader>ghs", require("gitsigns").stage_hunk, { buffer = buffnr, desc = "[H]unk [S]tage" })
     vim.keymap.set("n", "<leader>ghus", require("gitsigns").undo_stage_hunk, { buffer = buffnr, desc = "[H]unk [Undo] [S]tage" })
-    vim.keymap.set("n", "<leader>gbl", require("gitsigns").toggle_current_line_blame, { desc = "[G]it [B]lame [L]ine" })
-    
+    vim.keymap.set("n", "<leader>gbl", require("gitsigns").blame_line, { desc = "[G]it [B]lame [L]ine" })
+    vim.keymap.set("n", "<leader>gbh", require("gitsigns").toggle_current_line_blame, { desc = "[G]it [B]lame Line [H]ints" })
+
     vim.keymap.set({"n", "v"}, "]c", function()
       if vim.wo.diff then return "]c" end
       vim.schedule(function() require("gitsigns").next_hunk() end)
@@ -55,18 +52,18 @@ vim.keymap.set('n', '<leader>/', function()
  })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
-vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 -- Search in all files including hidden and ignored by Git
 vim.keymap.set('n', '<leader>sf', function()
  require('telescope.builtin').find_files({ hidden = true, no_ignore = true })
 end, { desc = '[S]earch [F]iles' })
 
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
+vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps, { desc = '[S]earch [K]eymaps' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
-vim.keymap.set('n', '<leader>sds', require('telescope.builtin').lsp_document_symbols, { desc = '[S]earch [D]oc [S]ymbols' })
+vim.keymap.set('n', '<leader>ss', require('telescope.builtin').lsp_document_symbols, { desc = '[S]earch [S]ymbols' })
 
 -- Trouble diagnostics
 vim.keymap.set("n", "<leader>q", function()
