@@ -53,15 +53,15 @@ vim.o.completeopt = "menu,menuone,noselect"
 vim.o.termguicolors = true
 
 -- Enable auto indenting and set it to spaces
-vim.opt.smartindent = true
-vim.opt.shiftwidth = 2      -- Size of indent
-vim.opt.shiftround = true   --- Round indent
+vim.o.smartindent = true
+vim.o.shiftwidth = 2      -- Size of indent
+vim.o.shiftround = true   --- Round indent
 
 vim.o.tabstop = 2           -- Nb of spaces per tab
 vim.o.softtabstop = 2       -- Nb of spaces per tab
 vim.o.expandtab = true      --Spaces instead of tabs
 vim.o.wrap = false          -- No word wrap
-vim.opt.list = true         -- Show non-printable chars
+vim.o.list = true         -- Show non-printable chars
 
 vim.o.cursorline = true     -- Highlight current line
 vim.o.relativenumber = true -- Line numbers start from current line
@@ -79,27 +79,12 @@ vim.o.colorcolumn = "120"
 vim.o.wildmode = "longest:full,full"
 
 -- Folding
-vim.opt.fillchars = {
-  foldopen = "",
-  foldclose = "",
-  fold = " ",
-  foldsep = " ",
-  diff = "╱",
-  eob = " ",
-}
-
 vim.o.foldlevel = 99
-
-if vim.fn.has("nvim-0.9.0") == 1 then
-  vim.opt.foldtext = "v:lua.require'user.functions'.foldtext()"
-end
 
 -- HACK: causes freezes on <= 0.9, so only enable on >= 0.10 for now
 if vim.fn.has("nvim-0.10") == 1 then
   vim.o.foldmethod = "expr"
-  vim.o.foldexpr = "v:lua.require'user.functions'.foldexpr()"
-  vim.o.foldtext = ""
-  vim.o.fillchars = "fold: "
+  vim.opt.foldexpr = "v:lua.require'user.functions'.foldexpr()"
 else
   vim.o.foldmethod = "indent"
 end
