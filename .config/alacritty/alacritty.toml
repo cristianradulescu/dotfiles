@@ -1,9 +1,10 @@
 import = ["~/.config/alacritty/catppuccin-mocha.toml"]
 
 [env]
+TERM = "xterm256-color"
 
 [window]
-opacity = 0.9
+# opacity = 0.9
 startup_mode = "Maximized"
 
 [scrolling]
@@ -13,5 +14,8 @@ history = 50000
 normal = { family = "Hack Nerd Font", style = "Regular" }
 size = 8
 
+# [colors]
+# transparent_background_colors = true
+
 [cursor]
-style = { shape = "Beam", blinking = "On" }
+style = { shape = "Beam", blinking = "Always" }
