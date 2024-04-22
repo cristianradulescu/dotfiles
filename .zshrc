@@ -76,6 +76,7 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+bindkey '^ ' autosuggest-accept
 
 # zsh auto-completion
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
