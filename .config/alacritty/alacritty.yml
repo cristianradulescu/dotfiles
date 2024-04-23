@@ -13,9 +13,10 @@ scrolling:
 
 font:
   normal:
-    family: Hack Nerd Font
+    family: JetBrainsMonoNL Nerd Font
+    # family: Hack Nerd Font
     style: Regular
-  size: 8.0
+  size: 9.0
 
 # colors:
 #   transparent_background_colors: true

@@ -11,7 +11,8 @@ startup_mode = "Maximized"
 history = 50000
 
 [font]
-normal = { family = "Hack Nerd Font", style = "Regular" }
+normal = { family = "JetBrainsMonoNL Nerd Font", style = "Regular" }
+# normal = { family = "Hack Nerd Font", style = "Regular" }
 size = 8
 
 # [colors]
