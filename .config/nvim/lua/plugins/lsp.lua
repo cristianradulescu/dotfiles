@@ -6,12 +6,12 @@ return {
     event = "BufReadPost",
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      { "williamboman/mason.nvim", config = true },
+      { "williamboman/mason.nvim",          config = true },
       { "williamboman/mason-lspconfig.nvim" },
 
       -- Useful status updates for LSP
-      { "j-hui/fidget.nvim", tag = "legacy", opts = {} },
-      
+      { "j-hui/fidget.nvim",                tag = "legacy", opts = {} },
+
       -- Additional lua configuration, makes nvim stuff amazing!
       "folke/neodev.nvim",
 
@@ -66,8 +66,15 @@ return {
           vim.lsp.buf.format()
         end, { desc = "Format current buffer with LSP" })
 
+        -- Create command to force Phpactor reindex
         vim.api.nvim_buf_create_user_command(buffnr, "PhpactorReindex", function(_)
-          vim.lsp.buf_notify(0, "phpactor/indexer/reindex", {})
+          local clients = vim.lsp.get_clients({ name = "phpactor" })
+          if next(clients) then
+            vim.notify("LSP: Starting Phpactor reindexing")
+            vim.lsp.buf_notify(0, "phpactor/indexer/reindex", {})
+          else
+            vim.notify("LSP: Cannot reindex, Phpactor not attached")
+          end
         end, { desc = "Phpactor reindex" })
 
         -- Create a function that lets us more easily define mappings specific
@@ -81,21 +88,9 @@ return {
         end
 
         nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-        nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-        -- nmap("<leader>ca", function()
-        --   vim.lsp.buf.code_action { context = { only = { "quickfix", "refactor", "source" } } }
-        -- end, "[C]ode [A]ction")
-
-        nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-        nmap("gr", function()
-            -- TODO: add fname_width globally
-            require("telescope.builtin").lsp_references({ fname_with = 75 })
-          end,
-          "[G]oto [R]eferences")
-        nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-        nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-        -- nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-        -- nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+        nmap("<leader>ca", function()
+          vim.lsp.buf.code_action { context = { only = { "quickfix", "refactor", "source" } } }
+        end, "[C]ode [A]ction")
 
         -- See `:help K` for why this keymap
         nmap("K", vim.lsp.buf.hover, "Hover Documentation")
