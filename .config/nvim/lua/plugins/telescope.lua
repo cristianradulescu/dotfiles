@@ -28,6 +28,7 @@ return {
               mirror = true,
               prompt_position = "top",
             },
+            preview_cutoff = 0,
           },
           mappings = {
             i = {
