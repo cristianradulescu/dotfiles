@@ -24,7 +24,7 @@ end, { expr = true, desc = "Add endline semicolon for PHP files" })
 -- ---------
 local M = {}
 
--- PHP: For the method under the cursor, copy the clas FQCN and metho name
+-- [PHP] For the method under the cursor, copy the clas FQCN and metho name
 -- Example: `App\Service\UserService::login`
 function M.copy_method_reference()
   if (vim.bo.filetype ~= "php") then
@@ -43,7 +43,7 @@ function M.copy_method_reference()
   local tree_root = tree:root()
 
   local method_reference = ""
-  local query = vim.treesitter.query.parse("php", query_str)
+  local query = vim.treesitter.query.parse(vim.bo.filetype, query_str)
   for _, matches, _ in query:iter_matches(tree_root) do
     local node = matches[1]
     if (nil ~= node) then
