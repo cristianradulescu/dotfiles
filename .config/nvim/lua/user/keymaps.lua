@@ -27,26 +27,11 @@ vim.keymap.set("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move Down" })
 vim.keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 
 -- buffers
-vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
-vim.keymap.set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
 -- Clear search with <esc>
 vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
-
--- PHP stuff: add semicolon at the end of line
-vim.keymap.set("i", "<A-;>", function()
-  local buffnr = vim.api.nvim_get_current_buf()
-
-  if vim.bo[buffnr].filetype == "php" then
-    return "<esc><cmd>TSTextobjectGotoNextEnd @statement.outer<cr>A;"
-  end
-
-  return "<Ignore>"
-end, { expr = true, desc = "Add endline semicolon for PHP files" })
 
 -- neo-tree
 vim.keymap.set('n', '<leader>e', function()
@@ -81,7 +66,7 @@ require("gitsigns").setup({
   end
 })
 
--- Git
+-- Git / Fugitive
 vim.keymap.set("n", "<leader>gbf", "<cmd>Git blame<CR>", { desc = "[G]it [B]lame [F]ile" })
 vim.keymap.set("n", "<leader>gdf", "<cmd>DiffviewFileHistory %<cr>", { desc = "Git file history" })
 
@@ -98,14 +83,14 @@ vim.keymap.set('n', '<leader>/', function()
 end, { desc = '[/] Fuzzily search in current buffer' })
 
 -- Search in all files including hidden and ignored by Git
-vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
-vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
-vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps, { desc = '[S]earch [K]eymaps' })
-vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
-vim.keymap.set('n', '<leader>ss', require('telescope.builtin').lsp_document_symbols, { desc = '[S]earch [S]ymbols' })
+vim.keymap.set("n", "<leader>sf", require("telescope.builtin").find_files, { desc = "[S]earch [F]iles" })
+vim.keymap.set("n", "<leader>sh", require("telescope.builtin").help_tags, { desc = "[S]earch [H]elp" })
+vim.keymap.set("n", "<leader>sk", require("telescope.builtin").keymaps, { desc = "[S]earch [K]eymaps" })
+vim.keymap.set("n", "<leader>sw", require("telescope.builtin").grep_string, { desc = "[S]earch current [W]ord" })
+vim.keymap.set("n", "<leader>sg", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
+vim.keymap.set("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
+vim.keymap.set("n", "<leader>sr", require("telescope.builtin").resume, { desc = "[S]earch [R]esume" })
+vim.keymap.set("n", "<leader>ss", require("telescope.builtin").lsp_document_symbols, { desc = "[S]earch [S]ymbols" })
 vim.keymap.set("n", "<leader>sc", require("telescope.builtin").lsp_dynamic_workspace_symbols,
   { desc = "Search Workspace Symbols" })
 vim.keymap.set("n", "gd", function()
