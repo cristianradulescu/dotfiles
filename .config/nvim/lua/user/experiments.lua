@@ -24,7 +24,7 @@ end, { expr = true, desc = "Add endline semicolon for PHP files" })
 -- ---------
 local M = {}
 
--- [PHP] For the method under the cursor, copy the clas FQCN and metho name
+-- [PHP] For the method under the cursor, copy the clas FQCN and method name
 -- Example: `App\Service\UserService::login`
 function M.copy_method_reference()
   if (vim.bo.filetype ~= "php") then

@@ -21,7 +21,7 @@ return {
     end,
     config = function()
       require("neo-tree").setup({
-        sources = { "filesystem", "git_status", "buffers" },
+        sources = { "filesystem" },
         open_files_do_not_replace_types = { "terminal", "Trouble" },
         filesystem = {
           filtered_items = {

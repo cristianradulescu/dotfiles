@@ -36,8 +36,7 @@ vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and 
 -- neo-tree
 vim.keymap.set('n', '<leader>e', function()
   require('neo-tree.command').execute({ toggle = true, reveal = true, dir = vim.loop.cwd() })
-end, { desc = 'Toggle file [e]xplorer' }
-)
+end, { desc = 'Toggle file [e]xplorer' })
 
 -- Gitsigns
 require("gitsigns").setup({
