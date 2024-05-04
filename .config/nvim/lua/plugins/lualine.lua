@@ -15,11 +15,18 @@ return {
             {
               function()
                 local current_path = vim.loop.cwd() or ""
-                return vim.fn.substitute(current_path, "\\/home\\/\\w*", "~", "")
+                current_path = vim.fn.substitute(current_path, "\\/home\\/\\w*", "~", "")
+                return " " .. current_path
               end,
               separator = "",
+              color = M.fg("Normal"),
             },
-            { "filename", path = 1, padding = { right = 0, left = 0 }, color = M.fg("Keyword") },
+            {
+              "filename",
+              fmt = function(str) return " " .. str end,
+              path = 1,
+              padding = { right = 0, left = 0 }
+            },
           },
           lualine_c = {
           },
@@ -41,13 +48,12 @@ return {
             { "encoding" },
             { "fileformat" },
             { "filetype" },
+            { "location",   padding = { left = 0, right = 1 } },
           },
           lualine_y = {
-            { "progress", separator = " ", padding = { left = 1, right = 0 } },
-            { "location", padding = { left = 0, right = 1 } },
+            { "branch" },
           },
           lualine_z = {
-            { "branch" },
           },
         },
       })
