@@ -61,6 +61,17 @@ return {
       require("neodev").setup()
 
       local on_attach = function(_, buffnr)
+        vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+          border = "single",
+        })
+
+        vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+          border = "single",
+          focusable = false,
+          relative = "cursor",
+          silent = true,
+        })
+
         -- Create a command `:Format` local to the LSP buffer
         vim.api.nvim_buf_create_user_command(buffnr, "Format", function(_)
           vim.lsp.buf.format()
