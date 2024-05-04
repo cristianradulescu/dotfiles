@@ -106,6 +106,8 @@ return {
         -- See `:help K` for why this keymap
         nmap("K", vim.lsp.buf.hover, "Hover Documentation")
         nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
+
+        nmap("<leader>cf", "<cmd>Format<cr>", "Format code")
       end
 
       -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
@@ -172,7 +174,6 @@ return {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         }
-
       })
     end
   }
