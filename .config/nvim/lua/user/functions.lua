@@ -1,4 +1,4 @@
-M = {}
+local M = {}
 
 -- From LazyVim
 function M.foldexpr()

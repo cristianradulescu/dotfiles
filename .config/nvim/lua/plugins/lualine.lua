@@ -20,7 +20,7 @@ return {
               end,
               separator = "/",
               padding = { right = 0, left = 1 },
-              color = M.fg("Normal"),
+              color = require("user.functions").fg("Normal"),
             },
             {
               "filename",
