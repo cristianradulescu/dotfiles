@@ -18,12 +18,12 @@ return {
                 current_path = vim.fn.substitute(current_path, "\\/home\\/\\w*", "~", "")
                 return " " .. current_path
               end,
-              separator = "",
+              separator = "/",
+              padding = { right = 0, left = 1 },
               color = M.fg("Normal"),
             },
             {
               "filename",
-              fmt = function(str) return " " .. str end,
               path = 1,
               padding = { right = 0, left = 0 }
             },
