@@ -44,8 +44,13 @@ git clone https://github.com/cristianradulescu/dotfiles
 
 Fonts
 ```sh
-curl -LO https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf ~/.local/share/fonts
-curl -LO https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/~Hack/Regular/HackNerdFont-Regular.ttf /.local/share/fonts
+# mkdir -p ~/.local/share/fonts 
+
+curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf -o ~/.local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf
+
+curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/~Hack/Regular/HackNerdFont-Regular.ttf -o ~/.local/share/fonts/HackNerdFont-Regular.ttf
+
+fc-cache -rfv
 ```
 
 OhMyZsh
@@ -61,7 +66,9 @@ Install plugin manager
 
 ```sh
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 ~/.tmux/plugins/tpm/bin/install_plugins
+
 ln -s ~/dotfiles/.tmux.conf .tmux.conf
 ```
 
@@ -75,12 +82,14 @@ sudo ln -s ~/nvim-linux64/bin/nvim /usr/local/bin
 rm -rf nvim-linux64.tar.gz
 ```
 
-Neovim nightly
+Neovim nightly 
 
 ```sh
-git clone https://github.com/neovim/neovim.git neovim-nightly
-
-cd neovim-nightly &&  make CMAKE_BUILD_TYPE=RelWithDebInfo && cd build && cpack -G DEB && sudo dpkg -i nvim-linux64.deb
+curl -Lo nvim-linux64.tar.gz "https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz"
+tar xf nvim-linux64.tar.gz
+sudo rm /usr/local/bin/nvim
+sudo ln -s ~/nvim-linux64/bin/nvim /usr/local/bin
+rm -rf nvim-linux64.tar.gz
 ```
 
 LazyVim
