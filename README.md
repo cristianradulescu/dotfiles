@@ -42,6 +42,12 @@ Dotfiles repo:
 git clone https://github.com/cristianradulescu/dotfiles
 ```
 
+Fonts
+```sh
+curl -LO https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf ~/.local/share/fonts
+curl -LO https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/~Hack/Regular/HackNerdFont-Regular.ttf /.local/share/fonts
+```
+
 OhMyZsh
 
 ```sh
