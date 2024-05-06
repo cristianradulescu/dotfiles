@@ -8,14 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-#ZSH_THEME="robbyrussell"
 ZSH_THEME="cr"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -34,9 +27,6 @@ ZSH_THEME="cr"
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -84,10 +74,15 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/nul
 source /usr/share/autojump/autojump.zsh 2>/dev/null
 source /etc/zsh_command_not_found 2>/dev/null
 
+# Remap CAPS LOCK as CTRL
+setxkbmap -option caps:ctrl_modifier
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # Custom binaries
 export PATH=$PATH:/home/$USER/bin:/home/$USER/.local/bin
+# Sometimes snaps are not loaded, adding to path works
+[ -d "/snap/bin" ] && export PATH=$PATH:/snap/bin
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
