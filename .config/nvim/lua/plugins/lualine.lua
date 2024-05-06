@@ -8,6 +8,7 @@ return {
         options = {
           component_separators = "⎟",
           section_separators = "",
+          -- disabled_filetypes = { statusline = { "neo-tree" } },
         },
         sections = {
           lualine_a = { "mode" },
@@ -56,6 +57,7 @@ return {
           lualine_z = {
           },
         },
+        extensions = { "neo-tree", "fugitive", "lazy", "mason", "quickfix", "trouble" }
       })
     end
   },
