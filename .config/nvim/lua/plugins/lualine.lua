@@ -12,16 +12,52 @@ return {
         },
         sections = {
           lualine_a = { "mode" },
+          -- Curent dir
           lualine_b = {
             {
               function()
                 local current_path = vim.loop.cwd() or ""
-                current_path = vim.fn.substitute(current_path, "\\/home\\/\\w*", "~", "")
-                return " " .. current_path
+
+                -- Show full path of the current dir
+                local function full_path()
+                  -- If on home dir, use ~
+                  current_path = vim.fn.substitute(current_path, "\\/home\\/\\w*", "~", "")
+
+                  -- Keep only the first 3 chars of each dir except for the parent
+                  local new_path = {}
+                  local path_parts = vim.fn.split(current_path, "/")
+                  for key, value in pairs(path_parts) do
+                    if key < vim.fn.len(path_parts) then
+                      new_path[key] = vim.fn.slice(value, 0, 3)
+                    else
+                      new_path[key] = value
+                    end
+                  end
+
+                  return " " .. vim.fn.join(new_path, "/")
+                end
+
+                -- Show only the parent dir
+                local function parent_only()
+                  local path_parts = vim.fn.split(current_path, "/")
+                  return " " .. vim.fn.slice(path_parts, vim.fn.len(path_parts) - 1)[1]
+                end
+
+                if vim.fn.len(current_path) > 30 then
+                  return parent_only()
+                end
+
+                return full_path()
               end,
-              separator = "/",
-              padding = { right = 0, left = 1 },
+              separator = "",
+              padding = { right = 1, left = 1 },
               color = require("user.functions").fg("Normal"),
+            },
+            {
+              "filetype",
+              icon_only = true,
+              separator = "",
+              padding = { right = 0, left = 1 }
             },
             {
               "filename",

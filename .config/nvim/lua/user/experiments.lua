@@ -69,6 +69,8 @@ end
 
 vim.api.nvim_create_user_command("PHPCopyMethodReference", function()
   local method_reference = M.copy_method_reference()
+  -- Use both registers in case "+" is not available
+  vim.fn.setreg('+', method_reference)
   vim.fn.setreg('"', method_reference)
 end, { desc = "Copy current PHP method reference" })
 

@@ -91,7 +91,10 @@ return {
       pcall(require("telescope").load_extension, "fzf")
 
       local telescope = require("telescope.builtin")
-      vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
+      vim.keymap.set('n', '<leader>?', function()
+        require('telescope.builtin').oldfiles({ cwd_only = true })
+      end, { desc = '[?] Find recently opened files' })
+
       vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[] Find existing buffers' })
       vim.keymap.set('n', '<leader>/', function()
         require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
@@ -107,8 +110,10 @@ return {
       vim.keymap.set("n", "<leader>sg", telescope.live_grep, { desc = "[S]earch by [G]rep" })
       vim.keymap.set("n", "<leader>sd", telescope.diagnostics, { desc = "[S]earch [D]iagnostics" })
       vim.keymap.set("n", "<leader>sr", telescope.resume, { desc = "[S]earch [R]esume" })
-      vim.keymap.set("n", "<leader>ss", telescope.lsp_document_symbols,
-        { desc = "[S]earch [S]ymbols" })
+      vim.keymap.set("n", "<leader>ss", function()
+        telescope.lsp_document_symbols({ symbol_width = 55 })
+      end, { desc = "[S]earch [S]ymbols" })
+
       vim.keymap.set("n", "<leader>sc", telescope.lsp_dynamic_workspace_symbols,
         { desc = "Search Workspace Symbols" })
       vim.keymap.set("n", "gd", function()
