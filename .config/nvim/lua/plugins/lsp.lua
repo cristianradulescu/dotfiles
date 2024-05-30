@@ -104,10 +104,10 @@ return {
         end, "[C]ode [A]ction")
 
         -- See `:help K` for why this keymap
-        nmap("K", vim.lsp.buf.hover, "Hover Documentation")
+        -- nmap("K", vim.lsp.buf.hover, "Hover Documentation") -- Built-in in v10
         nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
 
-        nmap("<leader>cf", "<cmd>Format<cr>", "Format code")
+        -- nmap("<leader>cf", "<cmd>Format<cr>", "Format code") -- Replced with Conform
       end
 
       -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
