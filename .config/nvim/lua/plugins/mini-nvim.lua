@@ -24,4 +24,12 @@ return {
       require("mini.surround").setup()
     end
   },
+  {
+    -- Show bubffers as tabs
+    "echasnovski/mini.tabline",
+    version = "*",
+    config = function()
+      require("mini.tabline").setup()
+    end
+  },
 }
