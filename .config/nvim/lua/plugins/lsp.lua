@@ -152,6 +152,7 @@ return {
           { name = "nvim-lsp-signature-help" },
           { name = "path" },
           { name = "nvim_lua" },
+          { name = "calendar" },
         }, {
           { name = "buffer" },
         }),
