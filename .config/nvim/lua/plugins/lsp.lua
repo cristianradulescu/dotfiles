@@ -6,11 +6,11 @@ return {
     event = "BufReadPost",
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      { "williamboman/mason.nvim",          config = true },
+      { "williamboman/mason.nvim", config = true },
       { "williamboman/mason-lspconfig.nvim" },
 
       -- Useful status updates for LSP
-      { "j-hui/fidget.nvim",                tag = "legacy", opts = {} },
+      { "j-hui/fidget.nvim", tag = "legacy", opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       "folke/neodev.nvim",
@@ -28,37 +28,96 @@ return {
           "hrsh7th/cmp-buffer",
           -- Snippet Engine & its associated nvim-cmp source
           {
-            'L3MON4D3/LuaSnip',
+            "L3MON4D3/LuaSnip",
             build = (function()
               -- Build Step is needed for regex support in snippets
-              return 'make install_jsregexp'
+              return "make install_jsregexp"
             end)(),
           },
-          'saadparwaiz1/cmp_luasnip',
+          "saadparwaiz1/cmp_luasnip",
         },
-      }
+      },
     },
 
     config = function()
-      local servers = {
-        phpactor = {
-          -- cmd = { "phpactor", "language-server", "-vvv" }
-        },
-        bashls = {},
-        lua_ls = {
-          settings = {
-            Lua = {
-              workspace = { checkThirdParty = false },
-              telemetry = { enabled = false },
+      local servers =
+        {
+          phpactor = {
+            -- cmd = { "phpactor", "language-server", "-vvv" }
+          },
+          bashls = {},
+          lua_ls = {
+            settings = {
+              Lua = {
+                workspace = { checkThirdParty = false },
+                telemetry = { enabled = false },
+              },
+            },
+          },
+          twiggy_language_server = {},
+          cssls = {},
+          docker_compose_language_service = {},
+          dockerls = {},
+          html = {},
+          lemminx = {},
+          marksman = {},
+          sqlls = {},
+          tailwindcss = {},
+          tsserver = {},
+          yamlls = {
+            -- Have to add this for yamlls to understand that we support line folding
+            capabilities = {
+              textDocument = {
+                foldingRange = {
+                  dynamicRegistration = false,
+                  lineFoldingOnly = true,
+                },
+              },
+            },
+            -- lazy-load schemastore when needed
+            on_new_config = function(new_config)
+              new_config.settings.yaml.schemas = vim.tbl_deep_extend(
+                "force",
+                new_config.settings.yaml.schemas or {},
+                require("schemastore").yaml.schemas()
+              )
+            end,
+            settings = {
+              redhat = { telemetry = { enabled = false } },
+              yaml = {
+                keyOrdering = false,
+                format = {
+                  enable = true,
+                },
+                validate = true,
+                schemaStore = {
+                  -- Must disable built-in schemaStore support to use
+                  -- schemas from SchemaStore.nvim plugin
+                  enable = false,
+                  -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+                  url = "",
+                },
+              },
+            },
+          },
+          jsonls = {
+            -- lazy-load schemastore when needed
+            on_new_config = function(new_config)
+              new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+              vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+            end,
+            settings = {
+              json = {
+                format = {
+                  enable = true,
+                },
+                validate = { enable = true },
+              },
             },
           },
         },
-        jsonls = {},
-        twiggy_language_server = {},
-      }
-
-      -- Setup neovim lua config
-      require("neodev").setup()
+        -- Setup neovim lua config
+        require("neodev").setup()
 
       local on_attach = function(_, buffnr)
         vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -100,7 +159,7 @@ return {
 
         nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
         nmap("<leader>ca", function()
-          vim.lsp.buf.code_action { context = { only = { "quickfix", "refactor", "source" } } }
+          vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
         end, "[C]ode [A]ction")
 
         -- See `:help K` for why this keymap
@@ -117,9 +176,9 @@ return {
       -- Setup Mason
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = vim.tbl_keys(servers)
+        ensure_installed = vim.tbl_keys(servers),
       })
-      require("mason-lspconfig").setup {
+      require("mason-lspconfig").setup({
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -131,11 +190,11 @@ return {
             require("lspconfig")[server_name].setup(server)
           end,
         },
-      }
+      })
 
       local cmp = require("cmp")
       local luasnip = require("luasnip")
-      luasnip.config.setup {}
+      luasnip.config.setup({})
 
       cmp.setup({
         snippet = {
@@ -157,7 +216,7 @@ return {
           { name = "buffer" },
         }),
 
-        mapping = cmp.mapping.preset.insert {
+        mapping = cmp.mapping.preset.insert({
           ["<C-n>"] = cmp.mapping.select_next_item(),
           ["<C-p>"] = cmp.mapping.select_prev_item(),
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -166,15 +225,15 @@ return {
           ["<C-e>"] = cmp.mapping.abort(),
           ["<C-y>"] = cmp.mapping.confirm({ select = true }),
 
-          ["<CR>"] = cmp.mapping.confirm { select = true },
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
           ["<Tab>"] = cmp.mapping.select_next_item(),
           ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-        },
+        }),
 
         window = {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
-        }
+        },
       })
 
       vim.diagnostic.config({
@@ -187,6 +246,6 @@ return {
           prefix = "",
         },
       })
-    end
-  }
+    end,
+  },
 }
