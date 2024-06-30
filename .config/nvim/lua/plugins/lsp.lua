@@ -62,7 +62,6 @@ return {
           lemminx = {},
           marksman = {},
           sqlls = {},
-          tailwindcss = {},
           tsserver = {},
           yamlls = {
             -- Have to add this for yamlls to understand that we support line folding
