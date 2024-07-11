@@ -19,6 +19,11 @@ return {
     end
 
     require("conform").setup({
+      formatters = {
+        sqlfluff = {
+          args = { "format", "--dialect=ansi", "-" }
+        },
+      },
       formatters_by_ft = {
         lua = function()
           ensure_installed("stylua")
@@ -31,13 +36,13 @@ return {
         end,
 
         sql = function()
-          ensure_installed("sqlfmt")
-          return { "sqlfmt" }
+          ensure_installed("sqlfluff")
+          return { "sqlfluff" }
         end,
 
         mysql = function()
-          ensure_installed("sqlfmt")
-          return { "sqlfmt" }
+          ensure_installed("sqlfluff")
+          return { "sqlfluff" }
         end,
       },
     })
@@ -46,7 +51,7 @@ return {
     {
       "<leader>cf",
       function()
-        require("conform").format({ async = true, lsp_fallback = true })
+        require("conform").format({ async = false, lsp_fallback = true, quiet = false })
       end,
       mode = "",
       desc = "Format code (with Conform)",

@@ -8,7 +8,7 @@ return {
     build = ":TSUpdate",
     config = function()
       -- See `:help nvim-treesitter`
-      require("nvim-treesitter.configs").setup ({
+      require("nvim-treesitter.configs").setup({
         ensure_installed = {
           "php",
           "python",
@@ -20,7 +20,7 @@ return {
           "typescript",
           "lua",
           "markdown",
-          "sql"
+          "sql",
         },
         sync_install = true,
         ignore_install = {},
@@ -76,9 +76,15 @@ return {
           },
         },
       })
-    end
+    end,
   },
 
   -- Show the context of the currently visible buffer contents
-  { "nvim-treesitter/nvim-treesitter-context" }
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    opts = {
+      -- Window should span at max 1 line to prevent clutter from multiline definitions
+      max_lines = 1,
+    },
+  },
 }
