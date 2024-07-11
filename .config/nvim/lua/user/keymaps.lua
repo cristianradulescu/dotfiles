@@ -29,3 +29,5 @@ vim.keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 -- Clear search with <esc>
 vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
 
+-- Better delete
+vim.keymap.set("n", "dd", '"ddd', { desc = "Delete without altering system clipboard"})

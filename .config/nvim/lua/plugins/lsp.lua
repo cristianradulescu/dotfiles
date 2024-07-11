@@ -156,10 +156,10 @@ return {
           vim.keymap.set("n", keys, func, { buffer = buffnr, desc = desc })
         end
 
-        nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+        nmap("<leader>rn", vim.lsp.buf.rename, "Rename")
         nmap("<leader>ca", function()
           vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
-        end, "[C]ode [A]ction")
+        end, "Code Action")
 
         -- See `:help K` for why this keymap
         -- nmap("K", vim.lsp.buf.hover, "Hover Documentation") -- Built-in in v10
