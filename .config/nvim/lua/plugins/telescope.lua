@@ -27,9 +27,9 @@ return {
           },
           mappings = {
             i = {
-              -- TODO: what are these shortcuts?
-              ["<C-u>"] = false,
-              ["<C-d>"] = false,
+              -- Leave this uncomment to be able to scroll up/down in Telescope preview
+              -- ["<C-u>"] = false,
+              -- ["<C-d>"] = false,
 
               -- Search in all (hidden and ignored) files
               ["<a-a>"] = function(prompt_bufnr)
@@ -96,12 +96,7 @@ return {
       end, { desc = '[?] Find recently opened files' })
 
       vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[] Find existing buffers' })
-      vim.keymap.set('n', '<leader>/', function()
-        require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 100,
-          previewer = false,
-        })
-      end, { desc = '[/] Fuzzily search in current buffer' })
+      vim.keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find, { desc = '[/] Fuzzily search in current buffer' })
 
       vim.keymap.set("n", "<leader>sf", telescope.find_files, { desc = "[S]earch [F]iles" })
       vim.keymap.set("n", "<leader>sh", telescope.help_tags, { desc = "[S]earch [H]elp" })

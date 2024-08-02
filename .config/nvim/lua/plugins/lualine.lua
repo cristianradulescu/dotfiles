@@ -11,7 +11,14 @@ return {
         disabled_filetypes = { statusline = { "neo-tree" } },
       },
       sections = {
-        lualine_a = { "mode" },
+        lualine_a = {
+          {
+            "mode",
+            fmt = function(str)
+              return str:sub(1, 1)
+            end,
+          },
+        },
         -- Curent dir
         lualine_b = {
           {
@@ -57,16 +64,15 @@ return {
             "filetype",
             icon_only = true,
             separator = "",
-            padding = { right = 0, left = 1 }
+            padding = { right = 0, left = 1 },
           },
           {
             "filename",
             path = 1,
-            padding = { right = 0, left = 0 }
+            padding = { right = 0, left = 0 },
           },
         },
-        lualine_c = {
-        },
+        lualine_c = {},
         lualine_x = {
           { "diagnostics" },
           {
@@ -83,7 +89,7 @@ return {
             end,
           },
           { "filetype" },
-          { "location",   padding = { left = 0, right = 1 } },
+          { "location", padding = { left = 0, right = 1 } },
           { "encoding" },
           {
             "fileformat",
@@ -102,16 +108,14 @@ return {
               end
 
               return "tabs"
-            end
+            end,
           },
           { "branch" },
         },
-        lualine_y = {
-        },
-        lualine_z = {
-        },
+        lualine_y = {},
+        lualine_z = {},
       },
-      extensions = { "fugitive", "lazy", "mason", "quickfix", "trouble" }
+      extensions = { "fugitive", "lazy", "mason", "quickfix", "trouble" },
     })
-  end
+  end,
 }
