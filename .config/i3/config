@@ -11,6 +11,10 @@
 
 set $mod Mod4
 
+exec --no-startup-id picom
+exec_always --no-startup-id setxkbmap -option caps:ctrl_modifier
+
+
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 # font pango:monospace 10
@@ -23,6 +27,9 @@ font pango:JetBrainsMono Nerd Font 10
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
+
+# Start Gnome settings (use Gnome theme for apps)
+# exec --no-startup-id /usr/libexec/gsd-xsettings
 
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
@@ -157,8 +164,8 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-# bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+Shift+e exec "zenity --question --text 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' --ok-label 'Yes, exit i3' && if [[ $? == 0 ]]; then i3-msg exit; fi"
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+# bindsym $mod+Shift+e exec "zenity --question --text 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' --ok-label 'Yes, exit i3' && if [[ $? == 0 ]]; then i3-msg exit; fi"
 # lock session
 bindsym Mod1+l exec "i3lock --nofork --color=888888 --ignore-empty-password"
 
