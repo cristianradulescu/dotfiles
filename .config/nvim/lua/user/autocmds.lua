@@ -5,6 +5,14 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   command = "set filetype=sh",
 })
 
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+  desc = "Disable diagnostics for env files",
+  pattern = { ".env", ".env.*" },
+  callback = function()
+    vim.diagnostic.enable(false)
+  end,
+})
+
 -- Highlight on yank. See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -12,7 +20,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank()
   end,
   group = highlight_group,
-  pattern = '*',
+  pattern = "*",
 })
 
 -- Resize splits if window got resized
@@ -44,5 +52,3 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end
   end,
 })
-
-
