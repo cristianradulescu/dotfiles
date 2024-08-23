@@ -40,83 +40,90 @@ return {
     },
 
     config = function()
-      local servers =
-        {
-          phpactor = {
-            -- cmd = { "phpactor", "language-server", "-vvv" }
+      local servers = {
+        phpactor = {
+          -- Use Phpactor from Lazy package instead of LSP (Mason package) since it has issues with stubs due to being 
+          -- installed as phar
+          cmd = {
+            "php",
+            vim.fn.expand("$HOME/.local/share/nvim/lazy/phpactor/bin/phpactor"),
+            "language-server",
+            -- "-vvv"
           },
-          bashls = {},
-          lua_ls = {
-            settings = {
-              Lua = {
-                workspace = { checkThirdParty = false },
-                telemetry = { enabled = false },
+        },
+        bashls = {},
+        lua_ls = {
+          settings = {
+            Lua = {
+              workspace = { checkThirdParty = false },
+              telemetry = { enabled = false },
+            },
+          },
+        },
+        twiggy_language_server = {},
+        cssls = {},
+        docker_compose_language_service = {},
+        dockerls = {},
+        html = {},
+        lemminx = {},
+        marksman = {},
+        sqlls = {},
+        tsserver = {},
+        yamlls = {
+          -- Have to add this for yamlls to understand that we support line folding
+          capabilities = {
+            textDocument = {
+              foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true,
               },
             },
           },
-          twiggy_language_server = {},
-          cssls = {},
-          docker_compose_language_service = {},
-          dockerls = {},
-          html = {},
-          lemminx = {},
-          marksman = {},
-          sqlls = {},
-          tsserver = {},
-          yamlls = {
-            -- Have to add this for yamlls to understand that we support line folding
-            capabilities = {
-              textDocument = {
-                foldingRange = {
-                  dynamicRegistration = false,
-                  lineFoldingOnly = true,
-                },
+          -- lazy-load schemastore when needed
+          on_new_config = function(new_config)
+            new_config.settings.yaml.schemas = vim.tbl_deep_extend(
+              "force",
+              new_config.settings.yaml.schemas or {},
+              require("schemastore").yaml.schemas()
+            )
+          end,
+          settings = {
+            redhat = { telemetry = { enabled = false } },
+            yaml = {
+              keyOrdering = false,
+              format = {
+                enable = true,
               },
-            },
-            -- lazy-load schemastore when needed
-            on_new_config = function(new_config)
-              new_config.settings.yaml.schemas = vim.tbl_deep_extend(
-                "force",
-                new_config.settings.yaml.schemas or {},
-                require("schemastore").yaml.schemas()
-              )
-            end,
-            settings = {
-              redhat = { telemetry = { enabled = false } },
-              yaml = {
-                keyOrdering = false,
-                format = {
-                  enable = true,
-                },
-                validate = true,
-                schemaStore = {
-                  -- Must disable built-in schemaStore support to use
-                  -- schemas from SchemaStore.nvim plugin
-                  enable = false,
-                  -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
-                  url = "",
-                },
-              },
-            },
-          },
-          jsonls = {
-            -- lazy-load schemastore when needed
-            on_new_config = function(new_config)
-              new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-              vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
-            end,
-            settings = {
-              json = {
-                format = {
-                  enable = true,
-                },
-                validate = { enable = true },
+              validate = true,
+              schemaStore = {
+                -- Must disable built-in schemaStore support to use
+                -- schemas from SchemaStore.nvim plugin
+                enable = false,
+                -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+                url = "",
               },
             },
           },
         },
-        -- Setup neovim lua config
-        require("neodev").setup()
+        jsonls = {
+          -- lazy-load schemastore when needed
+          on_new_config = function(new_config)
+            new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+            vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+          end,
+          settings = {
+            json = {
+              format = {
+                enable = true,
+              },
+              validate = { enable = true },
+            },
+          },
+        },
+      }
+
+      -- Setup neovim lua config
+      require("neodev").setup()
 
       local on_attach = function(_, buffnr)
         vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
