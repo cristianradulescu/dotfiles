@@ -1,0 +1,22 @@
+{
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.iconTheme": "catppuccin-mocha",
+  "workbench.editor.enablePreview": false,
+  "workbench.activityBar.location": "top",
+  "editor.fontFamily": "'JetBrainsMonoNL Nerd Font'",
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.8,
+  "editor.renderWhitespace": "all",
+  "editor.minimap.enabled": false,
+  "window.zoomLevel": 1,
+  "window.customTitleBarVisibility": "auto",
+  "window.menuBarVisibility": "toggle",
+  "search.useIgnoreFiles": false,
+  "telemetry.telemetryLevel": "off",
+  "files.autoSave": "onFocusChange",
+  "git.autofetch": true,
+  "catppuccin.italicKeywords": false,
+  "redhat.telemetry.enabled": false,
+  "php.suggest.basic": false,
+  "phpactor.path": "/opt/phpactor/bin/phpactor"
+}
