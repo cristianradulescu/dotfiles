@@ -20,6 +20,7 @@ return {
           "typescript",
           "lua",
           "markdown",
+          "markdown_inline",
           "sql",
         },
         sync_install = true,

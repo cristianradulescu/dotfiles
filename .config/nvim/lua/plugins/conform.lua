@@ -39,11 +39,6 @@ return {
           ensure_installed("sqlfluff")
           return { "sqlfluff" }
         end,
-
-        mysql = function()
-          ensure_installed("sqlfluff")
-          return { "sqlfluff" }
-        end,
       },
     })
   end,
