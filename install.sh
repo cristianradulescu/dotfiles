@@ -76,12 +76,16 @@ sudo apt install -y php-cli php-xml composer
 curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
 sudo apt install -y symfony-cli
 
-# Setup Phpactor locally
+# Checkout Phpactor locally (using it as PHAR has some issues with locating stubs)
 sudo git clone https://github.com/phpactor/phpactor.git /opt/phpactor && \
   sudo chown -R "$USER:$USER" /opt/phpactor && \
-  cd /opt/phpactor && \
-  composer install
+  cd /opt/phpactor
 
+# Switch to latest tag (named like: 2024.06.30.0)
+PHPACTOR_LAST_RELEASE=$(git tag -l "$(date +%Y).*" --sort -"version:refname" | head -n1) && \
+  git checkout "$PHPACTOR_LAST_RELEASE" && \
+  composer install && \
+  cd ~
 
 # ####
 # Tmux
