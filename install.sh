@@ -57,10 +57,9 @@ sudo apt install -y \
   php-cli composer \
   flameshot \
   apt-file \
-  build-essentials autoconf make gettext g++ \
-  libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses5-dev libffi-dev libgdbm-dev libjemalloc2 \
-  libvips imagemagick libmagickwand-dev gir1.2-gtop-2.0 gir1.2-clutter-1.0 \
-  redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev
+  build-essential autoconf make gettext g++ \
+  libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses-dev \
+  imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev
 
 
 # #####################
@@ -77,15 +76,23 @@ curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo 
 sudo apt install -y symfony-cli
 
 # Checkout Phpactor locally (using it as PHAR has some issues with locating stubs)
-sudo git clone https://github.com/phpactor/phpactor.git /opt/phpactor && \
-  sudo chown -R "$USER:$USER" /opt/phpactor && \
-  cd /opt/phpactor
+# Have both stable and unstable version (sometimes annoying issues are fixed on master and I can switch)
+sudo git clone https://github.com/phpactor/phpactor.git /opt/phpactor
+sudo git clone https://github.com/phpactor/phpactor.git /opt/phpactor-unstable
+sudo chown -R "$USER:$USER" /opt/phpactor /opt/phpactor-unstable
 
-# Switch to latest tag (named like: 2024.06.30.0)
-PHPACTOR_LAST_RELEASE=$(git tag -l "$(date +%Y).*" --sort -"version:refname" | head -n1) && \
+# Phpactor stable: switch to latest tag (named like: 2024.06.30.0) and install deps
+cd /opt/phpactor && \
+  PHPACTOR_LAST_RELEASE=$(git tag -l "$(date +%Y).*" --sort -"version:refname" | head -n1) && \
   git checkout "$PHPACTOR_LAST_RELEASE" && \
   composer install && \
   cd ~
+
+# Phpactor unstable: install deps
+cd /opt/phpactor-unstable && \
+  composer install && \
+  cd ~
+
 
 # ####
 # Tmux
@@ -215,11 +222,18 @@ code --install-extension redhat.vscode-xml
 code --install-extension redhat.vscode-yaml
 code --install-extension mblode.twig-language-2
 
-# #####
-# Gnome
-# #####
 
-# Theme
+# ##########
+# Redis GUIs
+# ##########
+sudo snap install redisinsight another-redis-desktop-manager
+
+
+# #############
+# Gnome desktop
+# #############
+
+# Theme / Catppuccin style
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'Yaru'
 gsettings set org.gnome.desktop.interface gtk-theme "Yaru-purple-dark"
@@ -230,6 +244,9 @@ gsettings set org.gnome.mutter center-new-windows true
 
 # Reveal week numbers in the Gnome calendar
 gsettings set org.gnome.desktop.calendar show-weekdate true
+
+# Show battery percentage
+gsettings set org.gnome.desktop.interface show-battery-percentage true
 
 # Make it easy to maximize like you can fill left/right
 gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>Up']"
@@ -245,8 +262,15 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/or
 # Clear favorite apps
 gsettings set org.gnome.shell favorite-apps "[]"
 
+# Auto-hide the dock
+# gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
+
+# Map Caps_Lock to CTRL (works on Wayland too)
+gsettings set org.gnome.desktop.input-sources xkb-options "['caps:ctrl_modifier']"
+gsettings org.gnome.desktop.input-sources sources "[('xkb-options', 'us')]"
+
 # Manage extensions
-sudo apt install -y gnome-shell-extension-manager pipx
+sudo apt install -y gnome-tweaks gnome-shell-extension-manager pipx
 pipx install gnome-extensions-cli --system-site-packages
 
 # Fix path for pipx 
