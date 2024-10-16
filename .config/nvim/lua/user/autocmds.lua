@@ -1,16 +1,9 @@
 -- Set filetype for environment specific dotenv files
+-- Use `bash` as type to prevent diagnostics
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   desc = "Set filetype for .env.* files",
-  pattern = ".env.*",
-  command = "set filetype=sh",
-})
-
-vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
-  desc = "Disable diagnostics for env files",
   pattern = { ".env", ".env.*" },
-  callback = function()
-    vim.diagnostic.enable(false)
-  end,
+  command = "set filetype=bash",
 })
 
 -- Highlight on yank. See `:help vim.highlight.on_yank()`

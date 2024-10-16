@@ -40,7 +40,7 @@ return {
     {
       "<leader>e",
       function()
-        require("neo-tree.command").execute({ toggle = true, reveal = true, dir = vim.loop.cwd() })
+        require("neo-tree.command").execute({ toggle = true, reveal = true, dir = vim.uv.cwd() })
       end,
       mode = "n",
       desc = "File explorer"

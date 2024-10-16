@@ -1,7 +1,7 @@
 local source = {}
 
 function source:is_available()
-  return true
+  return vim.tbl_contains({"text", "markdown"}, vim.bo.filetype)
 end
 
 function source:get_debug_name()

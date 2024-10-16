@@ -9,7 +9,7 @@ return {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "make",
         cond = function()
-          return vim.fn.executable "make" == 1
+          return vim.fn.executable("make") == 1
         end,
       },
     },
@@ -86,48 +86,52 @@ return {
               end,
             },
           },
-        }
+        },
       })
       pcall(require("telescope").load_extension, "fzf")
 
       local telescope = require("telescope.builtin")
-      vim.keymap.set('n', '<leader>?', function()
-        require('telescope.builtin').oldfiles({ cwd_only = true })
-      end, { desc = '[?] Find recently opened files' })
+      vim.keymap.set("n", "<leader>?", function()
+        require("telescope.builtin").oldfiles({ cwd_only = true })
+      end, { desc = "Find recently opened files" })
 
-      vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[] Find existing buffers' })
-      vim.keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find, { desc = '[/] Fuzzily search in current buffer' })
+      vim.keymap.set("n", "<leader><space>", require("telescope.builtin").buffers, { desc = "Find existing buffers" })
+      vim.keymap.set(
+        "n",
+        "<leader>/",
+        require("telescope.builtin").current_buffer_fuzzy_find,
+        { desc = "Fuzzily search in current buffer" }
+      )
 
-      vim.keymap.set("n", "<leader>sf", telescope.find_files, { desc = "[S]earch [F]iles" })
-      vim.keymap.set("n", "<leader>sh", telescope.help_tags, { desc = "[S]earch [H]elp" })
-      vim.keymap.set("n", "<leader>sk", telescope.keymaps, { desc = "[S]earch [K]eymaps" })
-      vim.keymap.set("n", "<leader>sw", telescope.grep_string, { desc = "[S]earch current [W]ord" })
-      vim.keymap.set("n", "<leader>sg", telescope.live_grep, { desc = "[S]earch by [G]rep" })
-      vim.keymap.set("n", "<leader>sd", telescope.diagnostics, { desc = "[S]earch [D]iagnostics" })
-      vim.keymap.set("n", "<leader>sr", telescope.resume, { desc = "[S]earch [R]esume" })
+      vim.keymap.set("n", "<leader>sf", telescope.find_files, { desc = "Search files" })
+      vim.keymap.set("n", "<leader>sh", telescope.help_tags, { desc = "Search help" })
+      vim.keymap.set("n", "<leader>sk", telescope.keymaps, { desc = "Search keymaps" })
+      vim.keymap.set("n", "<leader>sw", telescope.grep_string, { desc = "Search current word" })
+      vim.keymap.set("n", "<leader>sg", telescope.live_grep, { desc = "Search by grep" })
+      vim.keymap.set("n", "<leader>sd", telescope.diagnostics, { desc = "Search diagnostics" })
+      vim.keymap.set("n", "<leader>sr", telescope.resume, { desc = "Search resume" })
       vim.keymap.set("n", "<leader>ss", function()
         telescope.lsp_document_symbols({ symbol_width = 55 })
-      end, { desc = "[S]earch [S]ymbols" })
+      end, { desc = "Search symbols" })
 
-      vim.keymap.set("n", "<leader>sc", telescope.lsp_dynamic_workspace_symbols,
-        { desc = "Search Workspace Symbols" })
+      vim.keymap.set("n", "<leader>sc", function()
+        telescope.lsp_dynamic_workspace_symbols({ fname_width = 75 })
+      end, { desc = "Search workspace symbols" })
       vim.keymap.set("n", "gd", function()
         telescope.lsp_definitions({ fname_width = 75 })
-      end, { desc = "[G]oto [D]efinition" })
+      end, { desc = "Goto definition" })
       vim.keymap.set("n", "gr", function()
         -- TODO: add fname_width globally
         telescope.lsp_references({ fname_width = 75 })
       end, {
-        desc =
-        "[G]oto [R]eferences"
+        desc = "Goto references",
       })
       vim.keymap.set("n", "gI", function()
         telescope.lsp_implementations({ fname_width = 75 })
-      end, { desc = "[G]oto [I]mplementation" })
+      end, { desc = "Goto implementation" })
       vim.keymap.set("n", "<leader>D", function()
         telescope.lsp_type_definitions({ fname_width = 75 })
-      end, { desc = "Type [D]efinition" })
-    end
+      end, { desc = "Type definition" })
+    end,
   },
-
 }
