@@ -41,16 +41,6 @@ return {
 
     config = function()
       local servers = {
-        phpactor = {
-          -- Use Phpactor from Lazy package instead of LSP (Mason package) since it has issues with stubs due to being 
-          -- installed as phar
-          cmd = {
-            "php",
-            vim.fn.expand("$HOME/.local/share/nvim/lazy/phpactor/bin/phpactor"),
-            "language-server",
-            -- "-vvv"
-          },
-        },
         bashls = {},
         lua_ls = {
           settings = {
@@ -196,6 +186,19 @@ return {
             require("lspconfig")[server_name].setup(server)
           end,
         },
+      })
+
+      -- Use Phpactor from source since it has issues with stubs due to being installed as phar
+      require("lspconfig").phpactor.setup({
+        cmd = {
+          "php",
+          -- vim.fn.expand("$HOME/.local/share/nvim/lazy/phpactor/bin/phpactor"),
+          vim.fn.expand("/opt/phpactor-unstable/bin/phpactor"),
+          "language-server",
+          -- "-vvv"
+        },
+        capabilities = vim.tbl_deep_extend("force", {}, capabilities, require("lspconfig").phpactor.capabilities or {}),
+        on_attach = on_attach,
       })
 
       local cmp = require("cmp")

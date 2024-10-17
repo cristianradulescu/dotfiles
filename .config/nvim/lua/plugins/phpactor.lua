@@ -1,6 +1,7 @@
 return {
   -- Phpactor in non-LSP mode for more PHP related features
-  "phpactor/phpactor",
+  -- "phpactor/phpactor",
+  dir = "/opt/phpactor-unstable",
   ft = { "php" },
   build = "composer install --no-dev -o",
   config = function()
