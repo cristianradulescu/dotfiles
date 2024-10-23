@@ -21,7 +21,9 @@ return {
     require("conform").setup({
       formatters = {
         sqlfluff = {
-          args = { "format", "--dialect=ansi", "-" }
+          args = { "format", "--dialect=mysql", "-" },
+          -- disable require_cwd so that a config file is not required
+          require_cwd = false,
         },
       },
       formatters_by_ft = {
