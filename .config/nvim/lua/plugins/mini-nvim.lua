@@ -1,21 +1,21 @@
 return {
-  {
-    -- Auto add the "paired" character when typing the first one (", {, [...)
-    "echasnovski/mini.pairs",
-    -- stable version
-    version = "*",
-    config = function()
-      require("mini.pairs").setup()
-    end
-  },
-  {
-    -- More text objects selections
-    "echasnovski/mini.ai",
-    version = "*",
-    config = function()
-      require("mini.ai").setup()
-    end
-  },
+  -- {
+  --   -- Auto add the "paired" character when typing the first one (", {, [...)
+  --   "echasnovski/mini.pairs",
+  --   -- stable version
+  --   version = "*",
+  --   config = function()
+  --     require("mini.pairs").setup()
+  --   end
+  -- },
+  -- {
+  --   -- More text objects selections
+  --   "echasnovski/mini.ai",
+  --   version = "*",
+  --   config = function()
+  --     require("mini.ai").setup()
+  --   end
+  -- },
   {
     -- Manage surround charaters
     "echasnovski/mini.surround",

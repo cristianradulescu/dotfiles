@@ -45,3 +45,11 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end
   end,
 })
+
+-- PHP debugging with containers is buggy with nvim-dap, use VSCode instead
+vim.api.nvim_create_user_command(
+  "OpenProjectInVSCode",
+  -- open VSCode in a new window and add current project dir
+  "!code -n -a " .. vim.uv.cwd(),
+  { desc = "Format current buffer with LSP" }
+)
