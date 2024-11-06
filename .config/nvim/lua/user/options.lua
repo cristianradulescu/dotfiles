@@ -7,89 +7,92 @@ vim.g.maplocalleader = " "
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
--- Transparent bg
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
--- --
+-- Use Nerd Fonts
+vim.g.have_nerd_font = true
+
 -- Color scheme
-vim.o.background = "dark"
+vim.opt.background = "dark"
 
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.opt.hlsearch = false
 
 -- Make line numbers default
 vim.wo.number = true
 
 -- Enable mouse mode
-vim.o.mouse = "a"
+vim.opt.mouse = "a"
+
+-- Hide mode since it is already in status line
+vim.opt.showmode = false
 
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help "clipboard"`
-vim.o.clipboard = "unnamedplus"
+vim.opt.clipboard = "unnamedplus"
 
 -- Keep indent for next lines when word wrap is enabled
-vim.o.breakindent = true
+vim.opt.breakindent = true
 
 -- Save undo history
-vim.o.undofile = true
+vim.opt.undofile = true
 
 -- Case insensitive searching UNLESS /C or capital in search
-vim.o.ignorecase = true
-vim.o.smartcase = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 
 -- Keep signcolumn on by default
-vim.wo.signcolumn = "yes"
+vim.opt.signcolumn = "yes"
 
 -- Decrease update time
-vim.o.updatetime = 250
-vim.o.timeout = true
-vim.o.timeoutlen = 300
+vim.opt.updatetime = 250
+vim.opt.timeout = true
+vim.opt.timeoutlen = 300
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = "menu,menuone,noselect"
+vim.opt.completeopt = "menu,menuone,noselect"
 
 -- NOTE: You should make sure your terminal supports this
-vim.o.termguicolors = true
+vim.opt.termguicolors = true
 
 -- Enable auto indenting and set it to spaces
-vim.o.smartindent = true
-vim.o.shiftwidth = 2      -- Size of indent
-vim.o.shiftround = true   --- Round indent
+vim.opt.smartindent = true
+vim.opt.shiftwidth = 2      -- Size of indent
+vim.opt.shiftround = true   --- Round indent
 
-vim.o.tabstop = 2           -- Nb of spaces per tab
-vim.o.softtabstop = 2       -- Nb of spaces per tab
-vim.o.expandtab = true      --Spaces instead of tabs
-vim.o.wrap = false          -- No word wrap
-vim.o.list = true         -- Show non-printable chars
+vim.opt.tabstop = 2           -- Nb of spaces per tab
+vim.opt.softtabstop = 2       -- Nb of spaces per tab
+vim.opt.expandtab = true      --Spaces instead of tabs
+vim.opt.wrap = false          -- No word wrap
+vim.opt.list = true         -- Show non-printable chars
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
-vim.o.cursorline = true     -- Highlight current line
-vim.o.relativenumber = true -- Line numbers start from current line
-vim.o.scrolloff = 8         -- Lines of context to keep top/bottom
-vim.o.sidescrolloff = 8     -- Lines of context to keep left/right
+vim.opt.cursorline = true     -- Highlight current line
+vim.opt.relativenumber = true -- Line numbers start from current line
+vim.opt.scrolloff = 8         -- Lines of context to keep top/bottom
+vim.opt.sidescrolloff = 8     -- Lines of context to keep left/right
 
 -- Split directions - go right and bottom
-vim.o.splitright = true
-vim.o.splitbelow = true
+vim.opt.splitright = true
+vim.opt.splitbelow = true
 
 -- Right vertical line
-vim.o.colorcolumn = "120"
+vim.opt.colorcolumn = "120"
 
 -- Command line completion mode
-vim.o.wildmode = "longest:full,full"
+vim.opt.wildmode = "longest:full,full"
 
 -- Folding
-vim.o.foldlevel = 99
+vim.opt.foldlevel = 99
 
 -- HACK: causes freezes on <= 0.9, so only enable on >= 0.10 for now
 if vim.fn.has("nvim-0.10") == 1 then
-  vim.o.foldmethod = "expr"
+  vim.opt.foldmethod = "expr"
   vim.opt.foldexpr = "v:lua.require'user.functions'.foldexpr()"
 else
-  vim.o.foldmethod = "indent"
+  vim.opt.foldmethod = "indent"
 end
 
 -- Smooth scroll
 if vim.fn.has("nvim-0.10") == 1 then
-  vim.o.smoothscroll = true
+  vim.opt.smoothscroll = true
 end
