@@ -7,9 +7,6 @@ vim.g.maplocalleader = " "
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
--- Use Nerd Fonts
-vim.g.have_nerd_font = true
-
 -- Color scheme
 vim.opt.background = "dark"
 
@@ -63,8 +60,8 @@ vim.opt.tabstop = 2           -- Nb of spaces per tab
 vim.opt.softtabstop = 2       -- Nb of spaces per tab
 vim.opt.expandtab = true      --Spaces instead of tabs
 vim.opt.wrap = false          -- No word wrap
-vim.opt.list = true         -- Show non-printable chars
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+-- vim.opt.list = true         -- Show non-printable chars
+-- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 vim.opt.cursorline = true     -- Highlight current line
 vim.opt.relativenumber = true -- Line numbers start from current line
@@ -83,16 +80,12 @@ vim.opt.wildmode = "longest:full,full"
 
 -- Folding
 vim.opt.foldlevel = 99
-
--- HACK: causes freezes on <= 0.9, so only enable on >= 0.10 for now
-if vim.fn.has("nvim-0.10") == 1 then
-  vim.opt.foldmethod = "expr"
-  vim.opt.foldexpr = "v:lua.require'user.functions'.foldexpr()"
-else
-  vim.opt.foldmethod = "indent"
-end
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.require'user.functions'.foldexpr()"
 
 -- Smooth scroll
-if vim.fn.has("nvim-0.10") == 1 then
-  vim.opt.smoothscroll = true
-end
+vim.opt.smoothscroll = true
+
+-- Spellcheck
+vim.opt.spell = true
+vim.opt.spelllang = "en_us"
