@@ -52,9 +52,11 @@ function M.color(name, bg)
 end
 
 
--- [PHP] For the method under the cursor, copy the clas FQCN and method name
--- Example: `App\Service\UserService::login`
-function M.copy_method_reference()
+-- [PHP] For the method/property under the cursor, copy the class FQCN and method name
+-- Examples: 
+-- - `App\Service\UserService::login`
+-- - `App\Entity\User::email`
+function M.copy_reference()
   if (vim.bo.filetype ~= "php") then
     print("Not a PHP file")
     return
@@ -70,38 +72,38 @@ function M.copy_method_reference()
   local tree = parser:parse()[1]
   local tree_root = tree:root()
 
-  local method_reference = ""
+  local reference = ""
   local query = vim.treesitter.query.parse(vim.bo.filetype, query_str)
   for _, matches, _ in query:iter_matches(tree_root) do
     local node = matches[1]
     if (nil ~= node) then
       -- Concat the node text 
-      method_reference = method_reference .. vim.treesitter.get_node_text(node, 0)
+      reference = reference .. vim.treesitter.get_node_text(node, 0)
 
       -- After namespace add "\"
       if ("namespace_name" == node:type()) then
-        method_reference = method_reference .. "\\"
+        reference = reference .. "\\"
       -- After class name add "::"
       elseif ("name" == node:type()) then
-        method_reference = method_reference .. "::"
+        reference = reference .. "::"
       end
     end
   end
 
-  -- Append the word under cursor - should be the method name
-  method_reference = method_reference .. vim.fn.expand("<cword>")
-  print("Yanked method reference: " .. method_reference)
+  -- Append the word under cursor - should be the method/property name
+  reference = reference .. vim.fn.expand("<cword>")
+  print("Yanked reference: " .. reference)
 
-  return method_reference
+  return reference
 end
 
-vim.api.nvim_create_user_command("PHPCopyMethodReference", function()
-  local method_reference = M.copy_method_reference()
+vim.api.nvim_create_user_command("PHPCopyReference", function()
+  local reference = M.copy_reference()
   -- Use both registers in case "+" is not available
-  vim.fn.setreg('+', method_reference)
-  vim.fn.setreg('"', method_reference)
-end, { desc = "Copy current PHP method reference" })
+  vim.fn.setreg('+', reference)
+  vim.fn.setreg('"', reference)
+end, { desc = "Copy current PHP method/property reference" })
 
-vim.keymap.set({ "n" }, "<leader>ccm", "<cmd>PHPCopyMethodReference<cr>", { desc = "Copy method referece" })
+vim.keymap.set({ "n" }, "<leader>ccm", "<cmd>PHPCopyReference<cr>", { desc = "Copy method/property reference" })
 
 return M
