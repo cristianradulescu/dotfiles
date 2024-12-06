@@ -223,7 +223,7 @@ return {
           { name = "nvim_lua" },
           { name = "calendar" },
         }, {
-          { name = "buffer" },
+          { name = "buffer", max_item_count = 3 },
         }),
 
         mapping = cmp.mapping.preset.insert({

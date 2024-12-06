@@ -47,6 +47,8 @@ return {
   },
 
   vim.keymap.set("n", "<leader>gbf", "<cmd>Git blame<CR>", { desc = "Git blame file" }),
-  vim.keymap.set("n", "<leader>gdf", "<cmd>DiffviewFileHistory --no-merges %<cr>", { desc = "Git file history" })
+  vim.keymap.set("n", "<leader>gdf", "<cmd>DiffviewFileHistory --no-merges %<cr>", { desc = "Git file history" }),
+  vim.keymap.set("n", "<leader>gdo", "<cmd>DiffviewOpen<cr>", { desc = "Diffview open" }),
+  vim.keymap.set("n", "<leader>gdc", "<cmd>DiffviewClose<cr>", { desc = "Diffview close" })
 }
 
