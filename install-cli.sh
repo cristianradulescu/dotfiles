@@ -124,7 +124,7 @@ curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/lates
 tar xf lazygit.tar.gz lazygit
 sudo install lazygit /usr/local/bin
 rm -rf lazygit lazygit.tar.gz
-
+mkdir -p ~/.config/lazygit/ && ln -s ~/dotfiles/.config/lazygit/config.yml ~/.config/lazygit/config.yml
 
 # ######
 # Docker

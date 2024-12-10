@@ -107,6 +107,8 @@ gsettings set org.gnome.shell favorite-apps "[]"
 
 # Auto-hide the dock
 # gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
+# Disable hot-keys 
+gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 
 # Map Caps_Lock to CTRL (works on Wayland too)
 gsettings set org.gnome.desktop.input-sources xkb-options "['caps:ctrl_modifier']"
