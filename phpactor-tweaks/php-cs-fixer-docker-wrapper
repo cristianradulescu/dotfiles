@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+
+# ###
+# Phpactor will add the local PHP binary before the configured php-cs-fixer binary so we will just wrap the docker command
+# in a PHP script.
+#
+# Configuration for .phpactor.json:
+#  "language_server_php_cs_fixer.bin": "<path_to_this_file>"
+#  "language_server_php_cs_fixer.config": "<full_path_of_php-cs-fixer_config_file_from_container>"
+
+$containerPhpCsFixerBin = '/app/vendor/bin/php-cs-fixer';
+exec(
+    'docker compose exec -i php bash -c "'
+        # Default env variables configured in Phpactor
+        .'XDEBUG_MODE=off PHP_CS_FIXER_IGNORE_ENV=1 '
+        .'php '.$containerPhpCsFixerBin.' '
+        # Pass all arguments to the php-cs-fixer binary (except first one which is the script name)
+        # https://www.php.net/manual/en/reserved.variables.argv.php
+        .implode(' ', array_slice($argv, 1))
+        .'"',
+    $output
+);
+
+echo implode(PHP_EOL, $output);

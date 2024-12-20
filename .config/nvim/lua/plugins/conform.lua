@@ -32,10 +32,11 @@ return {
           return { "stylua" }
         end,
 
-        php = function()
-          ensure_installed("php_cs_fixer", "php-cs-fixer")
-          return { "php_cs_fixer" }
-        end,
+        -- -- There is also built in support in phpactor
+        -- php = function()
+        --   ensure_installed("php_cs_fixer", "php-cs-fixer")
+        --   return { "php_cs_fixer" }
+        -- end,
 
         sql = function()
           ensure_installed("sqlfluff")
