@@ -6,9 +6,11 @@ return {
     -- Creates a beautiful debugger UI
     "rcarriga/nvim-dap-ui",
     "nvim-neotest/nvim-nio",
+    "leoluz/nvim-dap-go",
   },
   config = function()
     local dap = require("dap")
+    require("dap-go").setup({})
     local dapui = require("dapui")
     dapui.setup({})
 
@@ -34,7 +36,6 @@ return {
       command = "node",
       args = { path .. "/extension/out/phpDebug.js" },
     }
-
     dap.configurations.php = {
       {
         type = "php",

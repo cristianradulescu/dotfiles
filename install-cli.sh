@@ -56,8 +56,8 @@ echo "Install NodeJS from nodesource.com to get a more recent version"
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && \
   sudo apt install -y nodejs
 
-echo "Install Golang"
-sudo apt install -y golang-go
+echo "Install Golang, Delve"
+sudo apt install -y golang-go delve
 
 echo "Install PHP, Composer, Symfony CLI"
 sudo apt install -y php-cli php-xml composer
