@@ -18,5 +18,5 @@
   "catppuccin.italicKeywords": false,
   "redhat.telemetry.enabled": false,
   "php.suggest.basic": false,
-  "phpactor.path": "/opt/phpactor/bin/phpactor"
+  "phpactor.path": "/opt/phpactor-unstable/bin/phpactor"
 }

@@ -13,7 +13,7 @@ end
 -- This is where you actually apply your config choices
 config.color_scheme = "Catppuccin Mocha"
 config.font = wezterm.font("JetBrainsMonoNL Nerd Font", { weight = "Medium" })
-config.font_size = 12
+config.font_size = 14
 config.line_height = 1.2
 config.bold_brightens_ansi_colors = "BrightAndBold"
 

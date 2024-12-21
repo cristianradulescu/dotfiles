@@ -43,7 +43,8 @@ sudo apt install -y \
   php-cli composer \
   flameshot \
   apt-file \
-  build-essential autoconf make gettext g++ \
+  xcape \
+  build-essential autoconf make cmake gettext g++ \
   libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses-dev \
   imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev
 
@@ -52,8 +53,11 @@ sudo apt install -y \
 # Programming languages
 # #####################
 echo "Install NodeJS from nodesource.com to get a more recent version"
-curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash - && \
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && \
   sudo apt install -y nodejs
+
+echo "Install Golang"
+sudo apt install -y golang-go
 
 echo "Install PHP, Composer, Symfony CLI"
 sudo apt install -y php-cli php-xml composer
@@ -109,7 +113,7 @@ git clone https://github.com/neovim/neovim ~/Apps/neovim && \
   make CMAKE_BUILD_TYPE=RelWithDebInfo && \
   cd build && \
   cpack -G DEB && \
-  sudo dpkg -i nvim-linux64.deb && \
+  sudo dpkg -i --force-all nvim-linux64.deb && \
   cd ~
 
 sudo apt install -y python3-pynvim 

@@ -13,5 +13,9 @@ if [ ! -d "$HOME/dotfiles" ]; then
   exit 1
 fi
 
+HERE=$(pwd)
 source "./install-cli.sh"
+
+# switch back to the original directory in case it is changed on previous script
+cd "$HERE"
 source "./install-gui.sh"

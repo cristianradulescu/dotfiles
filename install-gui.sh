@@ -112,7 +112,7 @@ gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 
 # Map Caps_Lock to CTRL (works on Wayland too)
 gsettings set org.gnome.desktop.input-sources xkb-options "['caps:ctrl_modifier']"
-gsettings org.gnome.desktop.input-sources sources "[('xkb-options', 'us')]"
+gsettings set org.gnome.desktop.input-sources sources "[('xkb-options', 'us')]"
 
 # Manage extensions
 sudo apt install -y gnome-tweaks gnome-shell-extension-manager pipx

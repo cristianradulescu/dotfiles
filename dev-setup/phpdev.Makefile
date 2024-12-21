@@ -1,5 +1,6 @@
 # 
 # Copy in the root of the project as ".Makefile"
+# Run as: `make -f .Makefile <target>`
 # 
 
 .SILENT:
@@ -68,42 +69,28 @@ run-tests-panther:
 				--filter $(TEST_FILTER) \
 			"
 
+
 # ######
 # XDEBUG
 # ######
 XDEBUG_CONF = "/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
+CMD_RESTART_PHP = "supervisorctl restart all"
+
 xdebug-install:
 	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
 		bash -c '\
 			php -v \
 			&& pecl install xdebug \
-			&& truncate -s0 $(XDEBUG_CONF) \
+		'
+
+xdebug-on: xdebug-install
+	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
+		bash -c '\
+			php -v \
+		  && truncate -s0 $(XDEBUG_CONF) \
 			&& echo "zend_extension=xdebug.so" > $(XDEBUG_CONF) \
-			&& echo -e "\nxdebug.client_host=host.docker.internal\nxdebug.start_with_request=yes\nxdebug.mode=debug" >> $(XDEBUG_CONF) \
-			&& supervisorctl restart all \
-			&& php -v \
-			&& cat $(XDEBUG_CONF) \
-		'
-
-xdebug-uninstall:
-	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
-		bash -c '\
-			php -v \
-			&& pecl uninstall xdebug \
-			&& truncate -s0 $(XDEBUG_CONF) \
-			&& echo "#zend_extension=xdebug.so" > $(XDEBUG_CONF) \
-			&& supervisorctl restart all \
-			&& php -v \
-			&& cat $(XDEBUG_CONF) \
-		'
-
-xdebug-on:
-	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
-		bash -c '\
-			php -v \
-			&& sed -i s/xdebug.mode=off/xdebug.mode=debug/g $(XDEBUG_CONF) \
-			&& sed -i s/xdebug.start_with_request=trigger/xdebug.start_with_request=yes/g $(XDEBUG_CONF) \
-			&& supervisorctl restart all \
+			&& echo -e "\nxdebug.client_host=host.docker.internal\nxdebug.start_with_request=trigger\nxdebug.mode=debug" >> $(XDEBUG_CONF) \
+			&& $(CMD_RESTART_PHP) \
 			&& php -v \
 			&& cat $(XDEBUG_CONF) \
 		'
@@ -112,22 +99,13 @@ xdebug-off:
 	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
 		bash -c '\
 			php -v \
-			&& sed -i s/xdebug.mode=debug/xdebug.mode=off/g $(XDEBUG_CONF) \
-			&& sed -i s/xdebug.start_with_request=yes/xdebug.start_with_request=trigger/g $(XDEBUG_CONF) \
+			&& truncate -s0 $(XDEBUG_CONF) \
+			&& echo "zend_extension=xdebug.so" > $(XDEBUG_CONF) \
+			&& echo -e "\nxdebug.mode=off" >> $(XDEBUG_CONF) \
 			&& supervisorctl restart all \
 			&& php -v \
 			&& cat $(XDEBUG_CONF) \
 		'
-
-
-###################
-# Manage containers
-###################
-dc-up:
-	$(DOCKER_COMPOSE_CMD) up -d --wait --pull=always $(TARGET_CONTAINER)
-
-dc-down:
-	$(DOCKER_COMPOSE_CMD) down --remove-orphans
 
 
 ##############
@@ -149,6 +127,7 @@ php-cs-fixer-file:
 		bash -c "\
 			php-cs-fixer fix $(DRY_RUN) -v --using-cache=no $(FILE) \
 		"
+
 
 ################
 # SQL query logs
