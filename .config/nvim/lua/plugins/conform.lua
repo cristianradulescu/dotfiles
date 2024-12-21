@@ -42,6 +42,11 @@ return {
           ensure_installed("sqlfluff")
           return { "sqlfluff" }
         end,
+
+        twig = function()
+          ensure_installed("djlint")
+          return { "djlint" }
+        end,
       },
     })
   end,

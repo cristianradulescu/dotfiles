@@ -35,6 +35,35 @@ return {
             end)(),
           },
           "saadparwaiz1/cmp_luasnip",
+          {
+            "zbirenbaum/copilot-cmp",
+            config = function()
+              require("copilot_cmp").setup()
+            end,
+            dependencies = {
+              "zbirenbaum/copilot.lua",
+              cmd = "Copilot",
+              build = ":Copilot auth",
+              event = "InsertEnter",
+              opts = {
+                suggestion = {
+                  enable = false,
+                  auto_trigger = false,
+                  keymap = {
+                    accept = false, -- handled by nvim-cmp
+                    next = "<M-]>",
+                    prev = "<M-[>",
+                  },
+                  panel = { enabled = false },
+                  filetypes = {
+                    markdown = true,
+                    help = true,
+                    twig = true,
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -193,7 +222,6 @@ return {
       require("lspconfig").phpactor.setup({
         cmd = {
           "php",
-          -- vim.fn.expand("$HOME/.local/share/nvim/lazy/phpactor/bin/phpactor"),
           vim.fn.expand("/opt/phpactor-unstable/bin/phpactor"),
           "language-server",
           -- "-vvv"
@@ -216,6 +244,7 @@ return {
           completeopt = "menu,menuone,noinsert",
         },
         sources = cmp.config.sources({
+          { name = "copilot", group_index = 2 },
           { name = "nvim_lsp" },
           { name = "luasnip" },
           { name = "nvim-lsp-signature-help" },
