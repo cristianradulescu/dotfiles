@@ -12,7 +12,38 @@ return {
     local dap = require("dap")
     require("dap-go").setup({})
     local dapui = require("dapui")
-    dapui.setup({})
+    dapui.setup({
+      layouts = {
+        {
+          elements = {
+            {
+              id = "scopes",
+              size = 0.50,
+            },
+            {
+              id = "stacks",
+              size = 0.50,
+            },
+          },
+          position = "left",
+          size = 50,
+        },
+        {
+          elements = {
+            {
+              id = "repl",
+              size = 1,
+            },
+            -- {
+            --   id = "console",
+            --   size = 0.5,
+            -- },
+          },
+          position = "bottom",
+          size = 10,
+        },
+      },
+    })
 
     vim.keymap.set("n", "<F5>", dap.continue, { desc = "Debug: Start/Continue" })
     vim.keymap.set("n", "<F6>", dap.disconnect, { desc = "Debug: Disconnect" })
@@ -27,7 +58,7 @@ return {
     vim.keymap.set("n", "<F7>", dapui.toggle, { desc = "Debug toogle UI." })
 
     dap.listeners.after.event_initialized["dapui_config"] = dapui.open
-    dap.listeners.before.event_terminated["dapui_config"] = dapui.close
+    -- dap.listeners.before.event_terminated["dapui_config"] = dapui.close
     dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
     local path = require("mason-registry").get_package("php-debug-adapter"):get_install_path()

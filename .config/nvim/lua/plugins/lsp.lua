@@ -37,29 +37,20 @@ return {
           "saadparwaiz1/cmp_luasnip",
           {
             "zbirenbaum/copilot-cmp",
+            cond = function()
+              return vim.g.copilot_enabled
+            end,
             config = function()
               require("copilot_cmp").setup()
             end,
             dependencies = {
               "zbirenbaum/copilot.lua",
               cmd = "Copilot",
-              build = ":Copilot auth",
               event = "InsertEnter",
               opts = {
                 suggestion = {
                   enable = false,
-                  auto_trigger = false,
-                  keymap = {
-                    accept = false, -- handled by nvim-cmp
-                    next = "<M-]>",
-                    prev = "<M-[>",
-                  },
                   panel = { enabled = false },
-                  filetypes = {
-                    markdown = true,
-                    help = true,
-                    twig = true,
-                  },
                 },
               },
             },
@@ -157,6 +148,12 @@ return {
           silent = true,
         })
 
+        -- attach cmp source whenever copilot attaches
+        -- fixes lazy-loading issues with the copilot cmp source
+        if vim.g.copilot_enabled then
+          require("copilot_cmp")._on_insert_enter({})
+        end
+
         -- Create a command `:Format` local to the LSP buffer
         vim.api.nvim_buf_create_user_command(buffnr, "Format", function(_)
           vim.lsp.buf.format()
@@ -234,6 +231,24 @@ return {
       local luasnip = require("luasnip")
       luasnip.config.setup({})
 
+      local cmp_sources = {
+        { name = "nvim_lsp", group_index = 2 },
+        { name = "luasnip", group_index = 2 },
+        { name = "nvim-lsp-signature-help", group_index = 2 },
+        { name = "path", group_index = 2 },
+        { name = "nvim_lua", group_index = 2 },
+        { name = "calendar", group_index = 2 },
+        { name = "buffer", max_item_count = 3, group_index = 2 },
+      }
+
+      if vim.g.copilot_enabled then
+        table.insert(cmp_sources, 1, {
+          name = "copilot",
+          group_index = 1,
+          priority = 100,
+        })
+      end
+
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -243,17 +258,7 @@ return {
         completion = {
           completeopt = "menu,menuone,noinsert",
         },
-        sources = cmp.config.sources({
-          { name = "copilot", group_index = 2 },
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "nvim-lsp-signature-help" },
-          { name = "path" },
-          { name = "nvim_lua" },
-          { name = "calendar" },
-        }, {
-          { name = "buffer", max_item_count = 3 },
-        }),
+        sources = cmp.config.sources(cmp_sources),
 
         mapping = cmp.mapping.preset.insert({
           ["<C-n>"] = cmp.mapping.select_next_item(),
@@ -263,11 +268,24 @@ return {
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-c>"] = cmp.mapping.abort(),
           ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
 
           -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
           ["<Tab>"] = cmp.mapping.select_next_item(),
           ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+
+          -- <c-l> will move you to the right of each of the expansion locations.
+          -- <c-h> is similar, except moving you backwards.
+          ["<C-l>"] = cmp.mapping(function()
+            if luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            end
+          end, { "i", "s" }),
+          ["<C-h>"] = cmp.mapping(function()
+            if luasnip.locally_jumpable(-1) then
+              luasnip.jump(-1)
+            end
+          end, { "i", "s" }),
         }),
 
         window = {

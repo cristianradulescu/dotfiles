@@ -53,3 +53,21 @@ vim.api.nvim_create_user_command(
   "!code -n -a " .. vim.uv.cwd(),
   { desc = "Format current buffer with LSP" }
 )
+
+-- when vim closes, save the session
+vim.api.nvim_create_autocmd({ "VimLeavePre" }, {
+  desc = "Save session on exit",
+  callback = function()
+    MiniSessions.write("Session.vim")
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "VimEnter" }, {
+  desc = "Load session on start",
+  -- enable nested to prevent file type not being set issues when session is restored
+  -- https://github.com/echasnovski/mini.nvim/issues/1133#issuecomment-2282721563
+  nested = true,
+  callback = function()
+    MiniSessions.read("Session.vim")
+  end,
+})

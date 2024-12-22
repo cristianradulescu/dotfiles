@@ -1,14 +1,5 @@
 return {
   -- {
-  --   -- Auto add the "paired" character when typing the first one (", {, [...)
-  --   "echasnovski/mini.pairs",
-  --   -- stable version
-  --   version = "*",
-  --   config = function()
-  --     require("mini.pairs").setup()
-  --   end
-  -- },
-  -- {
   --   -- More text objects selections
   --   "echasnovski/mini.ai",
   --   version = "*",
@@ -22,6 +13,15 @@ return {
     version = "*",
     config = function()
       require("mini.surround").setup()
-    end
+    end,
+  },
+  {
+    "echasnovski/mini.sessions",
+    version = "*",
+    config = function()
+      require("mini.sessions").setup({
+        autostart = true,
+      })
+    end,
   },
 }

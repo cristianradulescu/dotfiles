@@ -4,6 +4,9 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Toggle copilot
+vim.g.copilot_enabled = true
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
@@ -89,3 +92,7 @@ vim.opt.smoothscroll = true
 -- Spellcheck
 vim.opt.spell = true
 vim.opt.spelllang = "en_us"
+
+-- Session management
+vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "globals", "folds" }
+

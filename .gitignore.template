@@ -3,3 +3,6 @@
 .idea/
 .phpactor.json
 .php-cs-fixer.cache
+
+# Vim session files
+Session.vim
