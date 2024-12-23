@@ -75,11 +75,9 @@ return {
         docker_compose_language_service = {},
         dockerls = {},
         html = {},
-        lemminx = {},
         marksman = {},
         sqlls = {},
         ts_ls = {},
-        gopls = {},
         yamlls = {
           -- Have to add this for yamlls to understand that we support line folding
           capabilities = {
@@ -132,6 +130,12 @@ return {
           },
         },
       }
+
+      -- Skip Lemminx on Linux arm64 due to no support
+      local os_info = vim.loop.os_uname()["sysname"] .. " " .. vim.loop.os_uname()["machine"]
+      if os_info ~= "Linux aarch64" then
+        servers = vim.tbl_extend("keep", servers, { lemminx = {} })
+      end
 
       -- Setup neovim lua config
       require("neodev").setup()
@@ -226,6 +230,20 @@ return {
         capabilities = vim.tbl_deep_extend("force", {}, capabilities, require("lspconfig").phpactor.capabilities or {}),
         on_attach = on_attach,
       })
+
+      -- Gopls setup is buggy on WSL & Linux arm64, works better if installed from OS package manager
+      require("lspconfig").gopls.setup({
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+          },
+        },
+      })
+
 
       local cmp = require("cmp")
       local luasnip = require("luasnip")

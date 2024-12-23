@@ -68,6 +68,8 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
   -- https://github.com/echasnovski/mini.nvim/issues/1133#issuecomment-2282721563
   nested = true,
   callback = function()
-    MiniSessions.read("Session.vim")
+    if vim.fn.expand("%:t") == "" then
+      MiniSessions.read("Session.vim")
+    end
   end,
 })

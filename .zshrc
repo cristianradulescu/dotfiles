@@ -74,13 +74,14 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/nul
 source /usr/share/autojump/autojump.zsh 2>/dev/null
 source /etc/zsh_command_not_found 2>/dev/null
 
-# Remap CAPS LOCK long press to CTRL (only for X11)
+# CAPS LOCK remaps
 if [[ -n "$XDG_SESSION_TYPE" ]] && [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
+  # Long press to CTRL
   setxkbmap -option caps:ctrl_modifier
+  # Short press to Esc
+  xcape -e 'Caps_Lock=Escape'
 fi
 
-# Remap CAPS LOCK short press to Esc (X11 & Wayland)
-xcape -e 'Caps_Lock=Escape'
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
