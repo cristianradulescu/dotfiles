@@ -6,8 +6,13 @@
 echo "Installing fonts"
 mkdir -p ~/.local/share/fonts || echo 0
 curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf -o ~/.local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf
+curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFontMono-Regular.ttf -o ~/.local/share/fonts/JetBrainsMonoNerdFontMono-Regular.ttf
 curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFont-Regular.ttf -o ~/.local/share/fonts/JetBrainsMonoNLNerdFont-Regular.ttf
-curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/~Hack/Regular/HackNerdFont-Regular.ttf -o ~/.local/share/fonts/HackNerdFont-Regular.ttf
+curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFontMono-Regular.ttf -o ~/.local/share/fonts/JetBrainsMonoNLNerdFontMono-Regular.ttf
+curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/Hack/Regular/HackNerdFont-Regular.ttf -o ~/.local/share/fonts/HackNerdFont-Regular.ttf
+curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/Hack/Regular/HackNerdFontMono-Regular.ttf -o ~/.local/share/fonts/HackNerdFontMono-Regular.ttf
+curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/UbuntuMono/Regular/UbuntuMonoNerdFont-Regular.ttf -o ~/.local/share/fonts/UbuntuMonoNerdFont-Regular.ttf
+curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/UbuntuMono/Regular/UbuntuMonoNerdFontMono-Regular.ttf -o ~/.local/share/fonts/UbuntuMonoNerdFontMono-Regular.ttf
 fc-cache -rfv
 
 

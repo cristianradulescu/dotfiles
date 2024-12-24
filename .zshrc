@@ -78,8 +78,6 @@ source /etc/zsh_command_not_found 2>/dev/null
 if [[ -n "$XDG_SESSION_TYPE" ]] && [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
   # Long press to CTRL
   setxkbmap -option caps:ctrl_modifier
-  # Short press to Esc
-  xcape -e 'Caps_Lock=Escape'
 fi
 
 

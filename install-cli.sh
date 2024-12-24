@@ -43,7 +43,6 @@ sudo apt install -y \
   php-cli composer \
   flameshot \
   apt-file \
-  xcape \
   build-essential autoconf make cmake gettext g++ \
   libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses-dev \
   imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev
