@@ -73,3 +73,34 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
     end
   end,
 })
+
+local close_with_q = vim.api.nvim_create_augroup("CloseWithQ", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = close_with_q,
+  pattern = {
+    "checkhealth",
+    "gitsigns-blame",
+    "help",
+    "lspinfo",
+    "neotest-output",
+    "neotest-output-panel",
+    "neotest-summary",
+    "notify",
+    "qf",
+    "startuptime",
+    "tsplayground",
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.schedule(function()
+      vim.keymap.set("n", "q", function()
+        vim.cmd("close")
+        pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+      end, {
+        buffer = event.buf,
+        silent = true,
+        desc = "Quit buffer",
+      })
+    end)
+  end,
+})
