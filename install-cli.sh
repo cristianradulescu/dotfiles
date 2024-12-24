@@ -155,3 +155,13 @@ echo '{"log-driver":"json-file","log-opts":{"max-size":"10m","max-file":"5"}}' |
 #####################
 sudo usermod -aG dialout ${USER}
 
+
+# ###
+# ZSH
+# ###
+sudo apt install -y zsh && \
+  chsh -s $(which zsh)
+
+# Oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
+  ln -s ~/dotfiles/.zshrc ~/.zshrc
