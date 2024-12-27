@@ -71,65 +71,92 @@ code --install-extension redhat.vscode-yaml
 code --install-extension mblode.twig-language-2
 
 
+# #####
+# CopyQ
+# #####
+sudo apt install copyq && \
+  mkdir -p ~/.config/copyq && \
+  ln -s ~/dotfiles/.config/copyq/copyq.conf ~/.config/copyq/copyq.conf && \
+  ln -s ~/dotfiles/.config/copyq/themes ~/.config/copyq/themes
+
+
+# ###################################
+# Solaar (Logitech Unifying Receiver)
+# ###################################
+sudo apt install -y solaar
+
+
+# #############
+# Dygma Bazecor
+# #############
+BAZECOR_VERSION=$(curl -s "https://api.github.com/repos/DygmaLab/Bazecor/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -L "https://github.com/DygmaLab/Bazecor/releases/download/v${BAZECOR_VERSION}/Bazecor-${BAZECOR_VERSION}-x64.AppImage" -o ~/Apps/Bazecor.AppImage && \
+  chmod +x ~/Apps/Bazecor.AppImage
+
+
 # ##########
 # Redis GUIs
 # ##########
-sudo snap install redisinsight another-redis-desktop-manager
+if [[ -f $(which snap) ]]; then
+  sudo snap install redisinsight another-redis-desktop-manager
+fi
 
 
 # #############
 # Gnome desktop
 # #############
+if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
 
-# Theme / Catppuccin style
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface cursor-theme 'Yaru'
-gsettings set org.gnome.desktop.interface gtk-theme "Yaru-purple-dark"
-gsettings set org.gnome.desktop.interface icon-theme "Yaru-purple"
+  # Theme / Catppuccin style
+  gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+  gsettings set org.gnome.desktop.interface cursor-theme 'Yaru'
+  gsettings set org.gnome.desktop.interface gtk-theme "Yaru-purple-dark"
+  gsettings set org.gnome.desktop.interface icon-theme "Yaru-purple"
 
-# Center new windows in the middle of the screen
-gsettings set org.gnome.mutter center-new-windows true
+  # Center new windows in the middle of the screen
+  gsettings set org.gnome.mutter center-new-windows true
 
-# Reveal week numbers in the Gnome calendar
-gsettings set org.gnome.desktop.calendar show-weekdate true
+  # Reveal week numbers in the Gnome calendar
+  gsettings set org.gnome.desktop.calendar show-weekdate true
 
-# Show battery percentage
-gsettings set org.gnome.desktop.interface show-battery-percentage true
+  # Show battery percentage
+  gsettings set org.gnome.desktop.interface show-battery-percentage true
 
-# Make it easy to maximize like you can fill left/right
-gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>Up']"
+  # Make it easy to maximize like you can fill left/right
+  gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>Up']"
 
-# Full-screen with title/navigation bar
-gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift>F11']"
+  # Full-screen with title/navigation bar
+  gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift>F11']"
 
-# Set flameshot (with the sh fix for starting under Wayland) on alternate print screen key
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name 'Flameshot'
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command 'sh -c -- "flameshot gui"'
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding '<Control>Print'
+  # Set flameshot (with the sh fix for starting under Wayland) on alternate print screen key
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name 'Flameshot'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command 'sh -c -- "flameshot gui"'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding '<Control>Print'
 
-# Clear favorite apps
-gsettings set org.gnome.shell favorite-apps "[]"
+  # Clear favorite apps
+  gsettings set org.gnome.shell favorite-apps "[]"
 
-# Auto-hide the dock
-# gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-# Disable hot-keys 
-gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+  # Auto-hide the dock
+  # gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
+  # Disable hot-keys 
+  gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 
-# Map Caps_Lock to CTRL (works on Wayland too)
-gsettings set org.gnome.desktop.input-sources xkb-options "['caps:ctrl_modifier']"
-gsettings set org.gnome.desktop.input-sources sources "[('xkb-options', 'us')]"
+  # Map Caps_Lock to CTRL (works on Wayland too)
+  gsettings set org.gnome.desktop.input-sources xkb-options "['caps:ctrl_modifier']"
+  gsettings set org.gnome.desktop.input-sources sources "[('xkb-options', 'us')]"
 
-# Manage extensions
-sudo apt install -y gnome-tweaks gnome-shell-extension-manager pipx
-pipx install gnome-extensions-cli --system-site-packages
+  # Manage extensions
+  sudo apt install -y gnome-tweaks gnome-shell-extension-manager pipx
+  pipx install gnome-extensions-cli --system-site-packages
 
-# Fix path for pipx 
-# TODO: make it permanent
-PATH=$HOME/.local/bin:$PATH
+  # Fix path for pipx 
+  # TODO: make it permanent
+  PATH=$HOME/.local/bin:$PATH
 
-# Turn off default Ubuntu extensions
-gnome-extensions disable ding@rastersoft.com
+  # Turn off default Ubuntu extensions
+  gnome-extensions disable ding@rastersoft.com
 
-# Install new extensions
-gext install windowIsReady_Remover@nunofarruca@gmail.com
+  # Install new extensions
+  gext install windowIsReady_Remover@nunofarruca@gmail.com
 
+fi

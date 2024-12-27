@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+OS_CODENAME=noble
+
 # #########
 # Setup Git
 # #########
@@ -137,7 +139,7 @@ mkdir -p ~/.config/lazygit/ && ln -s ~/dotfiles/.config/lazygit/config.yml ~/.co
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo wget -qO /etc/apt/keyrings/docker.asc https://download.docker.com/linux/ubuntu/gpg
 sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $OS_CODENAME stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 
 # Install Docker engine and standard plugins
@@ -160,8 +162,12 @@ sudo usermod -aG dialout ${USER}
 # ZSH
 # ###
 sudo apt install -y zsh && \
-  chsh -s $(which zsh)
+  chsh -s $(which zsh) && \
+  ln -s ~/dotfiles/.zshrc ~/.zshrc
 
 # Oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
-  ln -s ~/dotfiles/.zshrc ~/.zshrc
+cd /tmp
+curl -LO https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh && \
+sh install.sh --unattended --keep-zshrc --skip-chsh
+cd -
+
