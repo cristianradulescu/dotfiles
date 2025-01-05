@@ -128,17 +128,48 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   # Full-screen with title/navigation bar
   gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift>F11']"
 
+  # Disable shortcuts which are using Super (I want them for workspace switching)
+  gsettings set org.gnome.shell.keybindings switch-to-application-1 "[]"
+  gsettings set org.gnome.shell.keybindings switch-to-application-2 "[]"
+  gsettings set org.gnome.shell.keybindings switch-to-application-3 "[]"
+  gsettings set org.gnome.shell.keybindings switch-to-application-4 "[]"
+  gsettings set org.gnome.shell.keybindings switch-to-application-5 "[]"
+  gsettings set org.gnome.shell.keybindings switch-to-application-6 "[]"
+  gsettings set org.gnome.shell.keybindings switch-to-application-7 "[]"
+  gsettings set org.gnome.shell.keybindings switch-to-application-8 "[]"
+  gsettings set org.gnome.shell.keybindings switch-to-application-9 "[]"
+
+  # Use Super for workspaces
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>5']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 "['<Super>6']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-7 "['<Super>7']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-8 "['<Super>8']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-9 "['<Super>9']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Super><Shift>1']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Super><Shift>2']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Super><Shift>3']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 "['<Super><Shift>4']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 "['<Super><Shift>5']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-6 "['<Super><Shift>6']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-7 "['<Super><Shift>7']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-8 "['<Super><Shift>8']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-9 "['<Super><Shift>9']"
+
   # Set flameshot (with the sh fix for starting under Wayland) on alternate print screen key
   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name 'Flameshot'
   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command 'sh -c -- "flameshot gui"'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding '<Control>Print'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding 'Print'
 
   # Clear favorite apps
   gsettings set org.gnome.shell favorite-apps "[]"
 
-  # Auto-hide the dock
+  # Dock (Ubuntu panel) tweaks
   # gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-  # Disable hot-keys 
+  gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 18
   gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 
   # Map Caps_Lock to CTRL (works on Wayland too)
@@ -153,8 +184,10 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   # TODO: make it permanent
   PATH=$HOME/.local/bin:$PATH
 
-  # Turn off default Ubuntu extensions
+  ### Turn off default Ubuntu extensions
+  # Desktop icons
   gnome-extensions disable ding@rastersoft.com
+
 
   # Install new extensions
   gext install windowIsReady_Remover@nunofarruca@gmail.com
