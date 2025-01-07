@@ -58,7 +58,7 @@ vim.api.nvim_create_user_command(
 vim.api.nvim_create_autocmd({ "VimLeavePre" }, {
   desc = "Save session on exit",
   callback = function()
-    MiniSessions.write("Session.vim")
+    require("persistence").save()
   end,
 })
 
@@ -69,7 +69,7 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
   nested = true,
   callback = function()
     if vim.fn.expand("%:t") == "" then
-      MiniSessions.read("Session.vim")
+      require("persistence").load()
     end
   end,
 })
