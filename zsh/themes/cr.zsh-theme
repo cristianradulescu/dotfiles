@@ -11,7 +11,7 @@ local current_dir_icon="󰝰"
 local current_dir="${section_separator} %{$fg[blue]%}${current_dir_icon} %~ $reset_color%"
 
 local cmd_icon="➜"
-local cmd_status="%(?:%{$fg_bold[green]%}%1{${cmd_icon}%}:%{$fg_bold[red]%}%1{${cmd_icon}%})"
+local cmd_status="%(?:%{$fg_bold[green]%}%1{${cmd_icon}%}:%{$fg_bold[red]%}%1{${cmd_icon}%})$reset_color"
 
 local git_info='$(git_prompt_info)'
 local git_prompt_prefix_icon=""
