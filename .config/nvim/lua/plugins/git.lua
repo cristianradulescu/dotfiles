@@ -17,7 +17,7 @@ return {
           topdelete = { text = "‾" },
           changedelete = { text = "~" },
         },
-        current_line_blame_formatter = "<committer> <committer_mail>, <author_time:%Y-%m-%d %H:%M> - <summary>",
+        current_line_blame_formatter = "<author> <author_mail>, <author_time:%Y-%m-%d %H:%M> - <summary>",
         on_attach = function(buffnr)
           vim.keymap.set("n", "<leader>ghp", require("gitsigns").preview_hunk,
             { buffer = buffnr, desc = "Git hunk preview" })
