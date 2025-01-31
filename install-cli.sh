@@ -131,6 +131,17 @@ sudo install lazygit /usr/local/bin
 rm -rf lazygit lazygit.tar.gz
 mkdir -p ~/.config/lazygit/ && ln -s ~/dotfiles/.config/lazygit/config.yml ~/.config/lazygit/config.yml
 
+# ##########
+# Lazydocker
+# ##########
+echo "Installing lazydocker"
+LAZYDOCKER_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -Lo lazydocker.tar.gz "httpa://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz"
+tar xf lazydocker.tar.gz lazydocker
+sudo install lazydocker /usr/local/bin
+rm -rf lazydocker lazydocker.tar.gz
+mkdir -p ~/.config/lazydocker && ln -s ~/dotfiles/.config/lazydocker/config.yml ~/.config/lazydocker/config.yml
+
 # ######
 # Docker
 # ######
