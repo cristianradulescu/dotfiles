@@ -27,12 +27,12 @@ if [ "$response" = "y" ]; then
   source "./install-gui.sh"
 fi
 
-cd "$DOTFILES_DIR"
-echo "Install udev rules? (y/n)"
-read -r response
-if [ "$response" = "y" ]; then
-  source "./install-udev-rules.sh"
-fi
+# cd "$DOTFILES_DIR"
+# echo "Install udev rules? (y/n)"
+# read -r response
+# if [ "$response" = "y" ]; then
+#   source "./install-udev-rules.sh"
+# fi
 
 cd "$DOTFILES_DIR"
 echo "Install apparmor profiles? (y/n)"

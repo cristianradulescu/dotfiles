@@ -4,12 +4,11 @@
   "workbench.editor.enablePreview": false,
   "workbench.activityBar.location": "top",
   "editor.fontFamily": "'JetBrainsMonoNL Nerd Font'",
-  "editor.fontSize": 14,
-  "editor.lineHeight": 1.8,
+  "editor.fontSize": 12,
+  "editor.lineHeight": 1.6,
   "editor.renderWhitespace": "all",
   "editor.minimap.enabled": false,
   "window.zoomLevel": 1,
-  "window.customTitleBarVisibility": "auto",
   "window.menuBarVisibility": "toggle",
   "search.useIgnoreFiles": false,
   "telemetry.telemetryLevel": "off",
@@ -18,5 +17,10 @@
   "catppuccin.italicKeywords": false,
   "redhat.telemetry.enabled": false,
   "php.suggest.basic": false,
-  "phpactor.path": "/opt/phpactor-unstable/bin/phpactor"
+  "phpactor.path": "/opt/phpactor-unstable/bin/phpactor",
+  "window.commandCenter": false,
+  "workbench.layoutControl.enabled": false,
+  "vim.foldfix": true,
+  "vim.leader": " ",
+  "vim.useSystemClipboard": true
 }

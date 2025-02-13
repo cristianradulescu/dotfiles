@@ -57,6 +57,7 @@ sudo apt install -y code
 
 mkdir -p ~/.config/Code/User
 ln -s ~/dotfiles/vscode/settings.json ~/.config/Code/User/settings.json
+ln -s ~/dotfiles/vscode/keybindings.json ~/.config/Code/User/keybindings.json
 
 # Install extensions
 code --install-extension Catppuccin.catppuccin-vsc
@@ -69,6 +70,7 @@ code --install-extension phpactor.vscode-phpactor
 code --install-extension redhat.vscode-xml
 code --install-extension redhat.vscode-yaml
 code --install-extension mblode.twig-language-2
+# code --install-extension vscodevim.vim
 
 
 # #####
@@ -89,17 +91,32 @@ sudo apt install -y solaar
 # #############
 # Dygma Bazecor
 # #############
+sudo apt install -y libfuse2t64
 BAZECOR_VERSION=$(curl -s "https://api.github.com/repos/DygmaLab/Bazecor/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
 curl -L "https://github.com/DygmaLab/Bazecor/releases/download/v${BAZECOR_VERSION}/Bazecor-${BAZECOR_VERSION}-x64.AppImage" -o ~/Apps/Bazecor.AppImage && \
   chmod +x ~/Apps/Bazecor.AppImage
 
+# ########
+# SQL GUIs
+# ########
+if [[ -f $(which snap) ]]; then
+  sudo snap install dbeaver-ce
+fi
 
 # ##########
 # Redis GUIs
 # ##########
 if [[ -f $(which snap) ]]; then
-  sudo snap install redisinsight another-redis-desktop-manager
+  sudo snap install another-redis-desktop-manager
+  # sudo snap install redisinsight
 fi
+
+
+# ##############
+# Autostart apps
+# ##############
+mkdir -p ~/.config/autostart && \
+   cp /usr/share/applications/org.flameshot.Flameshot.desktop ~/.config/autostart
 
 
 # #############

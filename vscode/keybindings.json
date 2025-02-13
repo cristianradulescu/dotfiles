@@ -1,0 +1,12 @@
+[
+    {
+        "key": "shift+l",
+        "command": "workbench.action.nextEditor",
+        "when": "vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "shift+h",
+        "command": "workbench.action.previousEditor",
+        "when": "vim.active && vim.mode == 'Normal'"
+    }
+]
