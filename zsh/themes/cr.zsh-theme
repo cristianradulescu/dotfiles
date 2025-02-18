@@ -4,8 +4,9 @@
 
 local section_separator="󰇙"
 
-local session_icon="󰌢"
-local user_host="%B%(!.%{$fg_bold[red]%}.%{$fg_bold[green]%})${session_icon} %n@%m%{$reset_color%}"
+# local session_icon="󰌢"
+local session_icon=""
+local user_host="%B${session_icon} %(!.%{$fg_bold[red]%}.%{$fg_bold[green]%})%n@%m%{$reset_color%}"
 
 local current_dir_icon="󰝰"
 local current_dir="${section_separator} %{$fg[blue]%}${current_dir_icon} %~ $reset_color%"
