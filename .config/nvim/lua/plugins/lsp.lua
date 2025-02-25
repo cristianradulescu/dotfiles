@@ -284,12 +284,10 @@ return {
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(),
-          ["<C-c>"] = cmp.mapping.abort(),
+          ["<C-e>"] = cmp.mapping.abort(),
           ["<C-y>"] = cmp.mapping.confirm({ select = true }),
           -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
-
-          -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
-          ["<Tab>"] = cmp.mapping.select_next_item(),
+          ["<Tab>"] = cmp.mapping.select_prev_item(),
           ["<S-Tab>"] = cmp.mapping.select_prev_item(),
 
           -- <c-l> will move you to the right of each of the expansion locations.
