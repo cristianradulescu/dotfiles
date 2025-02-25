@@ -1,13 +1,15 @@
--- Disable useless bash script diagnostics for env files
-local no_dotenv_diag_group = vim.api.nvim_create_augroup("NoDotenvDiag", { clear = true })
+-- Disable diagnostics:
+-- - useless bash script diagnostics for env files
+-- - external packages 
+local no_diag_group = vim.api.nvim_create_augroup("NoDiag", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  desc = "Disable shell diagnostics for env files",
-  pattern = { ".env", ".env.*" },
+  desc = "Disable diagnostics for specific files",
+  pattern = { ".env", ".env.*", "*/vendor/*"},
   callback = function(event)
     local buf = event.buf
     vim.diagnostic.enable(false, { bufnr = buf })
   end,
-  group = no_dotenv_diag_group,
+  group = no_diag_group,
 })
 
 -- Highlight on yank. See `:help vim.highlight.on_yank()`
