@@ -48,7 +48,8 @@ sudo apt install -y \
   apt-file \
   build-essential autoconf make cmake gettext g++ \
   libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses-dev \
-  imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev
+  imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev \
+  net-tools
 
 
 # #####################
@@ -173,7 +174,7 @@ sudo usermod -aG dialout ${USER}
 # ###
 # ZSH
 # ###
-sudo apt install -y zsh && \
+sudo apt install -y zsh zsh-autosuggestions zsh-syntax-highlighting autojump && \
   chsh -s $(which zsh) && \
   ln -s ~/dotfiles/.zshrc ~/.zshrc
 
