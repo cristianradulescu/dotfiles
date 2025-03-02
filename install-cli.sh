@@ -119,7 +119,7 @@ git clone https://github.com/neovim/neovim ~/Apps/neovim && \
   sudo dpkg -i --force-all nvim-linux64.deb && \
   cd ~
 
-sudo apt install -y python3-pynvim 
+sudo apt install -y python3-pynvim luarocks
 sudo npm install -g neovim
 
 # #######

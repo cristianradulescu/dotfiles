@@ -7,6 +7,33 @@ vim.g.maplocalleader = " "
 -- Toggle copilot
 vim.g.copilot_enabled = true
 
+-- Rest nvim
+vim.g.rest_nvim = {
+  request = {
+    hooks = {
+      user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+    },
+  },
+  clients = {
+    curl = {
+      statistics = {
+        { id = "time_total", winbar = "take", title = "Time taken" },
+        { id = "time_connect", title = "Connect time" },
+        { id = "size_download", title = "Download size" },
+        { id = "speed_download", title = "Download speed" },
+        { id = "size_upload", title = "Upload size" },
+        { id = "speed_upload", title = "Upload speed" },
+        { id = "local_ip", title = "Local IP" },
+        { id = "local_port", title = "Local port" },
+        { id = "remote_ip", title = "Remote IP" },
+        { id = "remote_port", title = "Remote port" },
+        { id = "exitcode", title = "Exit code" },
+        { id = "errormsg", title = "Error message" },
+      },
+    },
+  },
+}
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
@@ -56,20 +83,20 @@ vim.opt.termguicolors = true
 
 -- Enable auto indenting and set it to spaces
 vim.opt.smartindent = true
-vim.opt.shiftwidth = 2      -- Size of indent
-vim.opt.shiftround = true   --- Round indent
+vim.opt.shiftwidth = 2 -- Size of indent
+vim.opt.shiftround = true --- Round indent
 
-vim.opt.tabstop = 2           -- Nb of spaces per tab
-vim.opt.softtabstop = 2       -- Nb of spaces per tab
-vim.opt.expandtab = true      --Spaces instead of tabs
-vim.opt.wrap = false          -- No word wrap
+vim.opt.tabstop = 2 -- Nb of spaces per tab
+vim.opt.softtabstop = 2 -- Nb of spaces per tab
+vim.opt.expandtab = true --Spaces instead of tabs
+vim.opt.wrap = false -- No word wrap
 -- vim.opt.list = true         -- Show non-printable chars
 -- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
-vim.opt.cursorline = true     -- Highlight current line
+vim.opt.cursorline = true -- Highlight current line
 vim.opt.relativenumber = true -- Line numbers start from current line
-vim.opt.scrolloff = 8         -- Lines of context to keep top/bottom
-vim.opt.sidescrolloff = 8     -- Lines of context to keep left/right
+vim.opt.scrolloff = 8 -- Lines of context to keep top/bottom
+vim.opt.sidescrolloff = 8 -- Lines of context to keep left/right
 
 -- Split directions - go right and bottom
 vim.opt.splitright = true
@@ -96,3 +123,5 @@ vim.opt.spelllang = "en_us"
 -- Session management
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "globals", "folds" }
 
+-- Set formatting to Conform
+vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"

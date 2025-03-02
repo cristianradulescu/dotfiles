@@ -1,10 +1,10 @@
 -- Disable diagnostics:
 -- - useless bash script diagnostics for env files
--- - external packages 
+-- - external packages
 local no_diag_group = vim.api.nvim_create_augroup("NoDiag", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
   desc = "Disable diagnostics for specific files",
-  pattern = { ".env", ".env.*", "*/vendor/*"},
+  pattern = { ".env", ".env.*", "*/vendor/*" },
   callback = function(event)
     local buf = event.buf
     vim.diagnostic.enable(false, { bufnr = buf })
@@ -110,5 +110,15 @@ vim.api.nvim_create_autocmd("FileType", {
         desc = "Quit buffer",
       })
     end)
+  end,
+})
+
+-- Fix conceallevel for json files
+local fix_json_conceal = vim.api.nvim_create_augroup("FixJsonConceal", { clear = true })
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  group = fix_json_conceal,
+  pattern = { "json", "jsonc", "json5" },
+  callback = function()
+    vim.opt_local.conceallevel = 0
   end,
 })

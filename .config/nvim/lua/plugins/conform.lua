@@ -47,6 +47,11 @@ return {
           ensure_installed("djlint")
           return { "djlint" }
         end,
+
+        json = function()
+          return { "jq" }
+        end,
+
       },
     })
   end,

@@ -51,13 +51,12 @@ function M.color(name, bg)
   return color and string.format("#%06x", color) or nil
 end
 
-
 -- [PHP] For the method/property under the cursor, copy the class FQCN and method name
--- Examples: 
+-- Examples:
 -- - `App\Service\UserService::login`
 -- - `App\Entity\User::email`
 function M.copy_reference()
-  if (vim.bo.filetype ~= "php") then
+  if vim.bo.filetype ~= "php" then
     print("Not a PHP file")
     return
   end
@@ -76,15 +75,15 @@ function M.copy_reference()
   local query = vim.treesitter.query.parse(vim.bo.filetype, query_str)
   for _, matches, _ in query:iter_matches(tree_root) do
     local node = matches[1]
-    if (nil ~= node) then
-      -- Concat the node text 
+    if nil ~= node then
+      -- Concat the node text
       reference = reference .. vim.treesitter.get_node_text(node, 0)
 
       -- After namespace add "\"
-      if ("namespace_name" == node:type()) then
+      if "namespace_name" == node:type() then
         reference = reference .. "\\"
       -- After class name add "::"
-      elseif ("name" == node:type()) then
+      elseif "name" == node:type() then
         reference = reference .. "::"
       end
     end
@@ -100,10 +99,49 @@ end
 vim.api.nvim_create_user_command("PHPCopyReference", function()
   local reference = M.copy_reference()
   -- Use both registers in case "+" is not available
-  vim.fn.setreg('+', reference)
+  vim.fn.setreg("+", reference)
   vim.fn.setreg('"', reference)
 end, { desc = "Copy current PHP method/property reference" })
 
 vim.keymap.set({ "n" }, "<leader>ccm", "<cmd>PHPCopyReference<cr>", { desc = "Copy method/property reference" })
+
+-- Write the HTTP response body to a file and open it in a new buffer
+---
+--- Example config for rest.nvim post-request
+--- ```lua
+--- # @lang=lua
+--- > {%
+--- require("user.functions").rest_nvim_dump_response(response.body, response.headers["content-type"])
+--- %}
+--- ```
+--
+-- @param response_body string
+-- @param response_content_type string
+function M.rest_nvim_dump_response(response_body, response_content_type)
+  if type(response_content_type) == "table" then
+    response_content_type = response_content_type[1]
+  end
+
+  local supported_types = {
+    ["application/json"] = "json",
+    ["application/xml"] = "xml",
+    ["text/html"] = "html",
+    ["text/plain"] = "txt",
+  }
+
+  local filetype = supported_types[response_content_type or ""] or ""
+  local timestamp = os.date("%Y%m%d%H%M%S")
+  local filename = "http_response_" .. string.format("%s", timestamp) .. (filetype ~= "" and "." .. filetype or "")
+
+  local file = io.open(filename, "w+")
+  io.output(file)
+  io.write(response_body)
+  io.close(file)
+
+  print("Response body written to " .. filename)
+
+  -- Auto open file?
+  -- vim.cmd("split " .. filename)
+end
 
 return M
