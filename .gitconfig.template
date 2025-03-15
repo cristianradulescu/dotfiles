@@ -1,4 +1,4 @@
-# vim:ft=.gitconfig ts=2 sw=2 sts=2
+# vim:ft=gitconfig ts=2 sw=2 sts=2
 [user]
   email = 
   name = 
