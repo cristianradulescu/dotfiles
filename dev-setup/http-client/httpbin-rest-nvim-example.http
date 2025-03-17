@@ -39,3 +39,14 @@ GET https://httpbin.org/basic-auth/{{username}}/{{password}}
 Accept: application/json
 Authorization: Basic {{basic_auth_token}}
 
+
+###
+# @name SetCookies
+GET https://httpbin.org/cookies/set/theme/light
+
+
+###
+# @name GetCookies
+GET https://httpbin.org/cookies
+
+

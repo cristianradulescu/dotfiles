@@ -90,8 +90,8 @@ vim.opt.tabstop = 2 -- Nb of spaces per tab
 vim.opt.softtabstop = 2 -- Nb of spaces per tab
 vim.opt.expandtab = true --Spaces instead of tabs
 vim.opt.wrap = false -- No word wrap
--- vim.opt.list = true         -- Show non-printable chars
--- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.list = true -- Show non-printable chars
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 vim.opt.cursorline = true -- Highlight current line
 vim.opt.relativenumber = true -- Line numbers start from current line

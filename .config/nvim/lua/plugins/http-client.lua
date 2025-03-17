@@ -32,14 +32,14 @@ return {
       {
         "<leader>hr",
         "<cmd>Rest run<cr>",
-        "n",
-        "HTTP Request - Run",
+        mode = "n",
+        desc = "HTTP Request - Run",
       },
       {
         "<leader>he",
         "<cmd>Rest env select<cr>",
-        "n",
-        "HTTP Request - Select ENV",
+        mode = "n",
+        desc = "HTTP Request - Select ENV",
       },
     },
   }
