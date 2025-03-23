@@ -186,8 +186,8 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
 
   # Dock (Ubuntu panel) tweaks
   # gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-  gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 18
-  gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+  # gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 18
+  # gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 
   # Map Caps_Lock to CTRL (works on Wayland too)
   gsettings set org.gnome.desktop.input-sources xkb-options "['caps:ctrl_modifier']"
@@ -204,9 +204,23 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   ### Turn off default Ubuntu extensions
   # Desktop icons
   gnome-extensions disable ding@rastersoft.com
+  # Dock
+  gnome-extensions disable ubuntu-dock@ubuntu.com
 
-
-  # Install new extensions
+  ### Install new extensions
+  # Remove nagging windows is ready popup
   gext install windowIsReady_Remover@nunofarruca@gmail.com
+  # Better workspace indicator
+  gext install space-bar@luchrioh
+
+  # Compile gsettings schemas in order to be able to set them
+  sudo cp ~/.local/share/gnome-shell/extensions/space-bar\@luchrioh/schemas/org.gnome.shell.extensions.space-bar.gschema.xml /usr/share/glib-2.0/schemas/
+  sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
+
+  # Configure Space Bar
+  gsettings set org.gnome.shell.extensions.space-bar.behavior smart-workspace-names false
+  gsettings set org.gnome.shell.extensions.space-bar.shortcuts enable-activate-workspace-shortcuts false
+  gsettings set org.gnome.shell.extensions.space-bar.shortcuts enable-move-to-workspace-shortcuts true
+  gsettings set org.gnome.shell.extensions.space-bar.shortcuts open-menu "@as []"
 
 fi
