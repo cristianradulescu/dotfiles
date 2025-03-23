@@ -145,6 +145,9 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   # Full-screen with title/navigation bar
   gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift>F11']"
 
+  # Remove '<Super>v' from notification focus, keep only <Super>m
+  gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']"
+
   # Disable shortcuts which are using Super (I want them for workspace switching)
   gsettings set org.gnome.shell.keybindings switch-to-application-1 "[]"
   gsettings set org.gnome.shell.keybindings switch-to-application-2 "[]"
@@ -212,9 +215,12 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   gext install windowIsReady_Remover@nunofarruca@gmail.com
   # Better workspace indicator
   gext install space-bar@luchrioh
+  # Clipboard manager
+  gext install clipboard-indicator@tudmotu.com
 
   # Compile gsettings schemas in order to be able to set them
   sudo cp ~/.local/share/gnome-shell/extensions/space-bar\@luchrioh/schemas/org.gnome.shell.extensions.space-bar.gschema.xml /usr/share/glib-2.0/schemas/
+  sudo cp ~/.local/share/gnome-shell/extensions/clipboard-indicator\@tudmotu.com/schemas/org.gnome.shell.extensions.clipboard-indicator.gschema.xml /usr/share/glib-2.0/schemas/
   sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
 
   # Configure Space Bar
@@ -222,5 +228,11 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   gsettings set org.gnome.shell.extensions.space-bar.shortcuts enable-activate-workspace-shortcuts false
   gsettings set org.gnome.shell.extensions.space-bar.shortcuts enable-move-to-workspace-shortcuts true
   gsettings set org.gnome.shell.extensions.space-bar.shortcuts open-menu "@as []"
+
+  # Configure Clipboard Indicator
+  gsettings set org.gnome.shell.extensions.clipboard-indicator history-size 100
+  gsettings set org.gnome.shell.extensions.clipboard-indicator show-on-startup true
+  gsettings set org.gnome.shell.extensions.clipboard-indicator clear-on-boot false
+  gsettings set org.gnome.shell.extensions.clipboard-indicator toggle-menu "['<Super>v']"
 
 fi
