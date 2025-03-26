@@ -3,4 +3,5 @@
 .idea/
 .phpactor.json
 .php-cs-fixer.cache
-
+.editorconfig
+.Makefile

@@ -1,7 +1,7 @@
-# 
+#
 # Copy in the root of the project as ".Makefile"
 # Run as: `make -f .Makefile <target>`
-# 
+#
 
 .SILENT:
 
@@ -12,7 +12,9 @@ TARGET_CONTAINER = "php"
 clear-cache-test:
 	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) bash -c "rm -rf var/cache/test"
 
-run-tests-with-filter: clear-cache-test
+# To set and argument: -e ARGS=--filter=MyTest
+# Use multiple arguments: -e ARGS="--filter=MyTest --group=functional"
+run-tests:
 	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
 		bash -c "\
 			SYMFONY_DEPRECATIONS_HELPER=weak \
@@ -23,50 +25,7 @@ run-tests-with-filter: clear-cache-test
 				--no-coverage \
 				--testdox \
 				--do-not-cache-result \
-				--filter $(TEST_FILTER) \
-				--group ${TEST_GROUP} \
-			"
-
-run-tests-unit: clear-cache-test
-	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
-		bash -c "\
-			SYMFONY_DEPRECATIONS_HELPER=weak \
-			php \
-				-dxdebug.mode=off \
-				bin/phpunit \
-				--no-logging \
-				--no-coverage \
-				--testdox \
-				--do-not-cache-result \
-				--exclude-group functional,panther \
-			"
-
-run-tests-functional: clear-cache-test
-	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
-		bash -c "\
-			SYMFONY_DEPRECATIONS_HELPER=weak \
-			php \
-				-dxdebug.mode=off \
-				bin/phpunit \
-				--no-logging \
-				--no-coverage \
-				--do-not-cache-result \
-				--group functional \
-			"
-
-run-tests-panther:
-	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
-		bash -c "\
-			SYMFONY_DEPRECATIONS_HELPER=weak \
-			PANTHER_NO_HEADLESS=0 \
-			php \
-				bin/phpunit \
-				--no-logging \
-				--no-coverage \
-				--debug \
-				--do-not-cache-result \
-				--group panther \
-				--filter $(TEST_FILTER) \
+				$(ARGS) \
 			"
 
 
@@ -74,22 +33,24 @@ run-tests-panther:
 # XDEBUG
 # ######
 XDEBUG_CONF = "/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
-CMD_RESTART_PHP = "supervisorctl restart all"
+XDEBUG_VERSION = "3.2.2"
+XDEBUG_CLIENT_HOST = "host.docker.internal"
+CMD_RESTART_PHP = supervisorctl restart all
 
 xdebug-install:
 	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
 		bash -c '\
 			php -v \
-			&& pecl install xdebug \
+			&& pecl install xdebug-$(XDEBUG_VERSION) \
 		'
 
-xdebug-on: xdebug-install
+xdebug-on:
 	$(DOCKER_COMPOSE_CMD) exec -it $(TARGET_CONTAINER) \
 		bash -c '\
 			php -v \
 		  && truncate -s0 $(XDEBUG_CONF) \
 			&& echo "zend_extension=xdebug.so" > $(XDEBUG_CONF) \
-			&& echo -e "\nxdebug.client_host=host.docker.internal\nxdebug.start_with_request=trigger\nxdebug.mode=debug" >> $(XDEBUG_CONF) \
+			&& echo -e "\nxdebug.client_host=${XDEBUG_CLIENT_HOST}\nxdebug.start_with_request=yes\nxdebug.mode=debug" >> $(XDEBUG_CONF) \
 			&& $(CMD_RESTART_PHP) \
 			&& php -v \
 			&& cat $(XDEBUG_CONF) \
@@ -140,4 +101,6 @@ sql-query-logs-on:
 	docker exec -it ${MYSQL_CONTAINER} bash -c "mysql -u$(MYSQL_USER) -p$(MYSQL_PASS) -e $(CMD_SQL_LOGS_ON)"
 sql-query-logs-off:
 	docker exec -it ${MYSQL_CONTAINER} bash -c "mysql -u$(MYSQL_USER) -p$(MYSQL_PASS) -e $(CMD_SQL_LOGS_OFF)"
+sql-query-logs-tail:
+	docker exec -it ${MYSQL_CONTAINER} bash -c "tail -f /var/log/mysqld.log"
 

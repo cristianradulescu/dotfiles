@@ -68,6 +68,14 @@ return {
       args = { path .. "/extension/out/phpDebug.js" },
     }
     dap.configurations.php = {
+      -- Listen for Xdebug in Docker container
+      -- Configuration for XDebug in container:
+      -- - xdebug.mode=debug
+      -- - xdebug.start_with_request=yes
+      -- When containers are on local machine:
+      -- - xdebug.client_host=host.docker.internal
+      -- When containers are on remote machine:
+      -- - xdebug.client_host=<IP of the remote machine>
       {
         type = "php",
         request = "launch",

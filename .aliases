@@ -5,3 +5,5 @@ alias ll='ls -alh --color=always'
 alias grep='grep --color'
 alias ip='ip -c'
 
+# Docker
+alias dc='docker compose'
