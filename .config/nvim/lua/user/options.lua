@@ -7,33 +7,6 @@ vim.g.maplocalleader = " "
 -- Toggle copilot
 vim.g.copilot_enabled = true
 
--- Rest nvim
-vim.g.rest_nvim = {
-  request = {
-    hooks = {
-      user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
-    },
-  },
-  clients = {
-    curl = {
-      statistics = {
-        { id = "time_total", winbar = "take", title = "Time taken" },
-        { id = "time_connect", title = "Connect time" },
-        { id = "size_download", title = "Download size" },
-        { id = "speed_download", title = "Download speed" },
-        { id = "size_upload", title = "Upload size" },
-        { id = "speed_upload", title = "Upload speed" },
-        { id = "local_ip", title = "Local IP" },
-        { id = "local_port", title = "Local port" },
-        { id = "remote_ip", title = "Remote IP" },
-        { id = "remote_port", title = "Remote port" },
-        { id = "exitcode", title = "Exit code" },
-        { id = "errormsg", title = "Error message" },
-      },
-    },
-  },
-}
-
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
