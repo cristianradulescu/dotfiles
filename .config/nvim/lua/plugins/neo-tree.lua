@@ -2,6 +2,9 @@ return {
   -- File explorer
   "nvim-neo-tree/neo-tree.nvim",
   version = "v3.x",
+  enabled = function()
+    return vim.g.fileexplorer == "NeoTree"
+  end,
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-tree/nvim-web-devicons",

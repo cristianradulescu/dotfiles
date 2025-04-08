@@ -7,6 +7,12 @@ vim.g.maplocalleader = " "
 -- Toggle copilot
 vim.g.copilot_enabled = true
 
+-- Select picker to use (options: Telescope, FzfLua, Snacks)
+vim.g.picker = "Telescope"
+
+-- Select file explorer to use (options: NeoTree, Snacks)
+vim.g.fileexplorer = "NeoTree"
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
