@@ -93,48 +93,27 @@ return {
       })
       pcall(require("telescope").load_extension, "fzf")
 
-      local telescope = require("telescope.builtin")
-      vim.keymap.set("n", "<leader>?", function()
-        require("telescope.builtin").oldfiles({ cwd_only = true })
-      end, { desc = "Find recently opened files" })
+      if vim.g.picker == "Telescope" then
+        local telescope = require("telescope.builtin")
+        local keymaps = require("user.keymaps-picker")
 
-      vim.keymap.set("n", "<leader><space>", require("telescope.builtin").buffers, { desc = "Find existing buffers" })
-      vim.keymap.set(
-        "n",
-        "<leader>/",
-        require("telescope.builtin").current_buffer_fuzzy_find,
-        { desc = "Fuzzily search in current buffer" }
-      )
-
-      vim.keymap.set("n", "<leader>sf", telescope.find_files, { desc = "Search files" })
-      vim.keymap.set("n", "<leader>sh", telescope.help_tags, { desc = "Search help" })
-      vim.keymap.set("n", "<leader>sk", telescope.keymaps, { desc = "Search keymaps" })
-      vim.keymap.set("n", "<leader>sw", telescope.grep_string, { desc = "Search current word" })
-      vim.keymap.set("n", "<leader>sg", telescope.live_grep, { desc = "Search by grep" })
-      vim.keymap.set("n", "<leader>sd", telescope.diagnostics, { desc = "Search diagnostics" })
-      vim.keymap.set("n", "<leader>sr", telescope.resume, { desc = "Search resume" })
-      vim.keymap.set("n", "<leader>ss", function()
-        telescope.lsp_document_symbols({ symbol_width = 55 })
-      end, { desc = "Search symbols" })
-
-      vim.keymap.set("n", "<leader>sc", function()
-        telescope.lsp_dynamic_workspace_symbols({ fname_width = 75 })
-      end, { desc = "Search workspace symbols" })
-      vim.keymap.set("n", "gd", function()
-        telescope.lsp_definitions({ fname_width = 75 })
-      end, { desc = "Goto definition" })
-      vim.keymap.set("n", "gr", function()
-        -- TODO: add fname_width globally
-        telescope.lsp_references({ fname_width = 75 })
-      end, {
-        desc = "Goto references",
-      })
-      vim.keymap.set("n", "gI", function()
-        telescope.lsp_implementations({ fname_width = 75 })
-      end, { desc = "Goto implementation" })
-      vim.keymap.set("n", "<leader>D", function()
-        telescope.lsp_type_definitions({ fname_width = 75 })
-      end, { desc = "Type definition" })
+        keymaps.oldfiles(telescope, "oldfiles", { cwd_only = true })
+        keymaps.buffers(telescope, "buffers", {})
+        keymaps.lines(telescope, "current_buffer_fuzzy_find", {})
+        keymaps.files(telescope, "find_files", {})
+        keymaps.help(telescope, "help_tags", {})
+        keymaps.keymaps(telescope, "keymaps", {})
+        keymaps.search_cword(telescope, "grep_string", {})
+        keymaps.search_word(telescope, "live_grep", {})
+        keymaps.search_diagnostics(telescope, "diagnostics", {})
+        keymaps.search_resume(telescope, "resume", {})
+        keymaps.search_document_symbols(telescope, "lsp_document_symbols", { symbol_width = 55 })
+        keymaps.search_workspace_symbols(telescope, "lsp_dynamic_workspace_symbols", { fname_width = 75 })
+        keymaps.goto_definition(telescope, "lsp_definitions", { fname_width = 75 })
+        keymaps.goto_references(telescope, "lsp_references", { fname_width = 75 })
+        keymaps.goto_implementation(telescope, "lsp_implementations", { fname_width = 75 })
+        keymaps.goto_typedef(telescope, "lsp_typedefs", { fname_width = 75 })
+      end
     end,
   },
 }
