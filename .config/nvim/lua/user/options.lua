@@ -13,6 +13,9 @@ vim.g.picker = "Snacks"
 -- Select file explorer to use (options: NeoTree, Snacks)
 vim.g.fileexplorer = "Snacks"
 
+-- HTTP client to use (options: Rest, Kulala)
+vim.g.http_client = "Kulala"
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
