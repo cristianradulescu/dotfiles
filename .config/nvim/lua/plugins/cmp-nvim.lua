@@ -3,7 +3,7 @@ return {
   {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
-    commit = "1e1900b0769324a9675ef85b38f99cca29e203b3",
+    version = false,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lsp-signature-help",

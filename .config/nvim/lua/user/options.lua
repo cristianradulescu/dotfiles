@@ -19,6 +19,9 @@ vim.g.fileexplorer = "Snacks"
 -- Color scheme
 vim.opt.background = "dark"
 
+-- Default windows border
+vim.opt.winborder = "rounded"
+
 -- Set highlight on search
 vim.opt.hlsearch = false
 

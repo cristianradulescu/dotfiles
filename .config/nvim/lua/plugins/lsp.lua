@@ -103,17 +103,6 @@ return {
       require("neodev").setup()
 
       local on_attach = function(_, buffnr)
-        vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-          border = "single",
-        })
-
-        vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-          border = "single",
-          focusable = false,
-          relative = "cursor",
-          silent = true,
-        })
-
         -- Create a command `:Format` local to the LSP buffer
         vim.api.nvim_buf_create_user_command(buffnr, "Format", function(_)
           vim.lsp.buf.format()
@@ -140,16 +129,11 @@ return {
           vim.keymap.set("n", keys, func, { buffer = buffnr, desc = desc })
         end
 
-        -- nmap("<leader>rn", vim.lsp.buf.rename, "Rename")
         nmap("<leader>ca", function()
           vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
         end, "Code Action")
 
-        -- See `:help K` for why this keymap
-        -- nmap("K", vim.lsp.buf.hover, "Hover Documentation") -- Built-in in v10
         nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
-
-        -- nmap("<leader>cf", "<cmd>Format<cr>", "Format code") -- Replced with Conform
       end
 
       -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
@@ -201,13 +185,18 @@ return {
       })
 
       vim.diagnostic.config({
+        virtual_lines = false,
+        virtual_text = true,
         float = {
-          focusable = false,
-          style = "minimal",
-          border = "rounded",
-          source = "always",
+          source = true,
           header = "",
-          prefix = "",
+          prefix = function(_, i, total)
+            if total > 1 then
+              -- Show the number of diagnostics in the line
+              return i .. "/" .. total ..  ": ", ""
+            end
+            return "", ""
+          end,
         },
       })
     end,
