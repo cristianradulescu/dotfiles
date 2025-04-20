@@ -187,10 +187,12 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   # Clear favorite apps
   gsettings set org.gnome.shell favorite-apps "[]"
 
-  # Dock (Ubuntu panel) tweaks
+  # Dock (Ubuntu panel) tweaks (auto hide, smaller icons, no hotkeys, match background with top panel)
   # gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-  # gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 18
-  # gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+  gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 24
+  gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+  gsettings set org.gnome.shell.extensions.dash-to-dock custom-background-color true
+  gsettings set org.gnome.shell.extensions.dash-to-dock background-color '#131313'
 
   # Map Caps_Lock to CTRL (works on Wayland too)
   gsettings set org.gnome.desktop.input-sources xkb-options "['caps:ctrl_modifier']"
@@ -208,7 +210,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   # Desktop icons
   gnome-extensions disable ding@rastersoft.com
   # Dock
-  gnome-extensions disable ubuntu-dock@ubuntu.com
+  # gnome-extensions disable ubuntu-dock@ubuntu.com
 
   ### Install new extensions
   # Remove nagging windows is ready popup
