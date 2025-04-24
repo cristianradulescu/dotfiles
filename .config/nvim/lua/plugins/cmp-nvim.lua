@@ -61,6 +61,7 @@ return {
         { name = "nvim_lua", group_index = 2 },
         { name = "calendar", group_index = 2 },
         { name = "buffer", max_item_count = 3, group_index = 2 },
+        { name = "lazydev", group_index = 0 }, -- set group index to 0 to skip loading LuaLS completions
       }
 
       if vim.g.copilot_enabled then

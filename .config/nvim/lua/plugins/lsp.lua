@@ -12,8 +12,23 @@ return {
       -- Useful status updates for LSP
       { "j-hui/fidget.nvim", tag = "legacy", opts = {} },
 
-      -- Additional lua configuration, makes nvim stuff amazing!
-      "folke/neodev.nvim",
+      -- Configures LuaLS for editing your Neovim config by lazily updating your workspace libraries
+      {
+        "folke/lazydev.nvim",
+        ft = "lua",
+        opts = {
+          library = {
+            -- Load luvit types when the `vim.uv` word is found
+            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+            -- Load the wezterm types when the `wezterm` module is required
+            { path = "wezterm-types", mods = { "wezterm" } },
+          },
+        },
+        dependencies = {
+          -- Required for `wezterm` module
+          "justinsgithub/wezterm-types",
+        }
+      },
     },
     opts = {
       inlay_hints = {
@@ -98,9 +113,6 @@ return {
       if os_info ~= "Linux aarch64" then
         servers = vim.tbl_extend("keep", servers, { lemminx = {} })
       end
-
-      -- Setup neovim lua config
-      require("neodev").setup()
 
       local on_attach = function(_, buffnr)
         -- Create a command `:Format` local to the LSP buffer
