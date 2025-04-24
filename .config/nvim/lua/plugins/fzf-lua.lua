@@ -3,6 +3,40 @@ return {
   enabled = function()
     return vim.g.picker == "FzfLua"
   end,
+  opts = {
+    oldfiles = {
+      winopts = {
+        preview = {
+          hidden = true,
+        },
+      },
+      cwd_only = true,
+    },
+    files = {
+      winopts = {
+        preview = {
+          hidden = true,
+        },
+      },
+      path_shorten = false,
+      -- cwd_prompt = false,
+    },
+    buffers = {
+      winopts = {
+        preview = {
+          hidden = true,
+        },
+      },
+      cwd_only = true,
+    },
+    grep = {
+      winopts = {
+        preview = {
+          layout = "vertical",
+        },
+      },
+    },
+  },
   config = function(_, opts)
     local fzflua = require("fzf-lua")
     fzflua.setup(opts)
@@ -10,7 +44,7 @@ return {
     if vim.g.picker == "FzfLua" then
       local keymaps = require("user.keymaps-picker")
 
-      keymaps.oldfiles(fzflua, "oldfiles", { cwd = vim.fn.getcwd() })
+      keymaps.oldfiles(fzflua, "oldfiles", {})
       keymaps.buffers(fzflua, "buffers", {})
       keymaps.lines(fzflua, "lines", {})
       keymaps.files(fzflua, "files", {})
@@ -27,6 +61,10 @@ return {
       keymaps.goto_implementation(fzflua, "lsp_implementations", {})
       keymaps.goto_typedef(fzflua, "lsp_typedefs", {})
       keymaps.code_action(fzflua, "lsp_code_actions", {})
+
+      vim.keymap.set({ "v" }, "<leader>sw", function()
+        fzflua.grep_visual()
+      end, { desc = "Search current selection" })
     end
   end,
 }
