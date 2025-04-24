@@ -3,7 +3,8 @@ local http_client = {
   keymap_desc = {
     run = "HTTP Client - Run",
     env = "HTTP Client - Select ENV",
-  }
+    copy_as_curl = "HTTP Client - Copy as CURL",
+  },
 }
 
 return {
@@ -12,6 +13,7 @@ return {
     enabled = function()
       return vim.g.http_client == "Kulala"
     end,
+    ft = "http",
     opts = {
       default_view = "headers_body",
       additional_curl_options = {
@@ -32,6 +34,10 @@ return {
       vim.keymap.set({ "n" }, "<leader>he", function()
         return kulala.set_selected_env()
       end, { desc = http_client.keymap_desc.env })
+
+      vim.keymap.set({ "n" }, "<leader>hc", function()
+        return kulala.copy()
+      end, { desc = http_client.keymap_desc.copy_as_curl })
     end,
   },
 
