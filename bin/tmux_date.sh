@@ -3,8 +3,11 @@
 declare -A TIMEZONES
 
 TIMEZONES["RO"]="Europe/Bucharest"
-TIMEZONES["SW"]="Europe/Zurich"
-TIMEZONES["UTC"]="UTC"
+
+if [ -f $HOME/.zshrc_work ]; then
+  TIMEZONES["SW"]="Europe/Zurich"
+  TIMEZONES["UTC"]="UTC"
+fi
 
 echo -n $(TZ="UTC" date +%Y-%m-%d)" "
 for TIMEZONE_COUNTRY in "${!TIMEZONES[@]}"; do
