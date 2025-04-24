@@ -129,10 +129,6 @@ return {
           vim.keymap.set("n", keys, func, { buffer = buffnr, desc = desc })
         end
 
-        nmap("<leader>ca", function()
-          vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
-        end, "Code Action")
-
         nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
       end
 
@@ -193,7 +189,7 @@ return {
           prefix = function(_, i, total)
             if total > 1 then
               -- Show the number of diagnostics in the line
-              return i .. "/" .. total ..  ": ", ""
+              return i .. "/" .. total .. ": ", ""
             end
             return "", ""
           end,

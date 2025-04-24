@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -30,7 +31,7 @@ return {
     if vim.g.picker == "Snacks" then
       local keymaps = require("user.keymaps-picker")
 
-      keymaps.oldfiles(snacks.picker, "recent", { cwd = vim.fn.getcwd() })
+      keymaps.oldfiles(snacks.picker, "recent", { filter = { cwd = true } })
       keymaps.buffers(snacks.picker, "buffers", {})
       keymaps.lines(snacks.picker, "lines", {})
       keymaps.files(snacks.picker, "files", {})
@@ -46,6 +47,7 @@ return {
       keymaps.goto_references(snacks.picker, "lsp_references", {})
       keymaps.goto_implementation(snacks.picker, "lsp_implementations", {})
       keymaps.goto_typedef(snacks.picker, "lsp_type_definitions", {})
+      keymaps.code_action(nil, nil, {})
     end
   end,
 }

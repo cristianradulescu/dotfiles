@@ -113,6 +113,7 @@ return {
         keymaps.goto_references(telescope, "lsp_references", { fname_width = 75 })
         keymaps.goto_implementation(telescope, "lsp_implementations", { fname_width = 75 })
         keymaps.goto_typedef(telescope, "lsp_typedefs", { fname_width = 75 })
+        keymaps.code_action(nil, nil, {})
       end
     end,
   },

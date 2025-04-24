@@ -26,6 +26,7 @@ return {
       keymaps.goto_references(fzflua, "lsp_references", {})
       keymaps.goto_implementation(fzflua, "lsp_implementations", {})
       keymaps.goto_typedef(fzflua, "lsp_typedefs", {})
+      keymaps.code_action(fzflua, "lsp_code_actions", {})
     end
   end,
 }
