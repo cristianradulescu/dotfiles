@@ -24,7 +24,10 @@ run-tests:
 				--no-logging \
 				--no-coverage \
 				--testdox \
+				--debug \
 				--do-not-cache-result \
+                --stop-on-failure \
+                --stop-on-error \
 				$(ARGS) \
 			"
 
@@ -79,7 +82,7 @@ php-cs-fixer-changed-files:
 	echo "Changed files to analyse:" $(CHANGED_FILES)
 	docker compose exec -it $(TARGET_CONTAINER) \
 		bash -c "\
-			php-cs-fixer fix $(DRY_RUN) -v --using-cache=no $(CHANGED_FILES) \
+			php-cs-fixer fix $(DRY_RUN) -v --using-cache no --config .php-cs-fixer.php $(CHANGED_FILES) \
 		"
 
 php-cs-fixer-file:
@@ -89,6 +92,10 @@ php-cs-fixer-file:
 			php-cs-fixer fix $(DRY_RUN) -v --using-cache=no $(FILE) \
 		"
 
+php-cs-fixer:
+	git status
+	docker compose exec -it $(TARGET_CONTAINER) \
+		bash -c "php-cs-fixer fix $(DRY_RUN) -v --using-cache=no"
 
 ################
 # SQL query logs
