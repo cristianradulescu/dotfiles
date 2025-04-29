@@ -2,7 +2,7 @@ return {
   -- File explorer
   "nvim-neo-tree/neo-tree.nvim",
   version = "v3.x",
-  enabled = function()
+  cond = function()
     return vim.g.fileexplorer == "NeoTree"
   end,
   dependencies = {

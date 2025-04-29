@@ -10,7 +10,7 @@ local http_client = {
 return {
   {
     "mistweaverco/kulala.nvim",
-    enabled = function()
+    cond = function()
       return vim.g.http_client == "Kulala"
     end,
     ft = "http",

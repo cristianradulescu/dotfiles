@@ -3,7 +3,7 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     version = "0.1.x",
-    enabled = function()
+    cond = function()
       return vim.g.picker == "Telescope"
     end,
     dependencies = {

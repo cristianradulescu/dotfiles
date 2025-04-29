@@ -19,6 +19,7 @@ return {
         },
         current_line_blame_formatter = "<author> <author_mail>, <author_time:%Y-%m-%d %H:%M> - <summary>",
         on_attach = function(buffnr)
+          vim.keymap.set("n", "<leader>gbf", require("gitsigns").blame, { buffer = buffnr, desc = "Git blame" })
           vim.keymap.set("n", "<leader>ghp", require("gitsigns").preview_hunk,
             { buffer = buffnr, desc = "Git hunk preview" })
           vim.keymap.set("n", "<leader>ghr", require("gitsigns").reset_hunk, { buffer = buffnr, desc = "Hunk reset" })
@@ -44,7 +45,7 @@ return {
     end
   },
 
-  vim.keymap.set("n", "<leader>gbf", "<cmd>Git blame<CR>", { desc = "Git blame file" }),
+  -- vim.keymap.set("n", "<leader>gbf", "<cmd>Git blame<CR>", { desc = "Git blame file" }),
   vim.keymap.set("n", "<leader>gdf", "<cmd>DiffviewFileHistory --no-merges %<cr>", { desc = "Git file history" }),
   vim.keymap.set("n", "<leader>gdo", "<cmd>DiffviewOpen<cr>", { desc = "Diffview open" }),
   vim.keymap.set("n", "<leader>gdc", "<cmd>DiffviewClose<cr>", { desc = "Diffview close" })

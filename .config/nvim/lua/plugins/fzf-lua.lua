@@ -1,6 +1,6 @@
 return {
   "ibhagwan/fzf-lua",
-  enabled = function()
+  cond = function()
     return vim.g.picker == "FzfLua"
   end,
   opts = {
@@ -30,6 +30,20 @@ return {
       cwd_only = true,
     },
     grep = {
+      winopts = {
+        preview = {
+          layout = "vertical",
+        },
+      },
+    },
+    diagnostics = {
+      winopts = {
+        preview = {
+          layout = "vertical",
+        },
+      },
+    },
+    lsp = {
       winopts = {
         preview = {
           layout = "vertical",

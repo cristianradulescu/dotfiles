@@ -6,6 +6,7 @@ return {
   ---@type snacks.Config
   opts = {
     input = { enabled = true },
+    layout = { enabled = true },
     bigfile = { enabled = true },
     picker = {
       enabled = function()

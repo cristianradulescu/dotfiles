@@ -11,7 +11,7 @@ vim.g.copilot_enabled = true
 vim.g.picker = "FzfLua"
 
 -- Select file explorer to use (options: NeoTree, Snacks)
-vim.g.fileexplorer = "Snacks"
+vim.g.fileexplorer = "NeoTree"
 
 -- HTTP client to use (options: Rest, Kulala)
 vim.g.http_client = "Kulala"
