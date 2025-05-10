@@ -61,11 +61,10 @@ return {
     -- dap.listeners.before.event_terminated["dapui_config"] = dapui.close
     dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
-    local path = require("mason-registry").get_package("php-debug-adapter"):get_install_path()
     dap.adapters.php = {
       type = "executable",
       command = "node",
-      args = { path .. "/extension/out/phpDebug.js" },
+      args = { "/opt/vscode-php-debug/out/phpDebug.js" },
     }
     dap.configurations.php = {
       -- Listen for Xdebug in Docker container
