@@ -32,12 +32,6 @@ return {
           return { "stylua" }
         end,
 
-        -- -- There is also built in support in phpactor
-        -- php = function()
-        --   ensure_installed("php_cs_fixer", "php-cs-fixer")
-        --   return { "php_cs_fixer" }
-        -- end,
-
         sql = function()
           ensure_installed("sqlfluff")
           return { "sqlfluff" }
@@ -51,7 +45,6 @@ return {
         json = function()
           return { "jq" }
         end,
-
       },
     })
   end,

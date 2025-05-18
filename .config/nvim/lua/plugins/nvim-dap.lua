@@ -61,7 +61,10 @@ return {
     -- dap.listeners.before.event_terminated["dapui_config"] = dapui.close
     dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
-    local path = require("mason-registry").get_package("php-debug-adapter"):get_install_path()
+    if (not require("mason-registry").is_installed("php-debug-adapter")) then
+      vim.cmd("MasonInstall php-debug-adapter")
+    end
+    local path = require("mason-core.installer.InstallLocation").global():package("php-debug-adapter")
     dap.adapters.php = {
       type = "executable",
       command = "node",

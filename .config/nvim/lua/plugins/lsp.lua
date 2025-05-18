@@ -6,8 +6,8 @@ return {
     event = "BufReadPost",
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      { "williamboman/mason.nvim", config = true, version = "1.*" },
-      { "williamboman/mason-lspconfig.nvim", version = "1.*" },
+      { "williamboman/mason.nvim", config = true, version = "2.*" },
+      { "williamboman/mason-lspconfig.nvim", version = "2.*" },
 
       -- Useful status updates for LSP
       { "j-hui/fidget.nvim", tag = "legacy", opts = {} },
@@ -27,7 +27,7 @@ return {
         dependencies = {
           -- Required for `wezterm` module
           "justinsgithub/wezterm-types",
-        }
+        },
       },
     },
     opts = {
@@ -44,11 +44,11 @@ return {
             Lua = {
               workspace = { checkThirdParty = false },
               telemetry = { enabled = false },
+              format = { enable = false },
             },
           },
         },
         twiggy_language_server = {},
-        cssls = {},
         docker_compose_language_service = {},
         dockerls = {},
         html = {},
@@ -144,9 +144,8 @@ return {
         nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
       end
 
-      -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+      capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities(nil, true))
 
       -- Setup Mason
       require("mason").setup()
@@ -157,9 +156,6 @@ return {
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for tsserver)
             server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
             server.on_attach = on_attach
             require("lspconfig")[server_name].setup(server)
@@ -173,7 +169,6 @@ return {
           "php",
           vim.fn.expand("/opt/phpactor-unstable/bin/phpactor"),
           "language-server",
-          -- "-vvv"
         },
         capabilities = vim.tbl_deep_extend("force", {}, capabilities, require("lspconfig").phpactor.capabilities or {}),
         on_attach = on_attach,
