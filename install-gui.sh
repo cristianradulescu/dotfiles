@@ -73,13 +73,10 @@ code --install-extension mblode.twig-language-2
 # code --install-extension vscodevim.vim
 
 
-# #####
-# CopyQ
-# #####
-sudo apt install copyq && \
-  mkdir -p ~/.config/copyq && \
-  ln -s ~/dotfiles/.config/copyq/copyq.conf ~/.config/copyq/copyq.conf && \
-  ln -s ~/dotfiles/.config/copyq/themes ~/.config/copyq/themes
+# #########
+# Flameshot
+# #########
+sudo apt install -y flameshot
 
 
 # ###################################

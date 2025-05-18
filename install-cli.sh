@@ -44,7 +44,6 @@ sudo apt install -y \
   fzf ripgrep fd-find tree tldr \
   unzip \
   php-cli composer \
-  flameshot \
   apt-file \
   build-essential autoconf make cmake gettext g++ \
   libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses-dev \
