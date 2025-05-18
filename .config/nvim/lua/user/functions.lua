@@ -105,43 +105,4 @@ end, { desc = "Copy current PHP method/property reference" })
 
 vim.keymap.set({ "n" }, "<leader>ccm", "<cmd>PHPCopyReference<cr>", { desc = "Copy method/property reference" })
 
--- Write the HTTP response body to a file and open it in a new buffer
----
---- Example config for rest.nvim post-request
---- ```lua
---- # @lang=lua
---- > {%
---- require("user.functions").rest_nvim_dump_response(response.body, response.headers["content-type"])
---- %}
---- ```
---
--- @param response_body string
--- @param response_content_type string
-function M.rest_nvim_dump_response(response_body, response_content_type)
-  if type(response_content_type) == "table" then
-    response_content_type = response_content_type[1]
-  end
-
-  local supported_types = {
-    ["application/json"] = "json",
-    ["application/xml"] = "xml",
-    ["text/html"] = "html",
-    ["text/plain"] = "txt",
-  }
-
-  local filetype = supported_types[response_content_type or ""] or ""
-  local timestamp = os.date("%Y%m%d%H%M%S")
-  local filename = "http_response_" .. string.format("%s", timestamp) .. (filetype ~= "" and "." .. filetype or "")
-
-  local file = io.open(filename, "w+")
-  io.output(file)
-  io.write(response_body)
-  io.close(file)
-
-  print("Response body written to " .. filename)
-
-  -- Auto open file?
-  -- vim.cmd("split " .. filename)
-end
-
 return M
