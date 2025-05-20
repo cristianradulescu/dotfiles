@@ -2,8 +2,8 @@ return {
   "saghen/blink.cmp",
   dependencies = { "rafamadriz/friendly-snippets" },
   version = "1.*",
-  config = function()
-    require("blink.cmp").setup()
+  config = function(_, opts)
+    require("blink.cmp").setup(opts)
     vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities(nil, true) })
   end,
   ---@module 'blink.cmp'
@@ -12,10 +12,13 @@ return {
     fuzzy = { implementation = "lua" },
     completion = {
       list = {
-        max_items = 20,
+        -- Do not insert items while browsing the autocomplete menu
+        selection = { preselect = false, auto_insert = false },
+        max_items = 10,
       },
-      documentation = { auto_show = true, auto_show_delay_ms = 500 },
-      menu = { auto_show = false }
+      documentation = { auto_show = true },
+      menu = { auto_show = false },
     },
+    cmdline = { enabled = false }
   }
 }
