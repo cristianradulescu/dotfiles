@@ -13,7 +13,7 @@ return {
     completion = {
       list = {
         -- Do not insert items while browsing the autocomplete menu
-        selection = { preselect = false, auto_insert = false },
+        selection = { preselect = true, auto_insert = false },
         max_items = 10,
       },
       documentation = { auto_show = true },

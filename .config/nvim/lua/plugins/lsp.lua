@@ -10,7 +10,7 @@ return {
       { "williamboman/mason-lspconfig.nvim", version = "2.*" },
 
       -- Useful status updates for LSP
-      { "j-hui/fidget.nvim", tag = "legacy", opts = {} },
+      { "j-hui/fidget.nvim", opts = {} },
 
       -- Configures LuaLS for editing your Neovim config by lazily updating your workspace libraries
       {
