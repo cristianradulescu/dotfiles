@@ -7,6 +7,9 @@ return {
   cond = function()
     return vim.g.copilot_enabled
   end,
+  init = function()
+    require("plugins.codecompanion.fidget-spinner"):init()
+  end,
   config = function()
     require("codecompanion").setup({
       strategies = {
@@ -16,6 +19,15 @@ return {
         inline = {
           adapter = "copilot",
         },
+      },
+      adapters = {
+        gemini = function()
+          return require("codecompanion.adapters").extend("gemini", {
+            env = {
+              api_key = os.getenv("GEMINI_API_KEY") or vim.fn.readfile(vim.fn.expand("~/.codecompanion/gemini"))[1],
+            },
+          })
+        end,
       },
     })
   end,

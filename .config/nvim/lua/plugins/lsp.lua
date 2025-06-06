@@ -144,8 +144,18 @@ return {
         nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
       end
 
+      local cmp_engine_capabilities = function()
+        if vim.g.cmp_engine == "blink" then
+          return require("blink.cmp").get_lsp_capabilities(nil, true)
+        end
+        if vim.g.cmp_engine == "nvim-cmp" then
+          return require("cmp_nvim_lsp").default_capabilities()
+        end
+
+        return {}
+      end
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities(nil, true))
+      capabilities = vim.tbl_deep_extend("force", capabilities, cmp_engine_capabilities())
 
       -- Setup Mason
       require("mason").setup()

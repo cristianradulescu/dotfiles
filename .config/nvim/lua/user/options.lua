@@ -13,6 +13,9 @@ vim.g.picker = "FzfLua"
 -- Select file explorer to use (options: NeoTree, Snacks)
 vim.g.fileexplorer = "NeoTree"
 
+-- Select completion engine to use (options: nvim-cmp, blink)
+vim.g.cmp_engine = "blink"
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
