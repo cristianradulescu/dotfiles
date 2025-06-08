@@ -22,34 +22,6 @@ return {
         end)(),
       },
       "saadparwaiz1/cmp_luasnip",
-      -- {
-      --   "zbirenbaum/copilot-cmp",
-      --   cond = function()
-      --     return vim.g.copilot_enabled
-      --   end,
-      --   opts = {},
-      --   config = function(_, opts)
-      --     local copilot_cmp = require("copilot_cmp")
-      --     copilot_cmp.setup(opts)
-      --
-      --     -- attach cmp source whenever copilot attaches
-      --     -- fixes lazy-loading issues with the copilot cmp source
-      --     if vim.g.copilot_enabled then
-      --       copilot_cmp._on_insert_enter({})
-      --     end
-      --   end,
-      --   dependencies = {
-      --     "zbirenbaum/copilot.lua",
-      --     cmd = "Copilot",
-      --     event = "InsertEnter",
-      --     opts = {
-      --       suggestion = {
-      --         enable = false,
-      --         panel = { enabled = false },
-      --       },
-      --     },
-      --   },
-      -- },
     },
     opts = function()
       local cmp = require("cmp")
@@ -67,14 +39,6 @@ return {
         { name = "lazydev", group_index = 0 }, -- set group index to 0 to skip loading LuaLS completions
       }
 
-      -- if vim.g.copilot_enabled then
-      --   table.insert(cmp_sources, 1, {
-      --     name = "copilot",
-      --     group_index = 1,
-      --     priority = 100,
-      --   })
-      -- end
-
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -83,6 +47,7 @@ return {
         },
         completion = {
           completeopt = "menu,menuone,noinsert",
+          autocomplete = false, -- Disable automatic completion
         },
         sources = cmp.config.sources(cmp_sources),
 
