@@ -23,10 +23,11 @@ return {
       },
       "saadparwaiz1/cmp_luasnip",
     },
-    opts = function()
+    config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
-      luasnip.config.setup({})
+      -- luasnip.config.setup({})
+      require('luasnip/loaders/from_snipmate').lazy_load()
 
       local cmp_sources = {
         { name = "nvim_lsp", group_index = 2 },
