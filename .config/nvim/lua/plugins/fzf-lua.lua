@@ -65,7 +65,7 @@ return {
       keymaps.help(fzflua, "helptags", {})
       keymaps.keymaps(fzflua, "keymaps", {})
       keymaps.search_cword(fzflua, "grep_cword", {})
-      keymaps.search_word(fzflua, "grep", {})
+      keymaps.search_word(fzflua, "grep_visual", {})
       keymaps.search_diagnostics(fzflua, "diagnostics_document", {})
       keymaps.search_resume(fzflua, "resume", {})
       keymaps.search_document_symbols(fzflua, "lsp_document_symbols", {})
