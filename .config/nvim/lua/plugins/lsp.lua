@@ -120,15 +120,15 @@ return {
         end, { desc = "Format current buffer with LSP" })
 
         -- Create command to force Phpactor reindex
-        vim.api.nvim_buf_create_user_command(buffnr, "PhpactorReindex", function(_)
-          local clients = vim.lsp.get_clients({ name = "phpactor" })
-          if next(clients) then
-            vim.notify("LSP: Starting Phpactor reindexing")
-            vim.lsp.buf_notify(0, "phpactor/indexer/reindex", {})
-          else
-            vim.notify("LSP: Cannot reindex, Phpactor not attached")
-          end
-        end, { desc = "Phpactor reindex" })
+        -- vim.api.nvim_buf_create_user_command(buffnr, "PhpactorReindex", function(_)
+        --   local clients = vim.lsp.get_clients({ name = "phpactor" })
+        --   if next(clients) then
+        --     vim.notify("LSP: Starting Phpactor reindexing")
+        --     vim.lsp.buf_notify(0, "phpactor/indexer/reindex", {})
+        --   else
+        --     vim.notify("LSP: Cannot reindex, Phpactor not attached")
+        --   end
+        -- end, { desc = "Phpactor reindex" })
 
         -- Create a function that lets us more easily define mappings specific
         -- for LSP related items. It sets the mode, buffer and description for us each time.
@@ -140,7 +140,7 @@ return {
           vim.keymap.set("n", keys, func, { buffer = buffnr, desc = desc })
         end
 
-        nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
+        -- nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
       end
 
       local cmp_engine_capabilities = function()
@@ -173,44 +173,44 @@ return {
       })
 
       -- Use Phpactor from source since it has issues with stubs due to being installed as phar
-      require("lspconfig").phpactor.setup({
-        cmd = {
-          "php",
-          vim.fn.expand("/opt/phpactor-unstable/bin/phpactor"),
-          "language-server",
-        },
-        capabilities = vim.tbl_deep_extend("force", {}, capabilities, require("lspconfig").phpactor.capabilities or {}),
-        on_attach = on_attach,
-      })
+      -- require("lspconfig").phpactor.setup({
+      --   cmd = {
+      --     "php",
+      --     vim.fn.expand("/opt/phpactor-unstable/bin/phpactor"),
+      --     "language-server",
+      --   },
+      --   capabilities = vim.tbl_deep_extend("force", {}, capabilities, require("lspconfig").phpactor.capabilities or {}),
+      --   on_attach = on_attach,
+      -- })
 
       -- Gopls setup is buggy on WSL & Linux arm64, works better if installed from OS package manager
-      require("lspconfig").gopls.setup({
-        settings = {
-          gopls = {
-            analyses = {
-              unusedparams = true,
-            },
-            staticcheck = true,
-            gofumpt = true,
-          },
-        },
-      })
+      -- require("lspconfig").gopls.setup({
+      --   settings = {
+      --     gopls = {
+      --       analyses = {
+      --         unusedparams = true,
+      --       },
+      --       staticcheck = true,
+      --       gofumpt = true,
+      --     },
+      --   },
+      -- })
 
-      vim.diagnostic.config({
-        virtual_lines = false,
-        virtual_text = true,
-        float = {
-          source = true,
-          header = "",
-          prefix = function(_, i, total)
-            if total > 1 then
-              -- Show the number of diagnostics in the line
-              return i .. "/" .. total .. ": ", ""
-            end
-            return "", ""
-          end,
-        },
-      })
+      -- vim.diagnostic.config({
+      --   virtual_lines = false,
+      --   virtual_text = true,
+      --   float = {
+      --     source = true,
+      --     header = "",
+      --     prefix = function(_, i, total)
+      --       if total > 1 then
+      --         -- Show the number of diagnostics in the line
+      --         return i .. "/" .. total .. ": ", ""
+      --       end
+      --       return "", ""
+      --     end,
+      --   },
+      -- })
     end,
   },
 }
