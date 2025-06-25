@@ -1,8 +1,3 @@
-vim.lsp.enable({
-  "phpactor",
-  "gopls",
-})
-
 -- Things to do when LSP is attached
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("lsp_on_attach", {}),
