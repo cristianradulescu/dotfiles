@@ -23,4 +23,12 @@ return {
       require("mini.icons").setup()
     end,
   },
+  {
+    -- Auto add matching pair
+    "echasnovski/mini.pairs",
+    version = "*",
+    config = function()
+      require("mini.pairs").setup()
+    end,
+  },
 }
