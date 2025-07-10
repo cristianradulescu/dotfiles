@@ -6,7 +6,7 @@ return {
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
       { "williamboman/mason.nvim", config = true },
-      { "williamboman/mason-lspconfig.nvim"  },
+      { "williamboman/mason-lspconfig.nvim" },
     },
     opts = {
       inlay_hints = {
@@ -127,7 +127,6 @@ return {
           "language-server",
         },
         capabilities = vim.tbl_deep_extend("force", {}, capabilities, require("lspconfig").phpactor.capabilities or {}),
-        on_attach = on_attach,
       })
 
       -- Gopls setup is buggy on WSL & Linux arm64, works better if installed from OS package manager
@@ -142,6 +141,7 @@ return {
           },
         },
       })
+
     end,
   },
 }

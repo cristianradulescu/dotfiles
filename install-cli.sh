@@ -48,7 +48,8 @@ sudo apt install -y \
   build-essential autoconf make cmake gettext g++ \
   libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses-dev \
   imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev \
-  net-tools
+  net-tools \
+  openjdk-21-jre
 
 
 # #####################
@@ -88,6 +89,18 @@ cd /opt/phpactor-unstable && \
 # Update check
 # Unstable - find if there are new hashes: git fetch && git rev-list HEAD..origin/master | wc -l
 # Stable - find last tag:  git tag -l "v*" --sort -"version:refname" | head -n1 
+
+
+# #########
+# Sonarlint
+# #########
+echo "Installing Sonarlint for PHP"
+SONARLINT_VSCODE_EXT_VERSION=$(curl -s "https://api.github.com/repos/SonarSource/sonarlint-vscode/releases/latest" | grep -Po '"name": "\K[^"]*' | head -n 1)
+curl -Lo sonarlint.zip "https://github.com/SonarSource/sonarlint-vscode/releases/latest/download/sonarlint-vscode-linux-x64-${SONARLINT_VSCODE_EXT_VERSION}.vsix"
+sudo mkdir -p /opt/vscode-sonarlint
+sudo chown -R "$USER:$USER" /opt/vscode-sonarlint
+unzip sonarlint.zip -d /opt/vscode-sonarlint
+rm -rf sonarlint.zip
 
 
 # ####
