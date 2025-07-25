@@ -42,6 +42,7 @@ sudo apt install -y \
   htop \
   xclip \
   fzf ripgrep fd-find tree tldr \
+  jq xq \
   unzip \
   php-cli composer \
   apt-file \
@@ -60,7 +61,7 @@ curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && \
   sudo apt install -y nodejs
 
 echo "Install Golang, Delve and Go Language Server"
-sudo apt install -y golang-go delve goplse
+sudo apt install -y golang-go delve gopls
 
 echo "Install PHP, Composer, Symfony CLI"
 sudo apt install -y php-cli php-xml composer
@@ -78,17 +79,13 @@ sudo chown -R "$USER:$USER" /opt/phpactor /opt/phpactor-unstable
 cd /opt/phpactor && \
   PHPACTOR_LAST_RELEASE=$(git tag -l "$(date +%Y).*" --sort -"version:refname" | head -n1) && \
   git checkout "$PHPACTOR_LAST_RELEASE" && \
-  composer install && \
+  composer install --no-dev --optimize-autoloader && \
   cd ~
 
 # Phpactor unstable: install deps
 cd /opt/phpactor-unstable && \
-  composer install && \
+  composer install --no-dev --optimize-autoloader && \
   cd ~
-
-# Update check
-# Unstable - find if there are new hashes: git fetch && git rev-list HEAD..origin/master | wc -l
-# Stable - find last tag:  git tag -l "v*" --sort -"version:refname" | head -n1 
 
 
 # #########
