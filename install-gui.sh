@@ -93,21 +93,6 @@ BAZECOR_VERSION=$(curl -s "https://api.github.com/repos/DygmaLab/Bazecor/release
 curl -L "https://github.com/DygmaLab/Bazecor/releases/download/v${BAZECOR_VERSION}/Bazecor-${BAZECOR_VERSION}-x64.AppImage" -o ~/Apps/Bazecor.AppImage && \
   chmod +x ~/Apps/Bazecor.AppImage
 
-# ########
-# SQL GUIs
-# ########
-if [[ -f $(which snap) ]]; then
-  sudo snap install dbeaver-ce
-fi
-
-# ##########
-# Redis GUIs
-# ##########
-if [[ -f $(which snap) ]]; then
-  sudo snap install another-redis-desktop-manager
-  # sudo snap install redisinsight
-fi
-
 
 # ##############
 # Autostart apps
