@@ -41,7 +41,7 @@ sudo apt install -y \
   mc ranger \
   htop \
   xclip \
-  fzf ripgrep fd-find tree tldr \
+  ripgrep fd-find tree tldr \
   jq xq \
   unzip \
   php-cli composer \
@@ -51,6 +51,16 @@ sudo apt install -y \
   imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev \
   net-tools \
   openjdk-21-jre
+
+# ###
+# FZF (newer version than in Ubuntu repos)
+# ###
+echo "Installing FZF"
+FZF_VERSION=$(curl -s "https://api.github.com/repos/junegunn/fzf/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -Lo fzf.tar.gz "https://github.com/junegunn/fzf/releases/latest/download/fzf-${FZF_VERSION}-linux_amd64.tar.gz"
+tar xf fzf.tar.gz fzf
+sudo install fzf /usr/local/bin
+rm -rf fzf fzf.tar.gz
 
 
 # #####################
