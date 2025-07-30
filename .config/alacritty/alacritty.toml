@@ -1,0 +1,27 @@
+[env]
+TERM = "xterm-256color"
+
+[window]
+# opacity = 0.9
+startup_mode = "Maximized"
+
+[scrolling]
+history = 50000
+
+[font]
+normal = { family = "JetBrainsMonoNL Nerd Font", style = "Regular" }
+# normal = { family = "Hack Nerd Font", style = "Regular" }
+size = 12
+# Letter spacing (default=0)
+offset.x = 0
+# Line spacing (default=0)
+offset.y = 4 # equivalent of `line_height = 1.2` on other apps
+
+[cursor]
+style = { shape = "Beam", blinking = "Always" }
+
+[mouse]
+hide_when_typing = true
+
+[general]
+import = ["~/.config/alacritty/catppuccin-mocha.toml"]
