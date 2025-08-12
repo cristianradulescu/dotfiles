@@ -4,6 +4,7 @@ TERM = "xterm-256color"
 [window]
 # opacity = 0.9
 startup_mode = "Maximized"
+decorations = "None"
 
 [scrolling]
 history = 50000
@@ -25,3 +26,13 @@ hide_when_typing = true
 
 [general]
 import = ["~/.config/alacritty/catppuccin-mocha.toml"]
+
+[keyboard]
+bindings = [
+  { key = "n", mods = "Control|Shift", action = "CreateNewWindow" },
+  { key = "q", mods = "Control|Shift", action = "Quit" },
+  { key = "=", mods = "Control", action = "IncreaseFontSize" },
+  { key = "-", mods = "Control", action = "DecreaseFontSize" },
+  { key = "0", mods = "Control", action = "ResetFontSize" },
+  { key = "Enter", mods = "Alt", action = "ToggleFullscreen" },
+]
