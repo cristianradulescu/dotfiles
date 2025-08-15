@@ -1,0 +1,10 @@
+{
+  "code_transform.template_paths": [
+    "~/.config/phpactor/templates/"
+  ],
+  "code_transform.class_new.variants": {
+    "default": "class",
+    "interface": "interface",
+    "trait": "trait"
+  }
+}

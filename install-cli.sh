@@ -97,6 +97,8 @@ cd /opt/phpactor-unstable && \
   composer install --no-dev --optimize-autoloader && \
   cd ~
 
+ln -s ~/dotfiles/.config/phpactor ~/.config/phpactor
+
 
 # #########
 # Sonarlint
