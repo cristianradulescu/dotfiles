@@ -105,6 +105,9 @@ export EDITOR='nvim'
 # For a full list of active aliases, run `alias`.
 [ -f "$HOME/dotfiles/.aliases" ] && source "$HOME/dotfiles/.aliases"
 
+# Gemini API key
+[ -f "$HOME/.codecompanion/gemini" ] && export GEMINI_API_KEY=$(cat "$HOME/.codecompanion/gemini")
+
 # Work profile (sensitive data that cannot be commited)
 [[ ! -f ~/.zshrc_work ]] || source ~/.zshrc_work
 
