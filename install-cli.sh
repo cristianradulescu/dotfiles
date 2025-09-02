@@ -50,7 +50,7 @@ sudo apt install -y \
   libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses-dev \
   imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev \
   net-tools \
-  openjdk-21-jre
+  openjdk-21-jre openjdk-21-jdk
 
 # ###
 # FZF (newer version than in Ubuntu repos)
