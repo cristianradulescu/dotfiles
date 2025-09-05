@@ -29,6 +29,15 @@ mkdir -p ~/.config/wezterm && \
   sudo update-alternatives --set x-terminal-emulator /usr/bin/open-wezterm-here
 
 
+# #########
+# Alacritty
+# #########
+echo "Installing Alacritty (wip)"
+# https://github.com/alacritty/alacritty/blob/master/INSTALL.md
+mkdir -p ~/.config/alacritty && \
+  ln -s ~/dotfiles/.config/alacritty/alacritty.toml ~/.config/alacritty/
+
+
 # #############
 # Google Chrome
 # #############
