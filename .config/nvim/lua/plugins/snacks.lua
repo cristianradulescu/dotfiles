@@ -17,6 +17,8 @@ return {
       enabled = function()
         return vim.g.fileexplorer == "Snacks"
       end,
+
+      replace_netrw = vim.g.fileexplorer == "Snacks",
     },
   },
   config = function(_, opts)
