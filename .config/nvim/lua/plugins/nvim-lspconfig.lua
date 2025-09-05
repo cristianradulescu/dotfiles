@@ -85,6 +85,20 @@ return {
         },
       }
 
+      if vim.g.php_lsp == "intelephense" then
+        servers = vim.tbl_extend("keep", servers, {
+          intelephense = {
+            settings = {
+              intelephense = {
+                files = {
+                  maxSize = 99000000, -- 99MB?
+                }
+              },
+            },
+          },
+        })
+      end
+
       -- Skip Lemminx on Linux arm64 due to no support
       local os_info = vim.loop.os_uname()["sysname"] .. " " .. vim.loop.os_uname()["machine"]
       if os_info ~= "Linux aarch64" then
@@ -120,14 +134,21 @@ return {
       })
 
       -- Use Phpactor from source since it has issues with stubs due to being installed as phar
-      require("lspconfig").phpactor.setup({
-        cmd = {
-          "php",
-          vim.fn.expand("/opt/phpactor-unstable/bin/phpactor"),
-          "language-server",
-        },
-        capabilities = vim.tbl_deep_extend("force", {}, capabilities, require("lspconfig").phpactor.capabilities or {}),
-      })
+      if vim.g.php_lsp == "phpactor" then
+        require("lspconfig").phpactor.setup({
+          cmd = {
+            "php",
+            vim.fn.expand("/opt/phpactor-unstable/bin/phpactor"),
+            "language-server",
+          },
+          capabilities = vim.tbl_deep_extend(
+            "force",
+            {},
+            capabilities,
+            require("lspconfig").phpactor.capabilities or {}
+          ),
+        })
+      end
 
       -- Gopls setup is buggy on WSL & Linux arm64, works better if installed from OS package manager
       require("lspconfig").gopls.setup({
@@ -141,7 +162,6 @@ return {
           },
         },
       })
-
     end,
   },
 }

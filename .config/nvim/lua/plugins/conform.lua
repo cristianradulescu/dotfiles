@@ -45,6 +45,11 @@ return {
         json = function()
           return { "jq" }
         end,
+
+        php = function()
+          ensure_installed("php_cs_fixer", "php-cs-fixer")
+          return { "php_cs_fixer" }
+        end,
       },
     })
   end,
