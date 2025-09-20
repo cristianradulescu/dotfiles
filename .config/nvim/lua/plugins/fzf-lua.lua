@@ -54,6 +54,7 @@ return {
   config = function(_, opts)
     local fzflua = require("fzf-lua")
     fzflua.setup(opts)
+    fzflua.register_ui_select()
 
     if vim.g.picker == "FzfLua" then
       local keymaps = require("user.keymaps-picker")

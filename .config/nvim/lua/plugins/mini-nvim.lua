@@ -1,7 +1,7 @@
 return {
   {
     -- More text objects selections
-    "echasnovski/mini.ai",
+    "nvim-mini/mini.ai",
     version = "*",
     config = function()
       require("mini.ai").setup()
@@ -9,7 +9,7 @@ return {
   },
   {
     -- Manage surround characters
-    "echasnovski/mini.surround",
+    "nvim-mini/mini.surround",
     version = "*",
     config = function()
       require("mini.surround").setup()
@@ -17,7 +17,7 @@ return {
   },
   {
     -- Extra icons
-    "echasnovski/mini.icons",
+    "nvim-mini/mini.icons",
     version = "*",
     config = function()
       require("mini.icons").setup()
@@ -25,7 +25,7 @@ return {
   },
   {
     -- Auto add matching pair
-    "echasnovski/mini.pairs",
+    "nvim-mini/mini.pairs",
     version = "*",
     config = function()
       require("mini.pairs").setup()

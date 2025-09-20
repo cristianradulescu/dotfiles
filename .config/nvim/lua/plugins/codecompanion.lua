@@ -11,10 +11,10 @@ return {
     require("codecompanion").setup({
       strategies = {
         chat = {
-          adapter = "copilot",
+          adapter = "gemini",
         },
         inline = {
-          adapter = "copilot",
+          adapter = "gemini",
         },
       },
       adapters = {
@@ -23,6 +23,19 @@ return {
             return require("codecompanion.adapters").extend("gemini", {
               env = {
                 api_key = os.getenv("GEMINI_API_KEY") or vim.fn.readfile(vim.fn.expand("~/.codecompanion/gemini"))[1],
+              },
+            })
+          end,
+          ollama = function()
+            return require("codecompanion.adapters").extend("ollama", {
+              env = {
+                url = "http://127.0.0.1:11434",
+              },
+              headers = {
+                ["Content-Type"] = "application/json",
+              },
+              parameters = {
+                sync = true,
               },
             })
           end,

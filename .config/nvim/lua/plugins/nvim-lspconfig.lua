@@ -3,11 +3,6 @@ return {
   {
     -- LSP Configuration & Plugins
     "neovim/nvim-lspconfig",
-    dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
-      { "williamboman/mason.nvim", config = true },
-      { "williamboman/mason-lspconfig.nvim" },
-    },
     opts = {
       inlay_hints = {
         enabled = true,
@@ -92,9 +87,17 @@ return {
               intelephense = {
                 files = {
                   maxSize = 99000000, -- 99MB?
-                }
+                },
               },
             },
+          },
+        })
+      end
+
+      if vim.g.php_lsp == "phpactor" then
+        servers = vim.tbl_extend("keep", servers, {
+          phpactor = {
+            cmd = { "php", "/opt/phpactor-unstable/bin/phpactor", "language-server" },
           },
         })
       end
@@ -105,63 +108,12 @@ return {
         servers = vim.tbl_extend("keep", servers, { lemminx = {} })
       end
 
-      local cmp_engine_capabilities = function()
-        if vim.g.cmp_engine == "blink" then
-          return require("blink.cmp").get_lsp_capabilities(nil, true)
+      for server_name, server_config in pairs(servers) do
+        if server_config ~= nil then
+          vim.lsp.config(server_name, server_config)
         end
-        if vim.g.cmp_engine == "nvim-cmp" then
-          return require("cmp_nvim_lsp").default_capabilities()
-        end
-
-        return {}
+        vim.lsp.enable(server_name)
       end
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend("force", capabilities, cmp_engine_capabilities())
-
-      -- Setup Mason
-      require("mason").setup()
-      require("mason-lspconfig").setup({
-        ensure_installed = vim.tbl_keys(servers),
-      })
-      require("mason-lspconfig").setup({
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-            require("lspconfig")[server_name].setup(server)
-          end,
-        },
-      })
-
-      -- Use Phpactor from source since it has issues with stubs due to being installed as phar
-      if vim.g.php_lsp == "phpactor" then
-        require("lspconfig").phpactor.setup({
-          cmd = {
-            "php",
-            vim.fn.expand("/opt/phpactor-unstable/bin/phpactor"),
-            "language-server",
-          },
-          capabilities = vim.tbl_deep_extend(
-            "force",
-            {},
-            capabilities,
-            require("lspconfig").phpactor.capabilities or {}
-          ),
-        })
-      end
-
-      -- Gopls setup is buggy on WSL & Linux arm64, works better if installed from OS package manager
-      require("lspconfig").gopls.setup({
-        settings = {
-          gopls = {
-            analyses = {
-              unusedparams = true,
-            },
-            staticcheck = true,
-            gofumpt = true,
-          },
-        },
-      })
     end,
   },
 }

@@ -105,6 +105,18 @@ cd /opt/phpactor-unstable && \
 ln -s ~/dotfiles/.config/phpactor ~/.config/phpactor
 
 
+# #################
+# PHP Debug Adapter
+# #################
+echo "Installing PHP Debug Adapter"
+cd /opt && \
+  sudo git clone https://github.com/xdebug/vscode-php-debug.git && \
+  sudo chown -R "$USER:$USER" /opt/vscode-php-debug && \
+  cd vscode-php-debug && \
+  npm install && npm run build
+cd ~
+
+
 # #########
 # Sonarlint
 # #########

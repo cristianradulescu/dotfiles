@@ -5,7 +5,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Toggle copilot
-vim.g.copilot_enabled = true
+vim.g.copilot_enabled = false
 
 -- Picker to use (options: FzfLua, Snacks)
 vim.g.picker = "FzfLua"
@@ -17,7 +17,7 @@ vim.g.fileexplorer = "NeoTree"
 vim.g.cmp_engine = "nvim-cmp"
 
 -- Options: intelephense, phpactor
-vim.g.php_lsp = "intelephense"
+vim.g.php_lsp = "phpactor"
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -78,7 +78,7 @@ vim.opt.tabstop = 2 -- Nb of spaces per tab
 vim.opt.softtabstop = 2 -- Nb of spaces per tab
 vim.opt.expandtab = true --Spaces instead of tabs
 vim.opt.wrap = false -- No word wrap
-vim.opt.list = true -- Show non-printable chars
+vim.opt.list = false -- Show non-printable chars
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 vim.opt.cursorline = true -- Highlight current line

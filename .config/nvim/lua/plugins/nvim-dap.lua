@@ -61,14 +61,11 @@ return {
     -- dap.listeners.before.event_terminated["dapui_config"] = dapui.close
     dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
-    if (not require("mason-registry").is_installed("php-debug-adapter")) then
-      vim.cmd("MasonInstall php-debug-adapter")
-    end
-    local path = require("mason-core.installer.InstallLocation").global():package("php-debug-adapter")
+    local path = "/opt/vscode-php-debug/"
     dap.adapters.php = {
       type = "executable",
       command = "node",
-      args = { path .. "/extension/out/phpDebug.js" },
+      args = { path .. "/out/phpDebug.js" },
     }
     dap.configurations.php = {
       -- Listen for Xdebug in Docker container
