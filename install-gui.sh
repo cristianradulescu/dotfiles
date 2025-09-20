@@ -25,15 +25,26 @@ echo 'deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/w
 sudo apt update && sudo apt install -y wezterm
 
 mkdir -p ~/.config/wezterm && \
-  ln -s ~/dotfiles/.config/wezterm/wezterm.lua ~/.config/wezterm/ && \
-  sudo update-alternatives --set x-terminal-emulator /usr/bin/open-wezterm-here
+  ln -s ~/dotfiles/.config/wezterm/wezterm.lua ~/.config/wezterm/
 
 
 # #########
 # Alacritty
 # #########
-echo "Installing Alacritty (wip)"
-# https://github.com/alacritty/alacritty/blob/master/INSTALL.md
+echo "Installing Alacritty"
+sudo apt install -y apt install cmake g++ pkg-config libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
+  cd ~/Apps && \
+  git clone https://github.com/alacritty/alacritty.git && \
+  cd alacritty && \
+  git checkout v.0.16 && \
+  cargo build --release && \
+  sudo cp -f target/release/alacritty /usr/bin && \
+  sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg && \
+  sudo desktop-file-install extra/linux/Alacritty.desktop && \
+  sudo update-desktop-database && \
+  sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 50 && \
+  sudo update-alternatives --set x-terminal-emulator /usr/bin/alacritty
+
 mkdir -p ~/.config/alacritty && \
   ln -s ~/dotfiles/.config/alacritty/alacritty.toml ~/.config/alacritty/
 

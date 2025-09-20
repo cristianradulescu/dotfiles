@@ -79,6 +79,11 @@ sudo apt install -y php-cli php-xml composer
 curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
 sudo apt install -y symfony-cli
 
+echo "Install Rust via rustup"
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup override set stable
+rustup update stable
+
 # Checkout Phpactor locally (using it as PHAR has some issues with locating stubs)
 # Have both stable and unstable version (sometimes annoying issues are fixed on master and I can switch)
 sudo git clone https://github.com/phpactor/phpactor.git /opt/phpactor
@@ -137,7 +142,7 @@ git clone https://github.com/neovim/neovim ~/Apps/neovim && \
   make CMAKE_BUILD_TYPE=RelWithDebInfo && \
   cd build && \
   cpack -G DEB && \
-  sudo dpkg -i --force-all nvim-linux64.deb && \
+  sudo dpkg -i --force-all nvim-linux-"$(uname -i)".deb && \
   cd ~
 
 sudo apt install -y python3-pynvim luarocks
