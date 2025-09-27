@@ -1,7 +1,7 @@
 return {
   -- Phpactor in non-LSP mode for more PHP related features
   -- "phpactor/phpactor",
-  dir = "/opt/phpactor-unstable",
+  dir = vim.fn.expand("~/lsp/phpactor"),
   ft = { "php" },
   build = "composer install --no-dev -o",
   config = function()

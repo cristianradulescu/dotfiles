@@ -10,24 +10,48 @@ return {
     },
     config = function()
       local servers = {
-        bashls = {},
+        bashls = {
+          cmd = { vim.fn.expand("~/lsp/bashls/node_modules/.bin/bash-language-server"), "start" },
+        },
         lua_ls = {
+          cmd = { vim.fn.expand("~/lsp/lua-language-server/bin/lua-language-server") },
           settings = {
             Lua = {
-              workspace = { checkThirdParty = false },
+              workspace = {
+                checkThirdParty = false,
+                library = {
+                  vim.env.VIMRUNTIME,
+                },
+              },
               telemetry = { enabled = false },
               format = { enable = false },
             },
           },
         },
-        twiggy_language_server = {},
-        docker_compose_language_service = {},
-        dockerls = {},
-        html = {},
-        marksman = {},
-        sqlls = {},
-        ts_ls = {},
+        twiggy_language_server = {
+          cmd = { vim.fn.expand("~/lsp/twiggy-language-server/node_modules/.bin/twiggy-language-server"), "--stdio" },
+        },
+        docker_compose_language_service = {
+          cmd = {
+            vim.fn.expand("~/lsp/compose-language-service/node_modules/.bin/docker-compose-langserver"),
+            "--stdio",
+          },
+        },
+        docker_language_server = {},
+        sqlls = {
+          cmd = {
+            vim.fn.expand("~/lsp/sql-language-server/node_modules/.bin/sql-language-server"),
+            "up",
+            "--method",
+            "stdio",
+          },
+        },
+        -- ts_ls = {}, --replace with tsgo?
+        tsgo = {
+          cmd = { vim.fn.expand("~/lsp/tsgo/node_modules/.bin/tsgo"), "--lsp", "--stdio" },
+        },
         yamlls = {
+          cmd = { vim.fn.expand("~/lsp/yaml-language-server/bin/yaml-language-server"), "--stdio" },
           -- Have to add this for yamlls to understand that we support line folding
           capabilities = {
             textDocument = {
@@ -64,6 +88,10 @@ return {
           },
         },
         jsonls = {
+          cmd = {
+            vim.fn.expand("~/lsp/vscode-langservers-extracted/node_modules/.bin/vscode-json-language-server"),
+            "--stdio",
+          },
           -- lazy-load schemastore when needed
           on_new_config = function(new_config)
             new_config.settings.json.schemas = new_config.settings.json.schemas or {}
@@ -78,11 +106,16 @@ return {
             },
           },
         },
+        lemminx = {
+          cmd = { vim.fn.expand("~/lsp/lemminx/lemminx-linux") },
+        },
+        gopls = {},
       }
 
       if vim.g.php_lsp == "intelephense" then
         servers = vim.tbl_extend("keep", servers, {
           intelephense = {
+            cmp = { vim.fn.expand("~/lsp/intelephense/node_modules/intelephense/lib/intelephense.js"), "--stdio" },
             settings = {
               intelephense = {
                 files = {
@@ -97,15 +130,9 @@ return {
       if vim.g.php_lsp == "phpactor" then
         servers = vim.tbl_extend("keep", servers, {
           phpactor = {
-            cmd = { "php", "/opt/phpactor-unstable/bin/phpactor", "language-server" },
+            cmd = { "php", vim.fn.expand("~/lsp/phpactor/bin/phpactor"), "language-server" },
           },
         })
-      end
-
-      -- Skip Lemminx on Linux arm64 due to no support
-      local os_info = vim.loop.os_uname()["sysname"] .. " " .. vim.loop.os_uname()["machine"]
-      if os_info ~= "Linux aarch64" then
-        servers = vim.tbl_extend("keep", servers, { lemminx = {} })
       end
 
       for server_name, server_config in pairs(servers) do

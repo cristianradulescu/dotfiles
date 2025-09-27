@@ -28,6 +28,8 @@ fi
 
 # Custom binaries
 export PATH=$PATH:/home/$USER/bin:/home/$USER/.local/bin
+# Go binaries
+export PATH=$PATH:/home/$USER/go/bin
 # Sometimes snaps are not loaded, adding to path works
 [ -d "/snap/bin" ] && export PATH=$PATH:/snap/bin
 

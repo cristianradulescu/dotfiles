@@ -84,50 +84,6 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup override set stable
 rustup update stable
 
-# Checkout Phpactor locally (using it as PHAR has some issues with locating stubs)
-# Have both stable and unstable version (sometimes annoying issues are fixed on master and I can switch)
-sudo git clone https://github.com/phpactor/phpactor.git /opt/phpactor
-sudo git clone https://github.com/phpactor/phpactor.git /opt/phpactor-unstable
-sudo chown -R "$USER:$USER" /opt/phpactor /opt/phpactor-unstable
-
-# Phpactor stable: switch to latest tag (named like: 2024.06.30.0) and install deps
-cd /opt/phpactor && \
-  PHPACTOR_LAST_RELEASE=$(git tag -l "$(date +%Y).*" --sort -"version:refname" | head -n1) && \
-  git checkout "$PHPACTOR_LAST_RELEASE" && \
-  composer install --no-dev --optimize-autoloader && \
-  cd ~
-
-# Phpactor unstable: install deps
-cd /opt/phpactor-unstable && \
-  composer install --no-dev --optimize-autoloader && \
-  cd ~
-
-ln -s ~/dotfiles/.config/phpactor ~/.config/phpactor
-
-
-# #################
-# PHP Debug Adapter
-# #################
-echo "Installing PHP Debug Adapter"
-cd /opt && \
-  sudo git clone https://github.com/xdebug/vscode-php-debug.git && \
-  sudo chown -R "$USER:$USER" /opt/vscode-php-debug && \
-  cd vscode-php-debug && \
-  npm install && npm run build
-cd ~
-
-
-# #########
-# Sonarlint
-# #########
-echo "Installing Sonarlint for PHP"
-SONARLINT_VSCODE_EXT_VERSION=$(curl -s "https://api.github.com/repos/SonarSource/sonarlint-vscode/releases/latest" | grep -Po '"name": "\K[^"]*' | head -n 1)
-curl -Lo sonarlint.zip "https://github.com/SonarSource/sonarlint-vscode/releases/latest/download/sonarlint-vscode-linux-x64-${SONARLINT_VSCODE_EXT_VERSION}.vsix"
-sudo mkdir -p /opt/vscode-sonarlint
-sudo chown -R "$USER:$USER" /opt/vscode-sonarlint
-unzip sonarlint.zip -d /opt/vscode-sonarlint
-rm -rf sonarlint.zip
-
 
 # ####
 # Tmux
@@ -159,6 +115,7 @@ git clone https://github.com/neovim/neovim ~/Apps/neovim && \
 
 sudo apt install -y python3-pynvim luarocks
 sudo npm install -g neovim
+source ./install-nvim-deps.sh
 
 # #######
 # LazyGit
