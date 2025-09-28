@@ -1,15 +1,18 @@
 return {
   "https://gitlab.com/schrieveslaach/sonarlint.nvim",
+  cond = function()
+    return vim.g.sonarlint_enabled
+  end,
   config = function()
     require("sonarlint").setup({
       server = {
         cmd = {
           "java",
           "-jar",
-          "/opt/vscode-sonarlint/extension/server/sonarlint-ls.jar",
+          vim.fn.expand("~/lsp/vscode-sonarlint/extension/server/sonarlint-ls.jar"),
           "-stdio",
           "-analyzers",
-          "/opt/vscode-sonarlint/extension/analyzers/sonarphp.jar"
+          vim.fn.expand("~/lsp/vscode-sonarlint/extension/analyzers/sonarphp.jar"),
         },
       },
       filetypes = { "php" },

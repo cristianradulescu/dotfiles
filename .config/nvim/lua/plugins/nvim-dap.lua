@@ -61,11 +61,10 @@ return {
     -- dap.listeners.before.event_terminated["dapui_config"] = dapui.close
     dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
-    local path = "/opt/vscode-php-debug/"
     dap.adapters.php = {
       type = "executable",
       command = "node",
-      args = { path .. "/out/phpDebug.js" },
+      args = { vim.fn.expand("~/lsp/vscode-php-debug/out/phpDebug.js") },
     }
     dap.configurations.php = {
       -- Listen for Xdebug in Docker container

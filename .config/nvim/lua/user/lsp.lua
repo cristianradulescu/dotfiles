@@ -1,3 +1,24 @@
+vim.lsp.enable({
+  "bashls",
+  "lua_ls",
+  "twiggy_language_server",
+  "docker_compose_language_service",
+  "docker_language_server",
+  "sqlls",
+  "tsgo",
+  "yamlls",
+  "jsonls",
+  "lemminx",
+  "gopls",
+  "php-diagls",
+})
+
+if vim.g.php_lsp == "phpactor" then
+  vim.lsp.enable("phpactor")
+else
+  vim.lsp.enable("intelephense")
+end
+
 -- Things to do when LSP is attached
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("lsp_on_attach", {}),

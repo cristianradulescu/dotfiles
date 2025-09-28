@@ -19,6 +19,8 @@ vim.g.cmp_engine = "nvim-cmp"
 -- Options: intelephense, phpactor
 vim.g.php_lsp = "phpactor"
 
+vim.g.sonarlint_enabled = false
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
