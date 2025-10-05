@@ -7,3 +7,5 @@ vim.lsp.config("intelephense", {
     },
   },
 })
+
+return {}

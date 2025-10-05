@@ -45,6 +45,7 @@ ln -s ~/lsp/node_modules/.bin/bash-language-server ~/lsp/bin/
 ln -s ~/lsp/node_modules/.bin/twiggy-language-server ~/lsp/bin/
 ln -s ~/lsp/node_modules/.bin/docker-compose-langserver ~/lsp/bin/
 ln -s ~/lsp/node_modules/.bin/vscode-json-language-server ~/lsp/bin/
+ln -s ~/lsp/node_modules/.bin/sql-language-server ~/lsp/bin/
 ln -s ~/lsp/node_modules/.bin/tsgo ~/lsp/bin/
 
 # [LSP] DockerLS

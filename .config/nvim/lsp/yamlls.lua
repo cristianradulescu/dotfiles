@@ -31,3 +31,5 @@ vim.lsp.config("yamlls", {
     },
   },
 })
+
+return {}
