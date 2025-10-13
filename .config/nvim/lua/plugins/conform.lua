@@ -29,9 +29,9 @@ return {
           return { "jq" }
         end,
 
-        php = function()
-          return { "php_cs_fixer" }
-        end,
+        -- php = function()
+        --   return { "php_cs_fixer" }
+        -- end,
       },
     })
   end,
