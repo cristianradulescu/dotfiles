@@ -16,6 +16,25 @@ curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fo
 fc-cache -rfv
 
 
+# #####
+# Sway
+# #####
+echo "Installing Sway and dependencies"
+sudo apt install -y sway swaybg swayidle swaylock \
+  waybar fuzzel mako-notifier grim slurp wl-clipboard cliphist
+mkdir -p ~/.config/sway && \
+  ln -s ~/dotfiles/.config/sway/config ~/.config/sway/config
+mkdir -p ~/.config/swaylock && \
+  ln -s ~/dotfiles/.config/swaylock/config ~/.config/swaylock/config
+mkdir -p ~/.config/waybar && \
+  ln -s ~/dotfiles/.config/waybar/config.jsonc ~/.config/waybar/config.jsonc && \
+  ln -s ~/dotfiles/.config/waybar/style.css ~/.config/waybar/style.css
+mkdir -p ~/.config/mako && \
+  ln -s ~/dotfiles/.config/mako/config ~/.config/mako/config
+mkdir -p ~/.config/fuzzel && \
+  ln -s ~/dotfiles/.config/fuzzel/fuzzel.ini ~/.config/fuzzel/fuzzel.ini
+
+
 # #######
 # Wezterm
 # #######
@@ -93,12 +112,6 @@ code --install-extension mblode.twig-language-2
 # code --install-extension vscodevim.vim
 
 
-# #########
-# Flameshot
-# #########
-sudo apt install -y flameshot
-
-
 # ###################################
 # Solaar (Logitech Unifying Receiver)
 # ###################################
@@ -112,13 +125,6 @@ sudo apt install -y libfuse2t64
 BAZECOR_VERSION=$(curl -s "https://api.github.com/repos/DygmaLab/Bazecor/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
 curl -L "https://github.com/DygmaLab/Bazecor/releases/download/v${BAZECOR_VERSION}/Bazecor-${BAZECOR_VERSION}-x64.AppImage" -o ~/Apps/Bazecor.AppImage && \
   chmod +x ~/Apps/Bazecor.AppImage
-
-
-# ##############
-# Autostart apps
-# ##############
-mkdir -p ~/.config/autostart && \
-   cp /usr/share/applications/org.flameshot.Flameshot.desktop ~/.config/autostart
 
 
 # #############
@@ -180,11 +186,6 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-7 "['<Super><Shift>7']"
   gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-8 "['<Super><Shift>8']"
   gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-9 "['<Super><Shift>9']"
-
-  # Set flameshot (with the sh fix for starting under Wayland) on alternate print screen key
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name 'Flameshot'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command 'sh -c -- "flameshot gui"'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding 'Print'
 
   # Clear favorite apps
   gsettings set org.gnome.shell favorite-apps "[]"

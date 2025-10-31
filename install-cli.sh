@@ -40,17 +40,16 @@ sudo apt install -y \
   curl \
   mc ranger \
   htop \
-  xclip \
   ripgrep fd-find tree tldr \
   jq xq \
   unzip \
-  php-cli composer \
   apt-file \
   build-essential autoconf make cmake gettext g++ \
   libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses-dev \
   imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev \
-  net-tools \
+  net-tools nmap dnsutils lsof \
   openjdk-21-jre openjdk-21-jdk
+
 
 # ###
 # FZF (newer version than in Ubuntu repos)

@@ -1,3 +1,7 @@
+# Default config for sway
+#
+# Copy this to ~/.config/sway/config and edit it to your liking.
+#
 # Read `man 5 sway` for a complete reference.
 
 ### Variables
@@ -14,7 +18,10 @@ set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu dmenu_path | wmenu | xargs swaymsg exec --
+# set $menu dmenu_path | wmenu | xargs swaymsg exec --
+set $menu fuzzel --show drun
+
+include /etc/sway/config-vars.d/*
 
 # Theme
 set $rosewater #f5e0dc
@@ -44,7 +51,7 @@ set $base #1e1e2e
 set $mantle #181825
 set $crust #11111b
 
-# target                 title     bg    text   indicator  border
+# target                 border    bg    text   indicator  child_border
 client.focused           $lavender $base $text  $rosewater $lavender
 client.focused_inactive  $overlay0 $base $text  $rosewater $overlay0
 client.unfocused         $overlay0 $base $text  $rosewater $overlay0
@@ -52,14 +59,20 @@ client.urgent            $peach    $base $peach $overlay0  $peach
 client.placeholder       $overlay0 $base $text  $overlay0  $overlay0
 client.background        $base
 
-include /etc/sway/config-vars.d/*
+font pango:JetBrainsMono Nerd Font 12
 
-font pango:JetBrainsMono Nerd Font 10
+# Borders/gaps
+# smart_gaps on
+# smart_borders on
+gaps inner 3
+gaps outer 3
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+set $default_bg ~/dotfiles/backgrounds/waves.png
+output * bg $default_bg fill
+
 #
 # Example configuration:
 #
@@ -80,6 +93,11 @@ output eDP-1 resolution 1920x1080 position 0,0 scale 1.25
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
+exec swayidle -w \
+  timeout 300  'swaylock -f --indicator-idle-visible --image '$default_bg \
+  timeout 600  'swaymsg "output * power off"' \
+  resume       'swaymsg "output * power on"' \
+  before-sleep 'swaylock -f --indicator-idle-visible --image '$default_bg
 
 ### Input configuration
 #
@@ -92,6 +110,8 @@ output eDP-1 resolution 1920x1080 position 0,0 scale 1.25
 #       middle_emulation enabled
 #   }
 #
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
 input "type:touchpad" {
     dwt enabled
     tap enabled
@@ -100,11 +120,10 @@ input "type:touchpad" {
 }
 input "type:keyboard" {
     # Use CapsLock as Control
-    xkb_options caps:ctrl_modifier
+    xkb_options ctrl:nocaps
+    repeat_delay 250
+    repeat_rate 50
 }
-#
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
 
 ### Key bindings
 #
@@ -131,6 +150,12 @@ input "type:keyboard" {
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+    # Lock the screen
+    bindsym $mod+Control+l exec swaylock \
+        -f \
+        --indicator-idle-visible \
+        --image $default_bg
 #
 # Moving around:
 #
@@ -244,32 +269,26 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 #
-# Screenshot
+# Brightness control
 #
-bindsym Print exec --no-startup-id flameshot gui
+bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+#
+# Volume control
+#
+# Use pactl to adjust volume in PulseAudio.
+bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym XF86AudioMute exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym XF86AudioMicMute exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+
 #
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
     position top
-
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    # status_command while date +'%Y-%m-%d %X'; do sleep 2; done
-    status_command i3status
-
-    colors {
-        background         $base
-        statusline         $text
-        focused_statusline $text
-        focused_separator  $base
-        focused_workspace  $base $base $green
-        active_workspace   $base $base $blue
-        inactive_workspace $base $base $surface1
-        urgent_workspace   $base $base $surface1
-        binding_mode       $base $base $surface1
-    }
+    swaybar_command waybar
 }
 
 #
@@ -278,3 +297,15 @@ bar {
 default_border pixel 2
 
 include /etc/sway/config.d/*
+
+# Import env into systemd user and DBus so apps inherit variables
+exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP SWAYSOCK
+exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP SWAYSOCK
+
+# Clipboard history (cliphist + wl-clipboard)
+exec sh -c 'pgrep -f "wl-paste --watch cliphist store" >/dev/null || wl-paste --watch cliphist store'
+bindsym $mod+Shift+v exec cliphist list | fuzzel --width 100% --dmenu | cliphist decode | wl-copy
+ 
+# Disable internal panel on lid close
+bindswitch --reload --locked lid:on  output eDP-1 disable
+bindswitch --reload --locked lid:off output eDP-1 enable
