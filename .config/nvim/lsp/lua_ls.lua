@@ -4,7 +4,7 @@ vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
       workspace = {
-        checkThirdParty = false,
+        checkThirdParty = true,
         library = {
           vim.env.VIMRUNTIME,
         },
