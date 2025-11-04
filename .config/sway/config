@@ -303,7 +303,6 @@ exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway systemctl --us
 exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP SWAYSOCK
 
 # Clipboard history (cliphist + wl-clipboard)
-exec sh -c 'pgrep -f "wl-paste --watch cliphist store" >/dev/null || wl-paste --watch cliphist store'
 bindsym $mod+Shift+v exec cliphist list | fuzzel --width 100% --dmenu | cliphist decode | wl-copy
  
 # Disable internal panel on lid close

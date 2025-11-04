@@ -34,6 +34,30 @@ mkdir -p ~/.config/mako && \
 mkdir -p ~/.config/fuzzel && \
   ln -s ~/dotfiles/.config/fuzzel/fuzzel.ini ~/.config/fuzzel/fuzzel.ini
 
+# Setup systemd user services
+mkdir -p ~/.config/systemd/user/
+
+# Clipboard history daemon (cliphist)
+cat > ~/.config/systemd/user/cliphist.service << 'EOF'
+[Unit]
+Description=Clipboard history daemon
+PartOf=default.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/wl-paste --watch /usr/bin/cliphist store
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=60
+
+[Install]
+WantedBy=default.target
+EOF
+
+systemctl --user daemon-reload
+systemctl --user enable cliphist.service
+systemctl --user start cliphist.service
+
 
 # #######
 # Wezterm
