@@ -87,7 +87,6 @@ window#waybar {
     color: @green;
 }
 
-
 #battery.warning:not(.charging) {
     color: @red;
 }
@@ -129,6 +128,9 @@ window#waybar {
     color: @sky;
 }
 
+#backlight {
+    color: @peach;
+}
 
 #tray {
     background-color: @surface0;

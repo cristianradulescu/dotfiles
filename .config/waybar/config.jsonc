@@ -14,6 +14,7 @@
     "bluetooth",
     "network",
     "pulseaudio",
+    "backlight",
     "battery"
   ],
   "clock": {
@@ -35,11 +36,15 @@
     "format-alt": "{time} {icon}",
     "format-icons": [ " ", " ", " ", " ", " " ]
   },
+  "backlight": {
+    "device": "amdgpu_bl1",
+    "format": "󰃠 {percent}%"
+  },
   "network": {
     "format-wifi": "  {essid}",
     "format-ethernet": "󰈀 Connected",
     "format-disconnected": "󰖪 Disconnected",
-    "tooltip-format": "{ifname} | IP: {ipaddr} | ({signalStrength}%)"
+    "tooltip-format": "Dev:\t{ifname}\nIP:\t{ipaddr}\nGw:\t{gwaddr}\nPow:\t{signalStrength}%"
   },
   "pulseaudio": {
     "format": "{icon} {volume}% {format_source}",
