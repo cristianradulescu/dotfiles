@@ -1,21 +1,120 @@
 # vim:ft=gitconfig ts=2 sw=2 sts=2
+
+# rerere (reuse recorded resolution) remembers how you resolved merge conflicts
+# so you don't have to solve the same conflict repeatedly during rebases
+[rerere]
+  enabled = true
+  # Automatically stages files after rerere resolves conflicts
+  autoUpdate = true
+
+# git pull --rebase by default
+# Replays your local commits on top of the fetched branch instead of creating merge commits
+[pull]
+  rebase = true
+
+# rebasing does not work if you have uncommitted changes - stash and stash pop those for you
+[rebase]
+  # Automatically stash uncommitted changes before rebasing and pop them after
+  autoStash = true
+  # Automatically use --squash and --fixup markers when rebasing interactively
+  ; autoSquash = true
+  # Automatically updates branch pointers that point to commits being rebased (Git 2.38+)
+  # Useful when you have multiple feature branches built on top of each other
+  updateRefs = true
+
+[core]
+  # On Linux, keep LF line endings in the repository (don't convert to CRLF)
+  autocrlf = input
+  # Global gitignore file for files you want to ignore in all repositories
+  excludesfile = /home/cristianradulescu/.gitignore
+
 [user]
   email = 
   name = 
 
 [push]
-	autoSetupRemote = true
+  # Automatically set up remote tracking when pushing a new branch
+  autoSetupRemote = true
+  # Push only the current branch to a branch with the same name on the remote
+  default = current
 
-[pull]
-	rebase = true
+[column]
+  # Automatically format output (like branch list) in columns when terminal is wide enough
+  ui = auto
 
-[rebase]
-	autoStash = true
+[branch]
+  # Sort branches by most recently committed (newest first)
+  sort = -committerdate
 
-# reminds conflict resolution so you don't solve the same conflict again
-[rerere]
-	enabled = true
+[diff]
+  # Use histogram diff algorithm for better and faster diffs
+  algorithm = histogram
+  # Detect file renames and show them as renames instead of delete+add
+  renames = true
+  # Highlight moved code blocks in a different color (useful for refactoring)
+  colorMoved = plain
+  # Use Neovim for diff viewing
+  tool = nvimdiff
 
-[core]
-	autocrlf = input
-	excludesfile = ~/.gitignore
+[difftool]
+  # Also use Neovim for viewing diffs
+  prompt = false
+
+[merge]
+  # Show conflicts in zdiff3 style: original|base|incoming
+  # Helps understand what changed on both sides relative to the common ancestor
+  conflictStyle = zdiff3
+  mergetool = nvimdiff4
+
+[mergetool]
+  # Don't create *.orig backup files after resolving conflicts
+  keepBackup = false
+  # Don't prompt before opening each file
+  prompt = false
+  # Trust nvim's exit code to determine if merge was successful
+  trustExitCode = true
+
+[mergetool "nvimdiff3"]
+  # Neovim's built-in diff mode
+  # 3-way split (LOCAL | REMOTE | MERGED)
+  cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[mergetool "nvimdiff4"]
+  # Shows the common ancestor (BASE) - very useful for understanding conflicts during rebases
+  # 4-way split: LOCAL | BASE | REMOTE on top, MERGED on bottom
+  cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[mergetool "fugitive"]
+  # 3-way diff with better highlighting
+  # Easy conflict navigation (`:diffget //2` for LOCAL, `:diffget //3` for REMOTE)
+  cmd = nvim -f -c "Gvdiffsplit!" "$MERGED"
+
+[fetch]
+  # Automatically remove remote-tracking branches that no longer exist on remote
+  prune = true
+
+[log]
+  # Show abbreviated commit hashes (7 chars) instead of full 40 character hashes
+  abbrevCommit = true
+  # When viewing file history, follow the file across renames
+  follow = true
+
+[alias]
+  # Useful for your cherry-pick workflow
+  cp = cherry-pick
+  cpa = cherry-pick --abort
+  cpc = cherry-pick --continue
+  
+  # Quick status and log views
+  st = status -sb
+  lg = log --graph --oneline --decorate --all
+  lp = log --pretty=format:'%C(yellow)%h%Creset %C(blue)%ad%Creset %C(green)%an%Creset %s' --date=short
+  
+  # Branch management
+  br = branch -vv
+  
+  # Rebase helpers
+  rb = rebase
+  rbi = rebase -i
+  rbc = rebase --continue
+  rba = rebase --abort
