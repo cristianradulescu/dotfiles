@@ -41,7 +41,7 @@
     "format": "󰃠 {percent}%"
   },
   "network": {
-    "format-wifi": "  {essid}",
+    "format-wifi": "  Connected",
     "format-ethernet": "󰈀 Connected",
     "format-disconnected": "󰖪 Disconnected",
     "tooltip-format": "Dev:\t{ifname}\nIP:\t{ipaddr}\nGw:\t{gwaddr}\nPow:\t{signalStrength}%"
