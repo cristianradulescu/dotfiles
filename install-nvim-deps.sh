@@ -7,14 +7,6 @@ cd ~/lsp
 git clone https://github.com/xdebug/vscode-php-debug
 cd vscode-php-debug && npm install && npm run build
 
-# [LSP] Sonarlint
-cd ~/lsp
-SONARLINT_VSCODE_EXT_VERSION=$(curl -s "https://api.github.com/repos/SonarSource/sonarlint-vscode/releases/latest" | grep -Po '"name": "\K[^"]*' | head -n 1)
-curl -Lo /tmp/sonarlint.zip "https://github.com/SonarSource/sonarlint-vscode/releases/latest/download/sonarlint-vscode-linux-x64-${SONARLINT_VSCODE_EXT_VERSION}.vsix"
-mkdir -p vscode-sonarlint
-unzip /tmp/sonarlint.zip -d vscode-sonarlint
-rm -rf /tmp/sonarlint.zip
-
 # [LSP] Phpactor
 cd ~/lsp
 git clone https://github.com/phpactor/phpactor
