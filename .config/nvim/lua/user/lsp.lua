@@ -4,7 +4,7 @@ vim.lsp.enable({
   "twiggy_language_server",
   "docker_compose_language_service",
   "docker_language_server",
-  "sqlls",
+  -- "sqlls",
   "tsgo",
   "yamlls",
   "jsonls",

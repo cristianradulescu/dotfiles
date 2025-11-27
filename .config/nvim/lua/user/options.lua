@@ -5,7 +5,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Toggle copilot
-vim.g.copilot_enabled = false
+vim.g.copilot_enabled = true
 
 -- Picker to use (options: FzfLua, Snacks)
 vim.g.picker = "FzfLua"
