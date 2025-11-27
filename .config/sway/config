@@ -157,6 +157,14 @@ input "type:keyboard" {
         -f \
         --indicator-idle-visible \
         --image $default_bg
+
+    # Take screenshot of entire screen
+    bindsym Print exec grim ~/Pictures/Screenshots/screenshot-$(date +'%Y%m%d-%H%M%S').png \
+        && notify-send -t 5000 -i /usr/share/icons/Yaru/32x32/apps/camera-app.png "Screenshot saved" "Saved to ~/Pictures/Screenshots/"
+
+    # Take screenshot of selected area
+    bindsym $mod+Print exec grim -g "$(slurp)" ~/Pictures/Screenshots/screenshot-$(date +'%Y%m%d-%H%M%S').png \
+        && notify-send -t 5000 -i /usr/share/icons/Yaru/32x32/apps/camera-app.png "Screenshot saved" "Saved to ~/Pictures/Screenshots/"
 #
 # Moving around:
 #
