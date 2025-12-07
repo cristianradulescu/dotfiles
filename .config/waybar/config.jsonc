@@ -44,7 +44,7 @@
     "format-wifi": "  Connected",
     "format-ethernet": "󰈀 Connected",
     "format-disconnected": "󰖪 Disconnected",
-    "tooltip-format": "Dev:\t{ifname}\nIP:\t{ipaddr}\nGw:\t{gwaddr}\nPow:\t{signalStrength}%"
+    "tooltip-format": "Name:\t{essid}\nDev:\t{ifname}\nIP:\t{ipaddr}\nGw:\t{gwaddr}\nPow:\t{signalStrength}%"
   },
   "pulseaudio": {
     "format": "{icon} {volume}% {format_source}",
@@ -58,7 +58,7 @@
     "on-click": "pavucontrol" // Opens audio control panel
   },
   "tray": {
-    "icon-size": 24,
+    "icon-size": 18,
     "spacing": 10
   },
   "sway/mode": {
