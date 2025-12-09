@@ -1,0 +1,163 @@
+#!/usr/bin/env bash
+
+DOTFILES_DIR="$HOME/dotfiles"
+
+show_help() {
+  cat << EOF
+Dotfiles Management Tool
+
+Usage: dotfiles [command] [options]
+
+Commands:
+  install [package]   Install specific package or run full installation
+  update [package]    Update specific package or all updatable packages
+  list                List all available packages
+  help                Show this help message
+
+Examples:
+  dotfiles install lazygit    # Install/reinstall lazygit
+  dotfiles update lazygit     # Update lazygit to latest version
+  dotfiles update             # Update all updatable packages
+  dotfiles list               # Show all available packages
+
+Note: Only GitHub-based packages support updates (apt packages are managed by Ubuntu).
+EOF
+}
+
+list_packages() {
+  echo "Available packages:"
+  echo ""
+  echo "CLI Tools:"
+  for script in "$DOTFILES_DIR"/install/cli/*.sh; do
+    if [ -f "$script" ]; then
+      local name=$(basename "$script" .sh)
+      echo "  - $name"
+    fi
+  done
+  echo ""
+  echo "GUI Tools:"
+  for script in "$DOTFILES_DIR"/install/gui/*.sh; do
+    if [ -f "$script" ]; then
+      local name=$(basename "$script" .sh)
+      echo "  - $name"
+    fi
+  done
+  echo ""
+  echo "Optional:"
+  for script in "$DOTFILES_DIR"/install/optional/*.sh; do
+    if [ -f "$script" ]; then
+      local name=$(basename "$script" .sh)
+      echo "  - $name"
+    fi
+  done
+}
+
+install_package() {
+  local package="$1"
+  local script=""
+  
+  # Find the script
+  if [ -f "$DOTFILES_DIR/install/cli/$package.sh" ]; then
+    script="$DOTFILES_DIR/install/cli/$package.sh"
+  elif [ -f "$DOTFILES_DIR/install/gui/$package.sh" ]; then
+    script="$DOTFILES_DIR/install/gui/$package.sh"
+  elif [ -f "$DOTFILES_DIR/install/optional/$package.sh" ]; then
+    script="$DOTFILES_DIR/install/optional/$package.sh"
+  else
+    echo "Error: Package '$package' not found"
+    echo "Run 'dotfiles list' to see available packages"
+    exit 1
+  fi
+  
+  echo "Installing $package..."
+  source "$script"
+}
+
+update_package() {
+  local package="$1"
+  local script=""
+  
+  # Find the script
+  if [ -f "$DOTFILES_DIR/install/cli/$package.sh" ]; then
+    script="$DOTFILES_DIR/install/cli/$package.sh"
+  elif [ -f "$DOTFILES_DIR/install/gui/$package.sh" ]; then
+    script="$DOTFILES_DIR/install/gui/$package.sh"
+  elif [ -f "$DOTFILES_DIR/install/optional/$package.sh" ]; then
+    script="$DOTFILES_DIR/install/optional/$package.sh"
+  else
+    echo "Error: Package '$package' not found"
+    echo "Run 'dotfiles list' to see available packages"
+    exit 1
+  fi
+  
+  echo "Checking updates for $package..."
+  # Execute directly (not source) to trigger update mode
+  bash "$script"
+}
+
+update_all() {
+  echo "Checking updates for all packages..."
+  echo ""
+  
+  local updated=0
+  local checked=0
+  
+  for script in "$DOTFILES_DIR"/install/cli/*.sh "$DOTFILES_DIR"/install/gui/*.sh "$DOTFILES_DIR"/install/optional/*.sh; do
+    if [ -f "$script" ]; then
+      local name=$(basename "$script" .sh)
+      ((checked++))
+      
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "Checking: $name"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        
+        # Capture output and display it
+        local output
+        output=$(bash "$script" 2>&1)
+        echo "$output"
+        
+        if echo "$output" | grep -q "up to date\|already installed\|not installed"; then
+          :
+        else
+          ((updated++))
+        fi
+        echo ""
+    fi
+  done
+  
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "Update check complete!"
+  echo "Checked: $checked packages"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+}
+
+# Main command dispatcher
+case "${1:-help}" in
+  install)
+    if [ -z "$2" ]; then
+      echo "Error: Please specify a package to install"
+      echo "Run 'dotfiles list' to see available packages"
+      exit 1
+    fi
+    install_package "$2"
+    ;;
+  update)
+    if [ -z "$2" ]; then
+      update_all
+    else
+      update_package "$2"
+    fi
+    ;;
+  list)
+    list_packages
+    ;;
+  help|--help|-h)
+    show_help
+    ;;
+  *)
+    echo "Error: Unknown command '$1'"
+    echo ""
+    show_help
+    exit 1
+    ;;
+esac

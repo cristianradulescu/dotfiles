@@ -18,20 +18,12 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/nul
 source /usr/share/autojump/autojump.zsh 2>/dev/null
 source /etc/zsh_command_not_found 2>/dev/null
 
-# CAPS LOCK remap to CTRL
-if [[ -n "$XDG_SESSION_TYPE" ]] && [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
-  setxkbmap -option caps:ctrl_modifier
-fi
-
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
 # Custom binaries
-export PATH=$PATH:/home/$USER/bin:/home/$USER/.local/bin
+export PATH=$PATH:$HOME/bin:$HOME/.local/bin:$HOME/dotfiles/bin
 # Go binaries
-export PATH=$PATH:/home/$USER/go/bin
+export PATH=$PATH:$HOME/go/bin
 # Neovim LSPs
-export PATH=$PATH:/home/$USER/lsp/bin
+export PATH=$PATH:$HOME/lsp/bin
 # Sometimes snaps are not loaded, adding to path works
 [ -d "/snap/bin" ] && export PATH=$PATH:/snap/bin
 # Rustup env
