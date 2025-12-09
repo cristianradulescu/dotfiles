@@ -75,11 +75,11 @@ mkdir -p ~/.config/wezterm && \
 # Alacritty
 # #########
 echo "Installing Alacritty"
-sudo apt install -y apt install cmake g++ pkg-config libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
+sudo apt install -y cmake g++ pkg-config libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
   cd ~/Apps && \
   git clone https://github.com/alacritty/alacritty.git && \
   cd alacritty && \
-  git checkout v.0.16 && \
+  git checkout v0.16.0 && \
   cargo build --release && \
   sudo cp -f target/release/alacritty /usr/bin && \
   sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg && \
@@ -226,12 +226,8 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   gsettings set org.gnome.desktop.input-sources sources "[('xkb-options', 'us')]"
 
   # Manage extensions
-  sudo apt install -y gnome-tweaks gnome-shell-extension-manager pipx
+  sudo apt install -y gnome-tweaks gnome-shell-extension-manager
   pipx install gnome-extensions-cli --system-site-packages
-
-  # Fix path for pipx 
-  # TODO: make it permanent
-  PATH=$HOME/.local/bin:$PATH
 
   ### Turn off default Ubuntu extensions
   # Desktop icons

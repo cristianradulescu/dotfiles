@@ -62,9 +62,9 @@ sudo install fzf /usr/local/bin
 rm -rf fzf fzf.tar.gz
 
 
-# #####################
-# Programming languages
-# #####################
+# ################################
+# Programming languages & packages
+# ################################
 echo "Install NodeJS from nodesource.com to get a more recent version"
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && \
   sudo apt install -y nodejs
@@ -80,8 +80,14 @@ sudo apt install -y symfony-cli
 
 echo "Install Rust via rustup"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source "$HOME/.cargo/env"
 rustup override set stable
 rustup update stable
+
+echo "Installing pipx"
+sudo apt install -y pipx
+# Add pipx binaries to PATH
+PATH=$HOME/.local/bin:$PATH
 
 
 # ####
@@ -114,7 +120,9 @@ git clone https://github.com/neovim/neovim ~/Apps/neovim && \
 
 sudo apt install -y python3-pynvim luarocks
 sudo npm install -g neovim
-source ./install-nvim-deps.sh
+
+# Install pipx here!!!
+source ~/dotfiles/install-nvim-deps.sh
 
 # #######
 # LazyGit

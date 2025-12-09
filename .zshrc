@@ -34,6 +34,8 @@ export PATH=$PATH:/home/$USER/go/bin
 export PATH=$PATH:/home/$USER/lsp/bin
 # Sometimes snaps are not loaded, adding to path works
 [ -d "/snap/bin" ] && export PATH=$PATH:/snap/bin
+# Rustup env
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 # export LANG=en_US.UTF-8
 
