@@ -24,6 +24,12 @@ function M.files(picker, picker_func, picker_func_params)
   end, { desc = "Search file" })
 end
 
+function M.marks(picker, picker_func, picker_func_params)
+  vim.keymap.set("n", "<leader>sm", function()
+    picker[picker_func](picker_func_params)
+  end, { desc = "Search marks" })
+end
+
 function M.help(picker, picker_func, picker_func_params)
   vim.keymap.set("n", "<leader>sh", function()
     picker[picker_func](picker_func_params)

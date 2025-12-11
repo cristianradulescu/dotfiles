@@ -98,6 +98,7 @@ return {
       keymaps.buffers(fzflua, "buffers", {})
       keymaps.lines(fzflua, "lines", {})
       keymaps.files(fzflua, "files", {})
+      keymaps.marks(fzflua, "marks", {})
       keymaps.help(fzflua, "helptags", {})
       keymaps.keymaps(fzflua, "keymaps", {})
       keymaps.search_cword(fzflua, "grep_cword", {})

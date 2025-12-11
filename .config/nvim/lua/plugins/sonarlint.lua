@@ -13,6 +13,7 @@ return {
           "-stdio",
           "-analyzers",
           vim.fn.expand("~/lsp/vscode-sonarlint/extension/analyzers/sonarphp.jar"),
+          vim.fn.expand("~/lsp/vscode-sonarlint/extension/analyzers/sonartext.jar"),
         },
       },
       filetypes = { "php" },

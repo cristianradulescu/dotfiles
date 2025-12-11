@@ -23,12 +23,12 @@ return {
       require("mini.icons").setup()
     end,
   },
-  {
-    -- Auto add matching pair
-    "nvim-mini/mini.pairs",
-    version = "*",
-    config = function()
-      require("mini.pairs").setup()
-    end,
-  },
+  -- {
+  --   -- Auto add matching pair
+  --   "nvim-mini/mini.pairs",
+  --   version = "*",
+  --   config = function()
+  --     require("mini.pairs").setup()
+  --   end,
+  -- },
 }
