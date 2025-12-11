@@ -3,6 +3,7 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
+    "ravitemer/codecompanion-history.nvim"
   },
   init = function()
     require("plugins.codecompanion.fidget-spinner"):init()
@@ -11,10 +12,16 @@ return {
     require("codecompanion").setup({
       strategies = {
         chat = {
-          adapter = "gemini",
+          adapter = {
+            name = "copilot",
+            model = "claude-sonnet-4.5"
+          }
         },
         inline = {
-          adapter = "gemini",
+          adapter = {
+            name = "copilot",
+            model = "claude-sonnet-4.5"
+          }
         },
       },
       adapters = {
@@ -39,6 +46,11 @@ return {
               },
             })
           end,
+        },
+      },
+      extensions = {
+        history = {
+          enabled = true,
         },
       },
     })
