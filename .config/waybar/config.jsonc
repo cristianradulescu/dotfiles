@@ -14,7 +14,6 @@
     "bluetooth",
     "network",
     "pulseaudio",
-    "backlight",
     "battery"
   ],
   "clock": {
@@ -36,14 +35,10 @@
     "format-alt": "{time} {icon}",
     "format-icons": [ " ", " ", " ", " ", " " ]
   },
-  "backlight": {
-    "device": "amdgpu_bl1",
-    "format": "󰃠 {percent}%"
-  },
   "network": {
-    "format-wifi": "  Connected",
-    "format-ethernet": "󰈀 Connected",
-    "format-disconnected": "󰖪 Disconnected",
+    "format-wifi": "",
+    "format-ethernet": "󰈀",
+    "format-disconnected": "󰖪",
     "tooltip-format": "Name:\t{essid}\nDev:\t{ifname}\nIP:\t{ipaddr}\nGw:\t{gwaddr}\nPow:\t{signalStrength}%"
   },
   "pulseaudio": {
@@ -65,13 +60,13 @@
     "format": "<span style=\"italic\">{}</span>"
   },
   "bluetooth": {
-    "format": " {status}",
+    "format": "",
     "format-connected": " {device_alias}",
     "format-connected-battery": " {device_alias} {device_battery_percentage}%",
     "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
     "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
-    "on_click": "blueman-manager"
+    "on-click": "blueman-manager"
   }
 }

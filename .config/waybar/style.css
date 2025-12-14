@@ -30,7 +30,6 @@
 * {
     border: none;
     border-radius: 0;
-    /* Set your Nerd Font here */
     font-family: "JetBrainsMono Nerd Font", "Font Awesome 6 Free";
     font-size: 12px;
     min-height: 0;
@@ -64,7 +63,7 @@ window#waybar {
 }
 
 #workspaces button.focused {
-    color: @sky;
+    color: @blue;
     background-color: @surface0;
     border-radius: 10px;
 }
@@ -77,10 +76,6 @@ window#waybar {
 #clock {
     color: @lavender;
     font-weight: bold;
-}
-
-#battery {
-    color: @green;
 }
 
 #battery.charging, #battery.plugged {
@@ -100,36 +95,16 @@ window#waybar {
     animation-direction: alternate;
 }
 
-#network {
-    color: @sky;
-}
-
 #network.disconnected {
     color: @red;
-}
-
-#pulseaudio {
-    color: @yellow;
 }
 
 #pulseaudio.muted {
     color: @subtext0;
 }
 
-#bluetooth.on {
-    color: @blue;
-}
-
 #bluetooth.off {
     color: @red;
-}
-
-#bluetooth.connected {
-    color: @sky;
-}
-
-#backlight {
-    color: @peach;
 }
 
 #tray {

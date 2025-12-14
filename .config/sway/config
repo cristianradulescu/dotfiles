@@ -280,8 +280,8 @@ bindsym $mod+r mode "resize"
 #
 # Brightness control
 #
-bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym XF86MonBrightnessUp exec brightnessctl set 5%+ && notify-send -t 1000  "Brightness: $(brightnessctl -m | awk -F, '{print $4}')"
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%- && notify-send -t 1000 "Brightness: $(brightnessctl -m | awk -F, '{print $4}')"
 #
 # Volume control
 #
