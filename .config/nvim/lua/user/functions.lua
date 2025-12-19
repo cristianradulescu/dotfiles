@@ -66,18 +66,19 @@ function M.copy_reference()
       (class_declaration (name)@capture)
   ]]
 
+  local bufnr = vim.api.nvim_get_current_buf()
+
   -- This looks like the standard way to parse queries
-  local parser = vim.treesitter.get_parser()
+  local parser = vim.treesitter.get_parser(bufnr)
   local tree = parser:parse()[1]
   local tree_root = tree:root()
 
   local reference = ""
   local query = vim.treesitter.query.parse(vim.bo.filetype, query_str)
-  for _, matches, _ in query:iter_matches(tree_root) do
-    local node = matches[1]
-    if nil ~= node then
+  for _, node, _ in query:iter_captures(tree_root, bufnr) do
+    if node then
       -- Concat the node text
-      reference = reference .. vim.treesitter.get_node_text(node, 0)
+      reference = reference .. vim.treesitter.get_node_text(node, bufnr)
 
       -- After namespace add "\"
       if "namespace_name" == node:type() then
