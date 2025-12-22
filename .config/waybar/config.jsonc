@@ -3,8 +3,7 @@
   "position": "top",
   "height": 37,
   "modules-left": [
-    "sway/workspaces",
-    "sway/mode"
+    "sway/workspaces"
   ],
   "modules-center": [
     "clock"
@@ -14,6 +13,7 @@
     "bluetooth",
     "network",
     "pulseaudio",
+    "power-profiles-daemon",
     "battery"
   ],
   "clock": {
@@ -33,7 +33,13 @@
     "format-charging": " {capacity}%",
     "format-plugged": " {capacity}%",
     "format-alt": "{time} {icon}",
-    "format-icons": [ " ", " ", " ", " ", " " ]
+    "format-icons": [
+      " ",
+      " ",
+      " ",
+      " ",
+      " "
+    ]
   },
   "network": {
     "format-wifi": "",
@@ -48,16 +54,17 @@
     "format-source": " {volume}%",
     "format-source-muted": " ",
     "format-icons": {
-      "default": [ "", "", "" ]
+      "default": [
+        "",
+        "",
+        ""
+      ]
     },
     "on-click": "pavucontrol" // Opens audio control panel
   },
   "tray": {
     "icon-size": 18,
     "spacing": 10
-  },
-  "sway/mode": {
-    "format": "<span style=\"italic\">{}</span>"
   },
   "bluetooth": {
     "format": "",
@@ -68,5 +75,16 @@
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
     "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
     "on-click": "blueman-manager"
+  },
+  "power-profiles-daemon": {
+    "format": "{icon}  {profile}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "",
+      "balanced": "",
+      "power-saver": ""
+    }
   }
 }
