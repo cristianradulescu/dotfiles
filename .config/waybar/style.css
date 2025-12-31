@@ -74,7 +74,8 @@ window#waybar {
 }
 
 #clock {
-    color: @lavender;
+    background-color: @surface0;
+    border-radius: 10px;
     font-weight: bold;
 }
 
