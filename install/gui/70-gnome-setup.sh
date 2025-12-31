@@ -66,7 +66,7 @@ gnome_setup() {
   pipx install gnome-extensions-cli --system-site-packages
 
   # Make sure user extensions are enabled
-  gesttings set org.gnome.shell disable-user-extensions false
+  gsettings set org.gnome.shell disable-user-extensions false
   
   # Turn off default Ubuntu extensions
   gnome-extensions disable ding@rastersoft.com 2>/dev/null || true
