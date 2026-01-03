@@ -59,6 +59,11 @@ alacritty_install() {
   # Set as default terminal
   sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 50
   sudo update-alternatives --set x-terminal-emulator /usr/bin/alacritty
+
+  # Default on Ubuntu 25.10 (xdg-terminal-exec)
+  cat > ~/.config/ubuntu-xdg-terminals.list << 'EOF'
+Alacritty.desktop
+EOF
   
   # Link config
   mkdir -p ~/.config/alacritty

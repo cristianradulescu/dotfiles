@@ -1,6 +1,6 @@
 # My Dotfiles Setup
 
-Personal dotfiles repository for setting up a development environment on **Ubuntu 24.04 LTS**
+Personal dotfiles repository for setting up a development environment on **Ubuntu 24.04 LTS / 25.10**
 
 ## Quick Start
 
