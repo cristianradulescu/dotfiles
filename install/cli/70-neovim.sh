@@ -53,7 +53,7 @@ neovim_install() {
   make CMAKE_BUILD_TYPE=RelWithDebInfo
   cd build
   cpack -G DEB
-  sudo dpkg -i --force-all nvim-linux-"$(uname -i)".deb
+  sudo dpkg -i --force-all nvim-linux-"$(uname -m)".deb
   cd ~
   
   # Install Neovim dependencies

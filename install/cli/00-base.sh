@@ -23,7 +23,7 @@ base_install() {
     curl wget \
     mc ranger \
     htop \
-    ripgrep fd-find tree tldr \
+    ripgrep fd-find tree \
     jq xq \
     unzip \
     apt-file \
