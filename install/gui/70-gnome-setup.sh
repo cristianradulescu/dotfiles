@@ -61,6 +61,15 @@ gnome_setup() {
   # Map Caps_Lock to CTRL (works on Wayland too)
   gsettings set org.gnome.desktop.input-sources xkb-options "['caps:ctrl_modifier']"
   gsettings set org.gnome.desktop.input-sources sources "[('xkb-options', 'us')]"
+
+  ### File manager
+  # Use list view
+  gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
+  # Show hidden files
+  gsettings set org.gnome.nautilus.preferences show-hidden-files true
+  gsettings set org.gnome.nautilus.preferences show-hidden-files true
+  gsettings set org.gtk.Settings.FileChooser show-hidden true
+  gsettings set org.gtk.gtk4.Settings.FileChooser show-hidden true
   
   # Install extension management tools
   sudo apt install -y gnome-tweaks gnome-shell-extension-manager
