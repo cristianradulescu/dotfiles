@@ -8,6 +8,9 @@ fonts_install() {
   echo "Installing $PACKAGE_NAME..."
   
   mkdir -p ~/.local/share/fonts
+
+  echo "Installing Microsoft Core Fonts..."
+  sudo apt install y ttf-mscorefonts-installe
   
   echo "Downloading JetBrains Mono Nerd Font..."
   curl -sL https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf -o ~/.local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf

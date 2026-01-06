@@ -9,7 +9,9 @@ sway_install() {
   
   # Install Sway and dependencies
   sudo apt install -y sway swaybg swayidle swaylock \
-    waybar fuzzel mako-notifier grim slurp wl-clipboard cliphist
+    waybar fuzzel mako-notifier grim slurp wl-clipboard cliphist brightnessctl
+
+  sudo usermod -aG input,video $USER
   
   # Link configs
   mkdir -p ~/.config/sway
