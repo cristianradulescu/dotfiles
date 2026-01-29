@@ -21,7 +21,8 @@ set $term alacritty
 # set $menu dmenu_path | wmenu | xargs swaymsg exec --
 set $menu fuzzel --show drun
 
-include /etc/sway/config-vars.d/*
+# [Ubuntu 24.04] Manually load config variables
+# include /etc/sway/config-vars.d/*
 
 # Theme
 set $rosewater #f5e0dc
@@ -129,6 +130,12 @@ input "type:keyboard" {
     repeat_delay 250
     repeat_rate 50
 }
+
+### Gesture bindings
+#
+# 3-finger swipe to navigate workspaces
+bindgesture swipe:3:right workspace prev
+bindgesture swipe:3:left workspace next
 
 ### Key bindings
 #
@@ -311,9 +318,9 @@ default_border pixel 2
 
 include /etc/sway/config.d/*
 
-# Import env into systemd user and DBus so apps inherit variables
-exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP SWAYSOCK
-exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP SWAYSOCK
+# [Ubuntu 24.04] Import env into systemd user and DBus so apps inherit variables
+# exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP SWAYSOCK
+# exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP SWAYSOCK
 
 # Clipboard history (cliphist + wl-clipboard)
 bindsym $mod+Shift+v exec cliphist list | fuzzel --width 100% --dmenu | cliphist decode | wl-copy
