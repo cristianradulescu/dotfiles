@@ -107,6 +107,10 @@ gnome_setup() {
   gsettings set org.gnome.shell.extensions.clipboard-indicator show-on-startup true 2>/dev/null || true
   gsettings set org.gnome.shell.extensions.clipboard-indicator clear-on-boot false 2>/dev/null || true
   gsettings set org.gnome.shell.extensions.clipboard-indicator toggle-menu "['<Super>v']" 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.clipboard-indicator clear-history "[]" 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.clipboard-indicator next-entry "[]" 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.clipboard-indicator prev-entry "[]" 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.clipboard-indicator private-mode-binding "[]" 2>/dev/null || true
   
   echo "✓ $PACKAGE_NAME configured successfully"
 }

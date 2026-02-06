@@ -8,7 +8,7 @@ aitools_install() {
   echo "Installing $PACKAGE_NAME..."
 
   echo "Installing Gemini CLI..."
-  sudo npm install -g @google/gemini-cli
+  sudo npm i -g @google/gemini-cli
 
   echo "Installing OpenCode AI..."
   sudo npm i -g opencode-ai

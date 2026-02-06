@@ -41,3 +41,9 @@ export EDITOR='nvim'
 # Work profile (sensitive data that cannot be commited)
 [[ ! -f ~/.zshrc_work ]] || source ~/.zshrc_work
 
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
