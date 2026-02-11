@@ -14,10 +14,10 @@ vim.g.picker = "FzfLua"
 vim.g.fileexplorer = "NeoTree"
 
 -- Completion engine to use (options: nvim-cmp, blink)
-vim.g.cmp_engine = "nvim-cmp"
+vim.g.cmp_engine = "blink"
 
 -- Options: intelephense, phpactor
-vim.g.php_lsp = "phpactor"
+vim.g.php_lsp = "intelephense"
 
 vim.g.sonarlint_enabled = false
 

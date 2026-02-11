@@ -12,7 +12,36 @@ return {
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
-    fuzzy = { implementation = "lua" },
+    fuzzy = {
+      implementation = "lua",
+      -- Always prioritize exact matches at the top
+      sorts = {
+        "exact",
+        -- Prioritize LSP (variables, functions, classes) over buffer text
+        function(a, b)
+          if a.source_id == b.source_id then
+            return -- Same source, continue to next sort
+          end
+          -- LSP comes before buffer
+          if a.source_id == "lsp" then
+            return true
+          end
+          if b.source_id == "lsp" then
+            return false
+          end
+        end,
+        "score",
+        "sort_text",
+      },
+    },
+    sources = {
+      -- Force LSP to be queried even without trigger characters when manually invoked
+      providers = {
+        lsp = {
+          min_keyword_length = 0, -- Allow LSP even with no characters typed
+        },
+      },
+    },
     completion = {
       list = {
         -- Do not insert items while browsing the autocomplete menu
@@ -26,6 +55,14 @@ return {
         auto_show = function()
           return vim.g.copilot_enabled
         end,
+        draw = {
+          columns = {
+            { "kind_icon" },
+            { "label", "label_description", gap = 1 },
+            { "kind" },
+            { "source_name" },
+          },
+        },
       },
     },
     cmdline = { enabled = false },

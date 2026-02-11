@@ -111,6 +111,10 @@ lsp_install() {
   # [LSP-DEBUG]
   echo "Installing LSP dev tools..."
   pipx install --force lsp-devtools
+
+  # [Stylua] Lua formatter
+  echo "Installing Stylua formatter..."
+  cargo install stylua
   
   echo "✓ $PACKAGE_NAME installed/updated successfully"
 }
