@@ -15,7 +15,7 @@ vim.lsp.enable({
 
 if vim.g.php_lsp == "phpactor" then
   vim.lsp.enable("phpactor")
-else
+elseif vim.g.php_lsp == "intelephense" then
   vim.lsp.enable("intelephense")
 end
 

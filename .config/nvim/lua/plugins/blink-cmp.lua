@@ -1,3 +1,6 @@
+-- Register 'markdown' for autocompletion popups
+vim.treesitter.language.register('markdown', 'blink-cmp-documentation')
+
 return {
   "saghen/blink.cmp",
   cond = function()

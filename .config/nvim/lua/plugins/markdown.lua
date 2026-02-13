@@ -2,6 +2,6 @@ return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
     opts = {},
-    ft = { "markdown", "codecompanion" },
+    ft = { "markdown", "codecompanion", "blink-cmp-documentation" },
   },
 }
