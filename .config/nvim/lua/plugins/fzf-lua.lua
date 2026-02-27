@@ -35,6 +35,7 @@ return {
           layout = "vertical",
         },
       },
+      rg_opts= "--ignore-case",
     },
     diagnostics = {
       winopts = {

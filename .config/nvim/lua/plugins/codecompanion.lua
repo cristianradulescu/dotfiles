@@ -5,9 +5,9 @@ return {
     "nvim-treesitter/nvim-treesitter",
     "ravitemer/codecompanion-history.nvim"
   },
-  init = function()
-    require("plugins.codecompanion.fidget-spinner"):init()
-  end,
+  -- init = function()
+  --   require("plugins.codecompanion.fidget-spinner"):init()
+  -- end,
   config = function()
     require("codecompanion").setup({
       strategies = {

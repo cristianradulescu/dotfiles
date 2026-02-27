@@ -23,12 +23,18 @@ return {
       require("mini.icons").setup()
     end,
   },
-  -- {
-  --   -- Auto add matching pair
-  --   "nvim-mini/mini.pairs",
-  --   version = "*",
-  --   config = function()
-  --     require("mini.pairs").setup()
-  --   end,
-  -- },
+  {
+    -- Extra icons
+    "nvim-mini/mini.notify",
+    version = "*",
+    config = function()
+      require("mini.notify").setup({
+        -- Notifications about LSP progress
+        lsp_progress = {
+          -- Duration (in ms) of how long last message should be shown
+          duration_last = 5000,
+        },
+      })
+    end,
+  },
 }
