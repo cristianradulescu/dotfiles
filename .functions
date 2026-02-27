@@ -1,0 +1,51 @@
+# vim:ft=sh ts=2 sw=2 sts=2
+
+function hex2bin() {
+  echo $1 | xxd -r -p
+}
+
+function git_last_tag_diff() {
+  TAG_PATTERN=$1
+
+  # List all tags matching the pattern and sorted in reverse order by tag name (latest ones at the top)
+  # Fetch the last 2 tags
+  # Sort again to have the tags in order of creation (do properly compute the diff)
+  # Inline tags by converting NL to spaces
+  # Split by space and keep only the first 2 elements which are the actual tags
+  # Format for git diff by joining the tags with ".."
+  LAST_TAGS=$(git tag --no-column --sort=-version:refname --list "$TAG_PATTERN" \
+    | head -n 2 \
+    | sort \
+    | tr -s "\n" " " \
+    | cut -d" " -f1,2 \
+    | sed "s/ /../" \
+  )
+
+  # Run git diff and get only the file name which are sent to fzf for selection
+  # Fzf preview will run the git diff again only on the select file
+  git diff $LAST_TAGS --name-only \
+    | fzf --preview "git diff --color=always $LAST_TAGS {}"
+}
+
+function jwt_decode() {
+  JWT_TOKEN=$1
+
+  IFS='.' read -r HEADER PAYLOAD SIGNATURE <<< "$JWT_TOKEN"
+  
+  DECODED_HEADER=$(echo "$HEADER" | tr '_-' '/+' | base64 -d)
+  DECODED_PAYLOAD=$(echo "$PAYLOAD" | tr '_-' '/+' | base64 -d)
+
+  echo ""
+  echo "[ Header ]"
+  echo "$DECODED_HEADER" | jq
+
+  echo ""
+  echo "[ Payload: ]"
+  echo "$DECODED_PAYLOAD" | jq
+
+  echo ""
+  echo "[ DEBUG ]"
+  echo "Issued at (iat): $(echo "$DECODED_PAYLOAD" | jq -r '.iat | todate')"
+  echo "Expires at (exp): $(echo "$DECODED_PAYLOAD" | jq -r '.exp | todate')"
+
+}

@@ -34,6 +34,7 @@ export PATH=$PATH:$HOME/lsp/bin
 export EDITOR='nvim'
 
 [ -f "$HOME/dotfiles/.aliases" ] && source "$HOME/dotfiles/.aliases"
+[ -f "$HOME/dotfiles/.functions" ] && source "$HOME/dotfiles/.functions"
 
 # Gemini API key
 [ -f "$HOME/.codecompanion/gemini" ] && export GEMINI_API_KEY=$(cat "$HOME/.codecompanion/gemini")
