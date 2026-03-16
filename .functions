@@ -45,7 +45,7 @@ function jwt_decode() {
 
   echo ""
   echo "[ DEBUG ]"
-  echo "Issued at (iat): $(echo "$DECODED_PAYLOAD" | jq -r '.iat | todate')"
-  echo "Expires at (exp): $(echo "$DECODED_PAYLOAD" | jq -r '.exp | todate')"
+  echo "Issued at (iat): $(echo "$DECODED_PAYLOAD" | jq -r '.iat | todate' 2>/dev/null || echo "N/A")"
+  echo "Expires at (exp): $(echo "$DECODED_PAYLOAD" | jq -r '.exp | todate' 2>/dev/null || echo "N/A")"
 
 }

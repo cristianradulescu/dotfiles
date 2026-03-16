@@ -1,0 +1,24 @@
+theme = Catppuccin Mocha
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = no-cursor
+
+env = TERM=xterm-256color
+
+shell-integration-features = no-cursor,title
+
+link-url = true
+
+font-family = "JetBrainsMonoNL Nerd Font"
+font-size = 12
+adjust-cell-height = 4
+
+mouse-hide-while-typing = true
+copy-on-select = true
+
+scrollback-limit = 50000
+
+window-vsync = true
+
