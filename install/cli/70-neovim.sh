@@ -36,12 +36,12 @@ neovim_install() {
     if [ -d ~/Apps/neovim ]; then
       echo "Neovim source already exists, updating..."
       cd ~/Apps/neovim
-      git fetch --tags
+      git fetch
     else
       echo "Cloning Neovim repository..."
       git clone https://github.com/neovim/neovim ~/Apps/neovim
       cd ~/Apps/neovim
-      git fetch --tags
+      git fetch
     fi
     
     # Checkout the specified version
@@ -50,6 +50,7 @@ neovim_install() {
   
   # Build Neovim
   echo "Building Neovim (this may take a while)..."
+  make clean
   make CMAKE_BUILD_TYPE=RelWithDebInfo
   cd build
   cpack -G DEB

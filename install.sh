@@ -41,19 +41,6 @@ if [ "$response" = "y" ]; then
   source "./install/gui.sh"
 fi
 
-# Install AppArmor profiles (optional)
-cd "$DOTFILES_DIR"
-echo ""
-echo "Install apparmor profiles? (y/n)"
-read -r response
-if [ "$response" = "y" ]; then
-  echo ""
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "Installing AppArmor Profiles"
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  source "./install/optional/apparmor.sh"
-fi
-
 # Add dotfiles bin to PATH
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
