@@ -4,51 +4,26 @@
 
 PACKAGE_NAME="Neovim"
 
-neovim_is_installed() {
-  command -v nvim >/dev/null 2>&1
+neovim_installed_version() {
+  is_installed nvim && nvim --version | head -n1 | awk '{print $2}' | sed 's/^v//'
 }
 
-neovim_get_installed_version() {
-  if neovim_is_installed; then
-    nvim --version | head -n1 | awk '{print $2}' | sed 's/^v//'
-  fi
-}
-
-neovim_get_latest_version() {
-  curl -s "https://api.github.com/repos/neovim/neovim/releases/latest" | grep -Po '"tag_name": "v\K[^"]*'
-}
-
-neovim_install() {
-  local VERSION="${1:-$(neovim_get_latest_version)}"
-  
+neovim_build_install() {
+  local VERSION="$1"
   echo "Installing/Updating $PACKAGE_NAME to version $VERSION..."
   
-  # Remove old neovim-runtime if exists
   sudo apt remove -y neovim-runtime 2>/dev/null || true
-  
-  # Link config
   ln -sf ~/dotfiles/.config/nvim ~/.config/
-  
-  # Create Apps directory
   mkdir -p ~/Apps
-  
-    # Clone and build Neovim
-    if [ -d ~/Apps/neovim ]; then
-      echo "Neovim source already exists, updating..."
-      cd ~/Apps/neovim
-      git fetch
-    else
-      echo "Cloning Neovim repository..."
-      git clone https://github.com/neovim/neovim ~/Apps/neovim
-      cd ~/Apps/neovim
-      git fetch
-    fi
-    
-    # Checkout the specified version
-    echo "Checking out version v$VERSION..."
-    git checkout "v$VERSION"
-  
-  # Build Neovim
+
+  if [ -d ~/Apps/neovim ]; then
+    cd ~/Apps/neovim && git fetch --tags
+  else
+    git clone https://github.com/neovim/neovim ~/Apps/neovim
+    cd ~/Apps/neovim && git fetch --tags
+  fi
+
+  git checkout "v$VERSION"
   echo "Building Neovim (this may take a while)..."
   make clean
   make CMAKE_BUILD_TYPE=RelWithDebInfo
@@ -57,34 +32,36 @@ neovim_install() {
   sudo dpkg -i --force-all nvim-linux-"$(uname -m)".deb
   cd ~
   
-  # Install Neovim dependencies
-  echo "Installing Neovim language support..."
   sudo apt install -y python3-pynvim luarocks
   sudo npm install -g neovim 2>/dev/null || true
   
   echo "✓ $PACKAGE_NAME installed successfully"
 }
 
-# Main execution
-main() {
-  # When run directly (for updates)
-  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    INSTALLED=$(neovim_get_installed_version)
-    LATEST=$(neovim_get_latest_version)
-    
-    if [ -z "$INSTALLED" ]; then
-      echo "$PACKAGE_NAME is not installed"
-      neovim_install "$LATEST"
-    elif [ "$INSTALLED" != "$LATEST" ]; then
-      echo "Updating $PACKAGE_NAME: $INSTALLED → $LATEST"
-      neovim_install "$LATEST"
-    else
-      echo "✓ $PACKAGE_NAME is up to date ($INSTALLED)"
-    fi
+neovim_install() {
+  neovim_build_install "$(github_latest neovim/neovim)"
+}
+
+neovim_update() {
+  local installed latest
+  installed="$(neovim_installed_version)"
+  latest="$(github_latest neovim/neovim)"
+
+  if [ -z "$installed" ]; then
+    echo "$PACKAGE_NAME is not installed, skipping"
+  elif [ "$installed" != "$latest" ]; then
+    echo "Updating $PACKAGE_NAME: $installed → $latest"
+    neovim_build_install "$latest"
   else
-    # When sourced (for initial install)
-    neovim_install
+    log_ok "$PACKAGE_NAME is up to date ($installed)"
   fi
+}
+
+main() {
+  case "${1:-install}" in
+    install) neovim_install ;;
+    update)  neovim_update ;;
+  esac
 }
 
 main "$@"

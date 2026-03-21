@@ -7,18 +7,12 @@ PACKAGE_NAME="Base System Tools"
 base_install() {
   echo "Installing $PACKAGE_NAME..."
   
-  # Update package list
-  echo "Updating package list..."
   sudo apt update
   
-  # Clean up unwanted packages
-  echo "Cleaning up unwanted packages..."
   sudo apt remove -y --purge \
     brltty \
     xserver-xorg-input-wacom 2>/dev/null || true
   
-  # Install base tools
-  echo "Installing file management and build tools..."
   sudo apt install -y \
     curl wget \
     mc ranger \
@@ -34,22 +28,21 @@ base_install() {
     openjdk-21-jre openjdk-21-jdk \
     pipx
   
-  # Add pipx binaries to PATH
   export PATH=$HOME/.local/bin:$PATH
   
   echo "✓ $PACKAGE_NAME installed successfully"
 }
 
-# Main execution
+base_update() {
+  echo "Base system packages are managed by Ubuntu's apt"
+  echo "Run 'sudo apt update && sudo apt upgrade' to update them"
+}
+
 main() {
-  # When run directly (for updates)
-  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    echo "Base system packages are managed by Ubuntu's apt"
-    echo "Run 'sudo apt update && sudo apt upgrade' to update them"
-  else
-    # When sourced (for initial install)
-    base_install
-  fi
+  case "${1:-install}" in
+    install) base_install ;;
+    update)  base_update ;;
+  esac
 }
 
 main "$@"

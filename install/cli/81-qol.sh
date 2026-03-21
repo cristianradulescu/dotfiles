@@ -6,30 +6,23 @@ PACKAGE_NAME="Quality of life tools"
 
 qoltools_install() {
   echo "Installing $PACKAGE_NAME..."
-
-  echo "Installing TLDR..."
   pipx install --force tldr-py
-
-  if ! command -v btop >/dev/null 2>&1; then
-    echo "Installing btop..."
-    sudo apt install -y btop
-  else
-    echo "✓ btop is already installed"
-  fi
-
+  is_installed btop || sudo apt install -y btop
   echo "✓ $PACKAGE_NAME installed successfully"
 }
 
-# Main execution
+qoltools_update() {
+  echo "Updating $PACKAGE_NAME..."
+  pipx upgrade tldr-py
+  echo "btop is managed by Ubuntu's apt"
+  echo "✓ $PACKAGE_NAME updated successfully"
+}
+
 main() {
-  # When run directly (for updates)
-  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    echo "Updating $PACKAGE_NAME..."
-    qoltools_install
-  else
-    # When sourced (for initial install)
-    qoltools_install
-  fi
+  case "${1:-install}" in
+    install) qoltools_install ;;
+    update)  qoltools_update ;;
+  esac
 }
 
 main "$@"

@@ -7,16 +7,10 @@ PACKAGE_NAME="ZSH Shell"
 shell_install() {
   echo "Installing $PACKAGE_NAME..."
   
-  # Install ZSH and plugins
   sudo apt install -y zsh zsh-autosuggestions zsh-syntax-highlighting autojump
-  
-  # Set ZSH as default shell (use sudo to avoid password prompt)
   sudo chsh -s $(which zsh) $USER
-  
-  # Link .zshrc
   ln -sf ~/dotfiles/.zshrc ~/.zshrc
   
-  # Install Oh-my-zsh
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Installing Oh-my-zsh..."
     cd /tmp
@@ -29,20 +23,19 @@ shell_install() {
   echo "Note: You'll need to log out and back in for shell change to take effect"
 }
 
-# Main execution
-main() {
-  # When run directly (for updates)
-  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    if command -v zsh >/dev/null 2>&1; then
-      echo "✓ ZSH is already installed"
-      echo "ZSH and plugins are managed by Ubuntu's apt"
-    else
-      shell_install
-    fi
+shell_update() {
+  if is_installed zsh; then
+    echo "ZSH and plugins are managed by Ubuntu's apt"
   else
-    # When sourced (for initial install)
-    shell_install
+    echo "ZSH is not installed, skipping"
   fi
+}
+
+main() {
+  case "${1:-install}" in
+    install) shell_install ;;
+    update)  shell_update ;;
+  esac
 }
 
 main "$@"

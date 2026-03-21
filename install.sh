@@ -21,27 +21,64 @@ sudo apt install git && \
   git clone https://github.com/cristianradulescu/dotfiles && \
   cd "$DOTFILES_DIR"
 
+# ---------------------------------------------------------------------------
+# Dev stack selection (asked once, exported for cli.sh to consume)
+# ---------------------------------------------------------------------------
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Select dev stacks to install"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Answer y/n for each:"
+
+_ask_stack() {
+  local name="$1"
+  local var="$2"
+  printf "  %-10s [y/N]: " "$name"
+  read -r reply < /dev/tty
+  if [[ "$reply" =~ ^[Yy]$ ]]; then
+    export "$var"=1
+  else
+    export "$var"=0
+  fi
+}
+
+_ask_stack "PHP"    INSTALL_STACK_PHP
+_ask_stack "Go"     INSTALL_STACK_GO
+_ask_stack "NodeJS" INSTALL_STACK_NODEJS
+_ask_stack "Rust"   INSTALL_STACK_RUST
+_ask_stack "Bun"    INSTALL_STACK_BUN
+
+# ---------------------------------------------------------------------------
 # Install CLI tools
+# ---------------------------------------------------------------------------
+
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Starting CLI Installation"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-source "./install/cli.sh"
+source "$DOTFILES_DIR/install/cli.sh" install
 
+# ---------------------------------------------------------------------------
 # Install GUI tools (optional)
+# ---------------------------------------------------------------------------
+
 cd "$DOTFILES_DIR"
 echo ""
 echo "Install GUI apps? (y/n)"
-read -r response
+read -r response < /dev/tty
 if [ "$response" = "y" ]; then
   echo ""
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo "Starting GUI Installation"
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  source "./install/gui.sh"
+  source "$DOTFILES_DIR/install/gui.sh" install
 fi
 
-# Add dotfiles bin to PATH
+# ---------------------------------------------------------------------------
+# Done
+# ---------------------------------------------------------------------------
+
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✓ Installation Complete!"

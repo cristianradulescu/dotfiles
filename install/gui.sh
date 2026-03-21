@@ -2,25 +2,19 @@
 
 # GUI tools installation orchestrator
 
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Installing GUI Tools"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-# Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib.sh"
 
-# Source all GUI installers in order
+ACTION="${1:-install}"
+
+section "GUI Tools — $ACTION"
+
 for script in "$SCRIPT_DIR"/gui/*.sh; do
-  if [ -f "$script" ]; then
-    echo ""
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "Running: $(basename "$script")"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    source "$script"
-  fi
+  [ -f "$script" ] || continue
+
+  name="$(basename "$script" .sh)"
+  section "Running: $name"
+  source "$script" "$ACTION"
 done
 
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "✓ GUI tools installation complete!"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+section "✓ GUI tools $ACTION complete!"

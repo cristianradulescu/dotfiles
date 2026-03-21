@@ -6,31 +6,26 @@ PACKAGE_NAME="Tmuxinator"
 
 tmuxinator_install() {
   echo "Installing $PACKAGE_NAME..."
-
-  # Install ruby-rubygems
   sudo apt install -y ruby-rubygems
-
-  # Install tmuxinator
   sudo gem install tmuxinator
-
   echo "✓ $PACKAGE_NAME installed successfully"
 }
 
-# Main execution
-main() {
-  # When run directly (for updates)
-  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    if command -v tmuxinator >/dev/null 2>&1; then
-      echo "Updating $PACKAGE_NAME..."
-      sudo gem update tmuxinator
-      echo "✓ $PACKAGE_NAME updated successfully"
-    else
-      tmuxinator_install
-    fi
+tmuxinator_update() {
+  if is_installed tmuxinator; then
+    echo "Updating $PACKAGE_NAME..."
+    sudo gem update tmuxinator
+    echo "✓ $PACKAGE_NAME updated successfully"
   else
-    # When sourced (for initial install)
-    tmuxinator_install
+    echo "Tmuxinator is not installed, skipping"
   fi
+}
+
+main() {
+  case "${1:-install}" in
+    install) tmuxinator_install ;;
+    update)  tmuxinator_update ;;
+  esac
 }
 
 main "$@"

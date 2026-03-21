@@ -6,27 +6,31 @@ PACKAGE_NAME="AppArmor Profiles"
 
 apparmor_install() {
   echo "Installing $PACKAGE_NAME..."
-  
-  # Run the install script from the repository
-  if [ -f ~/dotfiles/install-apparmor-profiles.sh ]; then
-    source ~/dotfiles/install-apparmor-profiles.sh
-  else
-    echo "Warning: install-apparmor-profiles.sh not found"
-  fi
-  
+
+  # Dygma Bazecor
+  echo "Installing Bazecor AppArmor profile..."
+  sudo tee /etc/apparmor.d/bazecor <<EOF
+# This profile allows everything and only exists to give the
+# application a name instead of having the label "unconfined"
+
+abi <abi/4.0>,
+include <tunables/global>
+
+profile bazecor $HOME/Apps/Bazecor.AppImage flags=(unconfined) {
+  userns,
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/bazecor>
+}
+EOF
+
   echo "✓ $PACKAGE_NAME installed successfully"
 }
 
-# Main execution
 main() {
-  # When run directly (for updates)
-  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    echo "Reinstalling $PACKAGE_NAME..."
-    apparmor_install
-  else
-    # When sourced (for initial install)
-    apparmor_install
-  fi
+  case "${1:-install}" in
+    install|update) apparmor_install ;;
+  esac
 }
 
 main "$@"

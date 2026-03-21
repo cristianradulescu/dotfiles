@@ -7,13 +7,9 @@ PACKAGE_NAME="Tmux"
 tmux_install() {
   echo "Installing $PACKAGE_NAME..."
   
-  # Install tmux
   sudo apt install -y tmux
-  
-  # Link config
   ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
   
-  # Install tmux plugin manager
   if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     echo "Installing tmux plugin manager..."
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -23,20 +19,19 @@ tmux_install() {
   echo "✓ $PACKAGE_NAME installed successfully"
 }
 
-# Main execution
-main() {
-  # When run directly (for updates)
-  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    if command -v tmux >/dev/null 2>&1; then
-      echo "✓ Tmux is already installed"
-      echo "Tmux is managed by Ubuntu's apt"
-    else
-      tmux_install
-    fi
+tmux_update() {
+  if is_installed tmux; then
+    echo "Tmux is managed by Ubuntu's apt"
   else
-    # When sourced (for initial install)
-    tmux_install
+    echo "Tmux is not installed, skipping"
   fi
+}
+
+main() {
+  case "${1:-install}" in
+    install) tmux_install ;;
+    update)  tmux_update ;;
+  esac
 }
 
 main "$@"
