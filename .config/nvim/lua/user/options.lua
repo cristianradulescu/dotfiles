@@ -17,7 +17,7 @@ vim.g.fileexplorer = "NeoTree"
 vim.g.cmp_engine = "blink"
 
 -- Options: intelephense, phpactor
-vim.g.php_lsp = "intelephense"
+vim.g.php_lsp = {"intelephense"}
 
 vim.g.sonarlint_enabled = false
 

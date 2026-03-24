@@ -122,3 +122,23 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     vim.opt_local.conceallevel = 0
   end,
 })
+
+-- Terminal
+-- Automatically enter insert mode when switching to terminal
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = 'term://*',
+  callback = function()
+    vim.cmd('startinsert')
+  end,
+})
+
+-- Don't show line numbers in terminal
+vim.api.nvim_create_autocmd('TermOpen', {
+  pattern = '*',
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.signcolumn = 'no'
+  end,
+})
+
