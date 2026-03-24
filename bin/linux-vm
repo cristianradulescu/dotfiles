@@ -1,0 +1,539 @@
+#!/bin/bash
+
+# Linux VM manager using qemux/qemu Docker container
+# https://github.com/qemus/qemu
+# Supports Sway WM and GNOME
+
+COMPOSE_FILE="$HOME/.config/linux-vm/docker-compose.yml"
+
+# Supported distros
+DISTRO_VALUES="alma alpine arch cachy centos debian fedora gentoo kali kubuntu mint manjaro mx nixos suse rocky slack tails ubuntu ubuntus xubuntu zorin"
+
+# ---------------------------------------------------------------------------
+# UI helpers (no external dependencies)
+# ---------------------------------------------------------------------------
+
+print_box() {
+  local title="$1"; shift
+  local width=50
+  local border=$(printf '%*s' "$width" '' | tr ' ' '-')
+  echo "+${border}+"
+  if [ -n "$title" ]; then
+    printf "| %-${width}s|\n" "$title"
+    echo "+${border}+"
+  fi
+  for line in "$@"; do
+    printf "| %-${width}s|\n" "$line"
+  done
+  echo "+${border}+"
+}
+
+# prompt_choose <header> <default> <option1> <option2> ...
+# Sets CHOSEN to the selected value.
+prompt_choose() {
+  local header="$1"; shift
+  local default="$1"; shift
+  local options=("$@")
+
+  echo ""
+  echo "$header"
+  select opt in "${options[@]}"; do
+    if [ -n "$opt" ]; then
+      CHOSEN="$opt"
+      return 0
+    fi
+    echo "Invalid selection, try again."
+  done
+}
+
+# prompt_input <header> <default>
+# Sets CHOSEN to the entered value (or default if empty).
+prompt_input() {
+  local header="$1"
+  local default="$2"
+  echo ""
+  read -rp "$header [$default]: " CHOSEN
+  CHOSEN="${CHOSEN:-$default}"
+}
+
+# prompt_confirm <question>
+# Returns 0 for yes, 1 for no.
+prompt_confirm() {
+  local question="$1"
+  echo ""
+  read -rp "$question [y/N]: " answer
+  case "$answer" in
+    [yY][eE][sS]|[yY]) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# ---------------------------------------------------------------------------
+
+check_prerequisites() {
+  local DISK_SIZE_GB=${1:-64}
+  local REQUIRED_SPACE=$((DISK_SIZE_GB + 5))
+
+  # Check for KVM support
+  if [ ! -e /dev/kvm ]; then
+    print_box "ERROR: KVM virtualization not available!" \
+      "" \
+      "Please enable virtualization in BIOS or run:" \
+      "  sudo modprobe kvm-intel  # for Intel CPUs" \
+      "  sudo modprobe kvm-amd    # for AMD CPUs"
+    exit 1
+  fi
+
+  # Check disk space
+  AVAILABLE_SPACE=$(df "$HOME" | awk 'NR==2 {print int($4/1024/1024)}')
+  if [ "$AVAILABLE_SPACE" -lt "$REQUIRED_SPACE" ]; then
+    echo "Insufficient disk space!"
+    echo "   Available: ${AVAILABLE_SPACE}GB"
+    echo "   Required: ${REQUIRED_SPACE}GB (${DISK_SIZE_GB}GB disk + 5GB overhead)"
+    exit 1
+  fi
+}
+
+# Detect display scale (supports Sway and GNOME)
+detect_scale() {
+  if command -v swaymsg &>/dev/null; then
+    SWAY_SCALE=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused == true) | .scale')
+    echo "$SWAY_SCALE" | awk '{print int($1 * 100)}'
+  elif command -v gsettings &>/dev/null; then
+    FACTOR=$(gsettings get org.gnome.desktop.interface scaling-factor 2>/dev/null | tr -d "uint32 ")
+    echo $(( ${FACTOR:-1} * 100 ))
+  else
+    echo 100
+  fi
+}
+
+install_linux() {
+  trap "echo ''; echo 'Installation cancelled by user'; exit 1" INT
+
+  check_prerequisites
+
+  mkdir -p "$HOME/.config/linux-vm"
+  mkdir -p "$HOME/.linux-vm"
+
+  # Get system resources
+  TOTAL_RAM=$(free -h | awk 'NR==2 {print $2}')
+  TOTAL_RAM_GB=$(awk 'NR==1 {printf "%d", $2/1024/1024}' /proc/meminfo)
+  TOTAL_CORES=$(nproc)
+
+  echo ""
+  echo "System Resources Detected:"
+  echo "  Total RAM: $TOTAL_RAM"
+  echo "  Total CPU Cores: $TOTAL_CORES"
+  echo ""
+
+  # Select distro
+  # shellcheck disable=SC2086
+  prompt_choose "Which Linux distro would you like to install?" "ubuntu" $DISTRO_VALUES
+  SELECTED_DISTRO="$CHOSEN"
+
+  # Select RAM
+  RAM_OPTIONS=()
+  for size in 2 4 8 16; do
+    if [ "$size" -le "$TOTAL_RAM_GB" ]; then
+      RAM_OPTIONS+=("${size}G")
+    fi
+  done
+
+  prompt_choose "How much RAM would you like to allocate to the Linux VM?" "2G" "${RAM_OPTIONS[@]}"
+  SELECTED_RAM="$CHOSEN"
+
+  # Select CPU cores
+  prompt_input "How many CPU cores would you like to allocate to the Linux VM? (1-$TOTAL_CORES)" "2"
+  SELECTED_CORES="$CHOSEN"
+
+  if ! [[ "$SELECTED_CORES" =~ ^[0-9]+$ ]] || [ "$SELECTED_CORES" -lt 1 ] || [ "$SELECTED_CORES" -gt "$TOTAL_CORES" ]; then
+    echo "Invalid input. Using default: 2 cores"
+    SELECTED_CORES=2
+  fi
+
+  # Select disk size
+  AVAILABLE_SPACE=$(df "$HOME" | awk 'NR==2 {print int($4/1024/1024)}')
+  MAX_DISK_GB=$((AVAILABLE_SPACE - 5))
+
+  if [ "$MAX_DISK_GB" -lt 16 ]; then
+    echo "Insufficient disk space for Linux VM!"
+    echo "   Available: ${AVAILABLE_SPACE}GB"
+    echo "   Minimum required: 21GB (16GB disk + 5GB overhead)"
+    exit 1
+  fi
+
+  DISK_OPTIONS=()
+  for size in 16 32 64; do
+    if [ "$size" -le "$MAX_DISK_GB" ]; then
+      DISK_OPTIONS+=("${size}G")
+    fi
+  done
+
+  prompt_choose "How much disk space would you like to give the Linux VM?" "16G" "${DISK_OPTIONS[@]}"
+  SELECTED_DISK="$CHOSEN"
+
+  DISK_SIZE_NUM=$(echo "$SELECTED_DISK" | sed 's/G//')
+  check_prerequisites "$DISK_SIZE_NUM"
+
+  # RDP setup
+  RDP_ENABLED=false
+  RDP_USERNAME=""
+  RDP_PASSWORD=""
+  RDP_SUMMARY="RDP:     disabled"
+
+  if prompt_confirm "Enable RDP access? (requires xrdp installed inside the VM)"; then
+    RDP_ENABLED=true
+
+    prompt_input "RDP username" "user"
+    RDP_USERNAME="$CHOSEN"
+
+    echo ""
+    read -rsp "RDP password [changeme]: " RDP_PASSWORD
+    echo ""
+    if [ -z "$RDP_PASSWORD" ]; then
+      RDP_PASSWORD="changeme"
+      RDP_SUMMARY="RDP:     enabled (user: $RDP_USERNAME, password: default)"
+    else
+      RDP_SUMMARY="RDP:     enabled (user: $RDP_USERNAME, password: set)"
+    fi
+  fi
+
+  # Display configuration summary
+  print_box "Linux VM Configuration" \
+    "" \
+    "Distro:  $SELECTED_DISTRO" \
+    "RAM:     $SELECTED_RAM" \
+    "CPU:     $SELECTED_CORES cores" \
+    "Disk:    $SELECTED_DISK" \
+    "$RDP_SUMMARY"
+
+  if ! prompt_confirm "Proceed with this configuration?"; then
+    echo "Installation cancelled by user"
+    exit 1
+  fi
+
+  # Build RDP sections for the compose file
+  RDP_PORT_ENTRY=""
+  RDP_ENV_ENTRIES=""
+  if [ "$RDP_ENABLED" = true ]; then
+    RDP_PORT_ENTRY="      - 3389:3389/tcp"$'\n'"      - 3389:3389/udp"
+    RDP_ENV_ENTRIES="      RDP_USERNAME: \"$RDP_USERNAME\""$'\n'"      RDP_PASSWORD: \"$RDP_PASSWORD\""
+  fi
+
+  # Create docker-compose.yml
+  {
+    cat << EOF
+services:
+  qemu:
+    image: qemux/qemu
+    container_name: linux-vm
+    environment:
+      BOOT: "$SELECTED_DISTRO"
+      RAM_SIZE: "$SELECTED_RAM"
+      CPU_CORES: "$SELECTED_CORES"
+      DISK_SIZE: "$SELECTED_DISK"
+EOF
+    if [ -n "$RDP_ENV_ENTRIES" ]; then
+      echo "$RDP_ENV_ENTRIES"
+    fi
+    cat << EOF
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8006:8006
+EOF
+    if [ -n "$RDP_PORT_ENTRY" ]; then
+      echo "$RDP_PORT_ENTRY"
+    fi
+    cat << EOF
+    volumes:
+      - $HOME/.linux-vm:/storage
+    restart: always
+    stop_grace_period: 2m
+EOF
+  } > "$COMPOSE_FILE"
+
+  echo ""
+  echo "Starting Linux VM ($SELECTED_DISTRO)..."
+  echo "This will download the OS image (size varies by distro)."
+  echo ""
+
+  if ! docker compose -f "$COMPOSE_FILE" up -d 2>&1; then
+    echo "Failed to start Linux VM!"
+    echo "   Common issues:"
+    echo "   - Docker daemon not running: sudo systemctl start docker"
+    echo "   - Port 8006 already in use: check if another VM is running"
+    echo "   - Permission issues: make sure you're in the docker group"
+    exit 1
+  fi
+
+  echo ""
+  echo "Linux VM is starting up!"
+  echo ""
+  echo "Opening browser to monitor installation..."
+  sleep 3
+  xdg-open "http://127.0.0.1:8006"
+
+  echo ""
+  echo "Installation is running in the background."
+  echo "You can monitor progress at: http://127.0.0.1:8006"
+  echo ""
+  if [ "$RDP_ENABLED" = true ]; then
+    echo "Once the OS is installed, enable RDP inside the VM:"
+    echo "  sudo apt install xrdp && sudo systemctl enable --now xrdp"
+    echo "Then connect with: linux-vm launch --rdp"
+  else
+    echo "Once finished, use: linux-vm launch"
+  fi
+  echo "To stop the VM:     linux-vm stop"
+  echo "To change resources: ~/.config/linux-vm/docker-compose.yml"
+  echo ""
+}
+
+remove_linux() {
+  echo "Removing Linux VM..."
+
+  docker compose -f "$COMPOSE_FILE" down 2>/dev/null || true
+  docker rmi qemux/qemu 2>/dev/null || echo "Image already removed or not found"
+
+  rm -rf "$HOME/.config/linux-vm"
+  rm -rf "$HOME/.linux-vm"
+
+  echo ""
+  echo "Linux VM removal completed!"
+}
+
+launch_linux() {
+  USE_RDP=false
+  KEEP_ALIVE=false
+
+  for arg in "$@"; do
+    case "$arg" in
+      --rdp)           USE_RDP=true ;;
+      --keep-alive|-k) KEEP_ALIVE=true ;;
+    esac
+  done
+
+  if [ ! -f "$COMPOSE_FILE" ]; then
+    echo "Linux VM not configured. Please run: linux-vm install"
+    exit 1
+  fi
+
+  # Validate RDP request against compose config
+  if [ "$USE_RDP" = true ]; then
+    if ! grep -q "RDP_USERNAME:" "$COMPOSE_FILE"; then
+      echo "RDP was not enabled during setup. Re-run: linux-vm install"
+      exit 1
+    fi
+  fi
+
+  CONTAINER_STATUS=$(docker inspect --format='{{.State.Status}}' linux-vm 2>/dev/null)
+
+  if [ "$CONTAINER_STATUS" != "running" ]; then
+    echo "Starting Linux VM..."
+    notify-send "Starting Linux VM" "This can take 15-30 seconds" -t 15000
+
+    if ! docker compose -f "$COMPOSE_FILE" up -d 2>&1; then
+      echo "Failed to start Linux VM!"
+      echo "   Try checking: linux-vm status"
+      echo "   View logs: docker logs linux-vm"
+      notify-send -u critical "Linux VM" "Failed to start Linux VM"
+      exit 1
+    fi
+  fi
+
+  if [ "$USE_RDP" = true ]; then
+    # Extract credentials from compose file
+    RDP_USER=$(grep "RDP_USERNAME:" "$COMPOSE_FILE" | sed 's/.*RDP_USERNAME: "\(.*\)"/\1/')
+    RDP_PASS=$(grep "RDP_PASSWORD:" "$COMPOSE_FILE" | sed 's/.*RDP_PASSWORD: "\(.*\)"/\1/')
+
+    if [ "$KEEP_ALIVE" = true ]; then
+      LIFECYCLE="VM will keep running after RDP closes. To stop: linux-vm stop"
+    else
+      LIFECYCLE="VM will auto-stop when RDP closes"
+    fi
+
+    print_box "Connecting to Linux VM via RDP" "" "$LIFECYCLE"
+
+    # Wait for RDP port to be ready
+    echo "Waiting for RDP to be ready..."
+    WAIT_COUNT=0
+    while ! nc -z 127.0.0.1 3389 2>/dev/null; do
+      sleep 2
+      WAIT_COUNT=$((WAIT_COUNT + 1))
+      if [ "$WAIT_COUNT" -gt 60 ]; then
+        echo "Timeout waiting for RDP!"
+        echo "   Make sure xrdp is installed and running inside the VM:"
+        echo "   sudo apt install xrdp && sudo systemctl enable --now xrdp"
+        exit 1
+      fi
+    done
+    sleep 2
+
+    # Detect display scale
+    SCALE_PERCENT=$(detect_scale)
+    RDP_SCALE=""
+    if [ "$SCALE_PERCENT" -ge 170 ]; then
+      RDP_SCALE="/scale:180"
+    elif [ "$SCALE_PERCENT" -ge 130 ]; then
+      RDP_SCALE="/scale:140"
+    fi
+
+    xfreerdp3 /u:"$RDP_USER" /p:"$RDP_PASS" /v:127.0.0.1:3389 \
+      -grab-keyboard /sound /microphone /cert:ignore \
+      /title:"Linux VM" /dynamic-resolution /gfx:AVC444 \
+      /floatbar:sticky:off,default:visible,show:fullscreen $RDP_SCALE
+
+    if [ "$KEEP_ALIVE" = false ]; then
+      echo ""
+      echo "RDP session closed. Stopping Linux VM..."
+      docker compose -f "$COMPOSE_FILE" down
+      echo "Linux VM stopped."
+    else
+      echo ""
+      echo "RDP session closed. Linux VM is still running."
+      echo "To stop it: linux-vm stop"
+    fi
+
+  else
+    # Browser (web VNC) mode
+    echo "Waiting for Linux VM to be ready..."
+    WAIT_COUNT=0
+    while ! curl -s "http://127.0.0.1:8006" > /dev/null 2>&1; do
+      sleep 2
+      WAIT_COUNT=$((WAIT_COUNT + 1))
+      if [ "$WAIT_COUNT" -gt 30 ]; then
+        echo "Timeout waiting for VM interface!"
+        echo "   Check progress at: http://127.0.0.1:8006"
+        exit 1
+      fi
+    done
+    sleep 2
+
+    if [ "$KEEP_ALIVE" = true ]; then
+      LIFECYCLE="VM will keep running after browser closes. To stop: linux-vm stop"
+    else
+      LIFECYCLE="VM will auto-stop when you exit this command"
+    fi
+
+    print_box "Connecting to Linux VM" "" "$LIFECYCLE"
+
+    xdg-open "http://127.0.0.1:8006"
+
+    if [ "$KEEP_ALIVE" = false ]; then
+      echo ""
+      echo "Press Enter to stop the VM, or Ctrl+C to leave it running."
+      read -r
+      echo "Stopping Linux VM..."
+      docker compose -f "$COMPOSE_FILE" down
+      echo "Linux VM stopped."
+    else
+      echo ""
+      echo "Linux VM is running at http://127.0.0.1:8006"
+      echo "To stop it: linux-vm stop"
+    fi
+  fi
+}
+
+stop_linux() {
+  if [ ! -f "$COMPOSE_FILE" ]; then
+    echo "Linux VM not configured."
+    exit 1
+  fi
+
+  echo "Stopping Linux VM..."
+  docker compose -f "$COMPOSE_FILE" down
+  echo "Linux VM stopped."
+}
+
+status_linux() {
+  if [ ! -f "$COMPOSE_FILE" ]; then
+    echo "Linux VM not configured."
+    echo "To set up: linux-vm install"
+    exit 1
+  fi
+
+  CONTAINER_STATUS=$(docker inspect --format='{{.State.Status}}' linux-vm 2>/dev/null)
+
+  if [ -z "$CONTAINER_STATUS" ]; then
+    echo "Linux VM container not found."
+    echo "To start: linux-vm launch"
+  elif [ "$CONTAINER_STATUS" = "running" ]; then
+    DISTRO=$(grep "BOOT:" "$COMPOSE_FILE" | sed 's/.*BOOT: "\(.*\)"/\1/')
+    RDP_STATUS="disabled"
+    if grep -q "RDP_USERNAME:" "$COMPOSE_FILE"; then
+      RDP_USER=$(grep "RDP_USERNAME:" "$COMPOSE_FILE" | sed 's/.*RDP_USERNAME: "\(.*\)"/\1/')
+      RDP_STATUS="enabled (user: $RDP_USER, port 3389)"
+    fi
+    print_box "Linux VM Status: RUNNING" \
+      "" \
+      "Distro: $DISTRO" \
+      "Web interface: http://127.0.0.1:8006" \
+      "RDP: $RDP_STATUS" \
+      "" \
+      "To connect (browser): linux-vm launch" \
+      "To connect (RDP):     linux-vm launch --rdp" \
+      "To stop:              linux-vm stop"
+  else
+    echo "Linux VM is stopped (status: $CONTAINER_STATUS)"
+    echo "To start: linux-vm launch"
+  fi
+}
+
+show_usage() {
+  echo "Usage: linux-vm [command] [options]"
+  echo ""
+  echo "Commands:"
+  echo "  install              Install and configure Linux VM"
+  echo "  remove               Remove Linux VM and its data"
+  echo "  launch [options]     Start Linux VM (if needed) and connect"
+  echo "                       Options:"
+  echo "                         --rdp              Connect via RDP (xfreerdp3)"
+  echo "                         --keep-alive, -k   Keep VM running after session closes"
+  echo "  stop                 Stop the running Linux VM"
+  echo "  status               Show current VM status"
+  echo "  help                 Show this help message"
+  echo ""
+  echo "Supported distros:"
+  echo "  alma alpine arch cachy centos debian fedora gentoo kali kubuntu"
+  echo "  mint manjaro mx nixos suse rocky slack tails ubuntu ubuntus xubuntu zorin"
+  echo ""
+  echo "Examples:"
+  echo "  linux-vm install              # Set up Linux VM for first time"
+  echo "  linux-vm launch               # Open VM in browser"
+  echo "  linux-vm launch --rdp         # Connect via RDP"
+  echo "  linux-vm launch --rdp -k      # RDP, keep VM running after session"
+  echo "  linux-vm stop                 # Shut down the VM"
+}
+
+# Main command dispatcher
+case "$1" in
+  install)
+    install_linux
+    ;;
+  remove)
+    remove_linux
+    ;;
+  launch|start)
+    shift
+    launch_linux "$@"
+    ;;
+  stop|down)
+    stop_linux
+    ;;
+  status)
+    status_linux
+    ;;
+  help|--help|-h|"")
+    show_usage
+    ;;
+  *)
+    echo "Unknown command: $1" >&2
+    echo "" >&2
+    show_usage >&2
+    exit 1
+    ;;
+esac
