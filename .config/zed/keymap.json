@@ -1,0 +1,177 @@
+[
+  // ─── File Explorer (<leader>e) ───────────────────────────────────────────
+  // Toggle focus into project panel (neo-tree equivalent)
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      "space e": "project_panel::ToggleFocus"
+    }
+  },
+  // When already focused in the panel, close it
+  {
+    "context": "ProjectPanel",
+    "bindings": {
+      "space e": "workspace::ToggleLeftDock"
+    }
+  },
+
+  // ─── Window Navigation (<C-h/j/k/l>) ────────────────────────────────────
+  // Navigate between panes — matches neovim <C-h/j/k/l>
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-j": "workspace::ActivatePaneDown"
+    }
+  },
+  // Same navigation from the terminal panel
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-j": "workspace::ActivatePaneDown"
+    }
+  },
+
+  // ─── Line Moving (<A-j> / <A-k>) ─────────────────────────────────────────
+  // Move current line up/down — matches neovim <A-j>/<A-k>
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      "alt-j": "editor::MoveLineDown",
+      "alt-k": "editor::MoveLineUp"
+    }
+  },
+  {
+    "context": "vim_mode == insert",
+    "bindings": {
+      "alt-j": "editor::MoveLineDown",
+      "alt-k": "editor::MoveLineUp"
+    }
+  },
+
+  // ─── Fuzzy Finding / Search (<leader>s*) ─────────────────────────────────
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      // <leader>sf — search files (file_finder)
+      "space s f": "file_finder::Toggle",
+      // <leader>sg — live grep (project search)
+      "space s g": "pane::DeploySearch",
+      // <leader>/ — fuzzy search current buffer
+      "space /": "buffer_search::Deploy",
+      // <leader>sd — search diagnostics panel
+      "space s d": "diagnostics::Deploy",
+      // <leader>ss — search document symbols (outline)
+      "space s s": "outline_panel::ToggleFocus",
+      // <leader>sc — search workspace/project symbols
+      "space s c": "project_symbols::Toggle",
+      // <leader><leader> — list open buffers (tab switcher)
+      "space space": "tab_switcher::Toggle"
+    }
+  },
+  // Same search bindings when no editor is open (empty pane)
+  {
+    "context": "EmptyPane || SharedScreen",
+    "bindings": {
+      "space s f": "file_finder::Toggle",
+      "space s g": "pane::DeploySearch",
+      "space s d": "diagnostics::Deploy",
+      "space s c": "project_symbols::Toggle",
+      "space space": "tab_switcher::Toggle",
+      "space e": "project_panel::ToggleFocus"
+    }
+  },
+
+  // ─── Buffer Management (<leader>b*) ──────────────────────────────────────
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      // <leader>bd — close buffer
+      "space b d": ["pane::CloseActiveItem", { "close_pinned": false }],
+      // <leader>bD — force close buffer (including pinned)
+      "space b D": ["pane::CloseActiveItem", { "close_pinned": true }],
+      // <leader>bo — close other/inactive buffers
+      "space b o": ["pane::CloseOtherItems", { "close_pinned": false }]
+    }
+  },
+
+  // ─── LSP / Code Actions (<leader>c*) ─────────────────────────────────────
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      // <leader>ca — code actions (equiv. vim.lsp.buf.code_action)
+      "space c a": "editor::ToggleCodeActions",
+      // <leader>cf — format document (Conform equivalent — manual only)
+      "space c f": "editor::Format",
+      // <leader>D — go to type definition
+      "space D": "editor::GoToTypeDefinition"
+    }
+  },
+  // <leader>cf in visual mode — format selection
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "space c f": "editor::Format"
+    }
+  },
+
+  // ─── Git (<leader>g*) ────────────────────────────────────────────────────
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      // <leader>gbl — toggle inline git blame (gitsigns equivalent)
+      "space g b l": "git::Blame",
+      // <leader>ghs — stage hunk
+      "space g h s": "git::ToggleStaged",
+      // <leader>ghr — restore/revert hunk (gitsigns reset_hunk equivalent)
+      "space g h r": "git::Restore",
+      // <leader>gdo — open git panel (fugitive / diffview equivalent)
+      "space g d o": "git_panel::ToggleFocus"
+    }
+  },
+  // When already focused in the git panel, close it
+  {
+    "context": "GitPanel",
+    "bindings": {
+      "space g d o": "workspace::ToggleRightDock"
+    }
+  },
+
+  // ─── Terminal (<leader>t*) ────────────────────────────────────────────────
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      // <leader>th — open terminal in horizontal split (split below)
+      "space t h": "workspace::NewTerminal",
+      // <leader>tv — open another terminal (vertical split not supported for terminals)
+      "space t v": "workspace::NewTerminal",
+      // <leader>tt — open/close terminal panel
+      "space t t": "terminal_panel::Toggle"
+    }
+  },
+
+  // ─── Panel/tab close-from-inside bindings ────────────────────────────────
+  // Pressing the same leader key while inside closes it.
+  // OutlinePanel — <leader>ss closes when focused
+  {
+    "context": "OutlinePanel",
+    "bindings": {
+      "space s s": "workspace::ToggleRightDock"
+    }
+  },
+  // ─── AI / Agent (<leader>a*) ─────────────────────────────────────────────
+  // Bound at Workspace level (no vim context) so it fires even when the agent
+  // panel's chat Editor has focus (insert mode inside the panel).
+  // agent::ToggleFocus opens the panel when closed and closes it when focused.
+  {
+    "context": "Workspace",
+    "bindings": {
+      "space a t": "agent::Toggle"
+    }
+  }
+]
