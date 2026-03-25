@@ -1,90 +1,103 @@
+-- lualine.nvim — statusline
+-- Layout (left → right):
+--   lualine_a  mode (single letter: N / I / V / …)
+--   lualine_b  cwd (abbreviated) · filetype icon · relative filename
+--   lualine_c  (empty)
+--   lualine_x  diagnostics · git diff · filetype · position · encoding ·
+--              line-ending format · indent style (spaces/tabs) · branch
+--
+-- The cwd component intelligently shortens the path:
+--   - Replaces /home/<user> with ~
+--   - If the full path is ≤ 30 chars, shows every segment abbreviated to
+--     3 characters except the final (current) directory which is shown in full
+--   - If longer, shows only the immediate parent directory name
+--
+-- Statusline is hidden for neo-tree windows (they have their own header bar).
+-- Extensions are enabled for fugitive, lazy, quickfix, and nvim-dap-ui so
+-- those windows get a context-appropriate statusline instead of the default.
 return {
-  -- Bottom info bar
   "nvim-lualine/lualine.nvim",
-  event = "VeryLazy",
+  event        = "VeryLazy",
   dependencies = { "nvim-tree/nvim-web-devicons" },
-  config = function()
+  config       = function()
     require("lualine").setup({
       options = {
-        component_separators = "",
-        section_separators = "",
-        disabled_filetypes = { statusline = { "neo-tree" } },
+        -- No separator characters between components or sections
+        component_separators = "",
+        section_separators   = "",
+        -- Hide the statusline in neo-tree (it has its own winbar)
+        disabled_filetypes   = { statusline = { "neo-tree" } },
       },
+
       sections = {
+        -- Section A: current mode, abbreviated to a single letter
         lualine_a = {
           {
             "mode",
-            fmt = function(str)
-              return str:sub(1, 1)
-            end,
+            fmt = function(str) return str:sub(1, 1) end,
           },
         },
-        -- Curent dir
+
+        -- Section B: cwd + filetype icon + filename
         lualine_b = {
           {
+            -- Custom CWD component
             function()
               local current_path = vim.loop.cwd() or ""
 
-              -- Show full path of the current dir
-              local function full_path()
-                -- If on home dir, use ~
-                current_path = vim.fn.substitute(current_path, "\\/home\\/\\w*", "~", "")
-
-                -- Keep only the first 3 chars of each dir except for the parent
-                local new_path = {}
-                local path_parts = vim.fn.split(current_path, "/")
-                for key, value in pairs(path_parts) do
-                  if key < vim.fn.len(path_parts) then
-                    new_path[key] = vim.fn.slice(value, 0, 3)
-                  else
-                    new_path[key] = value
-                  end
-                end
-
-                return " " .. vim.fn.join(new_path, "/")
-              end
-
-              -- Show only the parent dir
+              -- Shorten the path to just the parent directory name when the
+              -- full path is long, to avoid overflowing the statusline.
               local function parent_only()
-                local path_parts = vim.fn.split(current_path, "/")
-                return " " .. vim.fn.slice(path_parts, vim.fn.len(path_parts) - 1)[1]
+                local parts = vim.fn.split(current_path, "/")
+                return " " .. vim.fn.slice(parts, vim.fn.len(parts) - 1)[1]
               end
 
-              if vim.fn.len(current_path) > 30 then
-                return parent_only()
+              -- Show all segments abbreviated to 3 chars, except the last.
+              -- Replace /home/<user> with ~ first.
+              local function full_path()
+                local p = vim.fn.substitute(current_path, "\\/home\\/\\w*", "~", "")
+                local parts     = vim.fn.split(p, "/")
+                local new_parts = {}
+                for i, v in pairs(parts) do
+                  new_parts[i] = (i < vim.fn.len(parts)) and vim.fn.slice(v, 0, 3) or v
+                end
+                return " " .. vim.fn.join(new_parts, "/")
               end
 
-              return full_path()
+              return vim.fn.len(current_path) > 30 and parent_only() or full_path()
             end,
-            separator = "",
-            padding = { right = 1, left = 1 },
-            color = require("user.functions").fg("Normal"),
+            separator = "",
+            padding   = { right = 1, left = 1 },
+            -- Inherit the foreground colour from the Normal highlight group so
+            -- the component blends with the colourscheme automatically.
+            color     = require("user.functions").fg("Normal"),
           },
           {
             "filetype",
             icon_only = true,
             separator = "",
-            padding = { right = 0, left = 1 },
+            padding   = { right = 0, left = 1 },
           },
           {
             "filename",
-            path = 1,
+            path    = 1,  -- show path relative to cwd
             padding = { right = 0, left = 0 },
           },
         },
+
         lualine_c = {},
+
+        -- Section X: diagnostics, git diff, and file metadata
         lualine_x = {
           { "diagnostics" },
           {
+            -- Git diff stats sourced from gitsigns so the numbers stay in sync
+            -- with the gutter signs without a separate git process.
             "diff",
             source = function()
-              local gitsigns = vim.b.gitsigns_status_dict
-              if gitsigns then
-                return {
-                  added = gitsigns.added,
-                  modified = gitsigns.changed,
-                  removed = gitsigns.removed,
-                }
+              local gs = vim.b.gitsigns_status_dict
+              if gs then
+                return { added = gs.added, modified = gs.changed, removed = gs.removed }
               end
             end,
           },
@@ -92,30 +105,28 @@ return {
           { "location", padding = { left = 0, right = 1 } },
           { "encoding" },
           {
+            -- Normalised line-ending format label (LF / CRLF)
             "fileformat",
-            symbols = {
-              unix = "LF",
-              dos = "CRLF",
-            },
+            symbols = { unix = "LF", dos = "CRLF" },
           },
           {
-            -- Use tabs or spaces
+            -- Show the effective indent style for the current buffer so it is
+            -- always clear whether the file uses spaces or tabs, and how wide.
             function()
-              local use_spaces = vim.api.nvim_buf_get_option(0, "expandtab")
-
-              if use_spaces then
-                return vim.api.nvim_buf_get_option(0, "shiftwidth") .. " spaces"
+              if vim.api.nvim_buf_get_option(0, "expandtab") then
+                return vim.api.nvim_buf_get_option(0, "shiftwidth") .. " spc"
               end
-
               return "tabs"
             end,
           },
           { "branch" },
         },
+
         lualine_y = {},
         lualine_z = {},
       },
-      extensions = { "fugitive", "lazy",  "quickfix", "nvim-dap-ui" },
+
+      extensions = { "fugitive", "lazy", "quickfix", "nvim-dap-ui" },
     })
   end,
 }

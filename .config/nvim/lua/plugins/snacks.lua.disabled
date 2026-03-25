@@ -1,12 +1,30 @@
 ---@diagnostic disable: missing-fields
+-- snacks.nvim — all-in-one utility collection (DISABLED)
+-- This file is intentionally named *.disabled so lazy.nvim ignores it.
+-- It serves as a drop-in alternative to the current fzf-lua + neo-tree setup.
+--
+-- To activate snacks instead:
+--   1. Rename this file to snacks.lua
+--   2. Set vim.g.picker = "Snacks" and/or vim.g.fileexplorer = "Snacks"
+--      in options.lua
+--
+-- Modules enabled here:
+--   input    — replaces vim.ui.input with a snacks floating input
+--   layout   — flexible window layout primitives used by other modules
+--   bigfile  — disables expensive features (treesitter, LSP) for large files
+--   picker   — fuzzy finder (active when vim.g.picker == "Snacks")
+--   explorer — file explorer (active when vim.g.fileexplorer == "Snacks")
+--
+-- All picker keymaps are wired through user.keymaps-picker (same abstraction
+-- used by fzf-lua) so switching pickers only requires changing the global flag.
 return {
   "folke/snacks.nvim",
   priority = 1000,
-  lazy = false,
+  lazy     = false,
   ---@type snacks.Config
   opts = {
-    input = { enabled = true },
-    layout = { enabled = true },
+    input   = { enabled = true },
+    layout  = { enabled = true },
     bigfile = { enabled = true },
     picker = {
       enabled = function()
@@ -17,7 +35,7 @@ return {
       enabled = function()
         return vim.g.fileexplorer == "Snacks"
       end,
-
+      -- Replace netrw only when snacks explorer is the active backend
       replace_netrw = vim.g.fileexplorer == "Snacks",
     },
   },
@@ -33,24 +51,23 @@ return {
 
     if vim.g.picker == "Snacks" then
       local keymaps = require("user.keymaps-picker")
-
-      keymaps.oldfiles(snacks.picker, "recent", { filter = { cwd = true } })
-      keymaps.buffers(snacks.picker, "buffers", {})
-      keymaps.lines(snacks.picker, "lines", {})
-      keymaps.files(snacks.picker, "files", {})
-      keymaps.help(snacks.picker, "help", {})
-      keymaps.keymaps(snacks.picker, "keymaps", {})
-      keymaps.search_cword(snacks.picker, "grep_word", {})
-      keymaps.search_word(snacks.picker, "grep", {})
+      keymaps.oldfiles(snacks.picker, "recent",               { filter = { cwd = true } })
+      keymaps.buffers(snacks.picker, "buffers",               {})
+      keymaps.lines(snacks.picker, "lines",                   {})
+      keymaps.files(snacks.picker, "files",                   {})
+      keymaps.help(snacks.picker, "help",                     {})
+      keymaps.keymaps(snacks.picker, "keymaps",               {})
+      keymaps.search_cword(snacks.picker, "grep_word",        {})
+      keymaps.search_word(snacks.picker, "grep",              {})
       keymaps.search_diagnostics(snacks.picker, "diagnostics_buffer", {})
-      keymaps.search_resume(snacks.picker, "resume", {})
-      keymaps.search_document_symbols(snacks.picker, "lsp_symbols", {})
+      keymaps.search_resume(snacks.picker, "resume",          {})
+      keymaps.search_document_symbols(snacks.picker, "lsp_symbols",          {})
       keymaps.search_workspace_symbols(snacks.picker, "lsp_workspace_symbols", {})
-      keymaps.goto_definition(snacks.picker, "lsp_definitions", {})
-      keymaps.goto_references(snacks.picker, "lsp_references", {})
+      keymaps.goto_definition(snacks.picker, "lsp_definitions",    {})
+      keymaps.goto_references(snacks.picker, "lsp_references",     {})
       keymaps.goto_implementation(snacks.picker, "lsp_implementations", {})
-      keymaps.goto_typedef(snacks.picker, "lsp_type_definitions", {})
-      keymaps.code_action(nil, nil, {})
+      keymaps.goto_typedef(snacks.picker, "lsp_type_definitions",  {})
+      keymaps.code_action(nil, nil,                           {})
     end
   end,
 }

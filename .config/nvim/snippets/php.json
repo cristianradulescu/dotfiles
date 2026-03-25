@@ -1,0 +1,61 @@
+{
+  "new class": {
+    "prefix": "class",
+    "body": [
+      "<?php declare(strict_types=1);",
+      "",
+      "namespace App\\\\${1}",
+      "",
+      "class ${2} {",
+      "\t$0",
+      "}"
+    ]
+  },
+  "public method": {
+    "prefix": "pubf",
+    "body": [
+      "public function ${1}(${2}): $3",
+      "{",
+      "\t${0}",
+      "}"
+    ],
+    "description": "public method"
+  },
+  "protected method": {
+    "prefix": "prof",
+    "body": [
+      "protected function ${1}(${2}): $3",
+      "{",
+      "\t${0}",
+      "}"
+    ],
+    "description": "protected method"
+  },
+  "private method": {
+    "prefix": "prif",
+    "body": [
+      "private function ${1}(${2}): $3",
+      "{",
+      "\t${0}",
+      "}"
+    ],
+    "description": "private method"
+  },
+  "test method (prefix)": {
+    "prefix": "testt",
+    "body": [
+      "public function test${1}()",
+      "{",
+      "\t${0}",
+      "}"
+    ],
+    "description": "test method (prefix)"
+  },
+  "var doc above variable": {
+    "prefix": "vard",
+    "body": [
+      "/** @var ${1:Type} \\$${2:variableName} */"
+    ],
+    "description": "PHPDoc @var annotation"
+  }
+}

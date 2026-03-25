@@ -17,10 +17,10 @@ neovim_build_install() {
   mkdir -p ~/Apps
 
   if [ -d ~/Apps/neovim ]; then
-    cd ~/Apps/neovim && git fetch --tags
+    cd ~/Apps/neovim && git fetch
   else
     git clone https://github.com/neovim/neovim ~/Apps/neovim
-    cd ~/Apps/neovim && git fetch --tags
+    cd ~/Apps/neovim && git fetch
   fi
 
   git checkout "v$VERSION"

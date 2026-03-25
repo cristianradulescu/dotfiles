@@ -7,3 +7,6 @@ alias ip='ip -c'
 
 # Docker
 alias dc='docker compose'
+
+# Neovim
+alias nvimconfig='cd ~/.config/nvim && nvim'
