@@ -6,7 +6,7 @@ PACKAGE_NAME="Node.js"
 
 nodejs_install() {
   echo "Installing $PACKAGE_NAME..."
-  curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+  curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
   sudo apt install -y nodejs
   echo "✓ $PACKAGE_NAME installed successfully"
 }
