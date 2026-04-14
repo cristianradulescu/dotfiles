@@ -1,6 +1,4 @@
 -- blink.cmp — fast Lua-native completion engine
--- Active when vim.g.cmp_engine == "blink" (set in options.lua).
--- The alternative engine is nvim-cmp (see nvim-cmp.lua).
 --
 -- After setup, LSP capabilities are broadcast to all servers via
 -- vim.lsp.config("*", ...) so every server knows which completion
@@ -12,9 +10,6 @@ vim.treesitter.language.register("markdown", "blink-cmp-documentation")
 
 return {
   "saghen/blink.cmp",
-  cond = function()
-    return vim.g.cmp_engine == "blink"
-  end,
   -- friendly-snippets provides a curated set of VSCode-style snippets for
   -- many languages, loaded automatically by blink's snippet source.
   dependencies = {

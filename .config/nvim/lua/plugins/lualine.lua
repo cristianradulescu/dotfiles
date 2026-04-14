@@ -73,12 +73,6 @@ return {
             color     = require("user.functions").fg("Normal"),
           },
           {
-            "filetype",
-            icon_only = true,
-            separator = "",
-            padding   = { right = 0, left = 1 },
-          },
-          {
             "filename",
             path    = 1,  -- show path relative to cwd
             padding = { right = 0, left = 0 },
@@ -119,7 +113,12 @@ return {
               return "tabs"
             end,
           },
-          { "branch" },
+          {
+            "branch", fmt = function(str)
+              local max_length = 17
+              return #str > max_length and str:sub(1, max_length) .. "..." or str
+            end
+          },
         },
 
         lualine_y = {},

@@ -21,7 +21,7 @@ base_install() {
     jq xq \
     unzip \
     apt-file \
-    build-essential autoconf make cmake gettext g++ ninja-build \
+    build-essential autoconf make cmake gettext g++ ninja-build clang \
     libssl-dev libreadline-dev zlib1g-dev libyaml-dev libreadline-dev libncurses-dev \
     imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev \
     net-tools nmap dnsutils lsof \

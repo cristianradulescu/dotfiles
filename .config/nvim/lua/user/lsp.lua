@@ -49,6 +49,7 @@ vim.lsp.enable({
   "lemminx",  -- XML
   "gopls",
   "php-diagls",
+  "pylsp",
 })
 
 -- Enable PHP LSP server(s) selected via the feature flag in options.lua

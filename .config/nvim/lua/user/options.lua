@@ -12,16 +12,13 @@ vim.g.maplocalleader = " "
 -- ============================================================================
 
 -- Enable/disable GitHub Copilot inline suggestions (requires copilot.lua)
-vim.g.copilot_enabled = true
+vim.g.copilot_enabled = false
 
 -- Fuzzy finder backend. Options: "FzfLua", "Snacks"
 vim.g.picker = "FzfLua"
 
 -- File explorer backend. Options: "NeoTree", "Snacks"
 vim.g.fileexplorer = "NeoTree"
-
--- Completion engine. Options: "blink", "nvim-cmp"
-vim.g.cmp_engine = "blink"
 
 -- Active PHP LSP server(s). Options: "intelephense", "phpactor"
 -- Multiple servers can be enabled at once, e.g. {"intelephense", "phpactor"}

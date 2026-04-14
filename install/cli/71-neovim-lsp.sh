@@ -94,6 +94,9 @@ lsp_install() {
   # [FORMATTER] Stylua
   cargo install stylua
 
+  # [TREESITTER]
+  cargo install --locked tree-sitter-cli
+
   echo "✓ $PACKAGE_NAME installed successfully"
 }
 
@@ -134,6 +137,9 @@ lsp_update() {
 
   # Stylua
   cargo install stylua
+
+  # [TREESITTER]
+  cargo install --locked tree-sitter-cli
 
   echo "✓ $PACKAGE_NAME updated successfully"
 }
