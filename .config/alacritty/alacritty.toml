@@ -15,7 +15,7 @@ history = 50000
 [font]
 normal = { family = "JetBrainsMonoNL Nerd Font", style = "Regular" }
 # normal = { family = "Hack Nerd Font", style = "Regular" }
-size = 12
+size = 14
 # Letter spacing (default=0)
 offset.x = 0
 # Line spacing (default=0)

@@ -47,5 +47,174 @@ function jwt_decode() {
   echo "[ DEBUG ]"
   echo "Issued at (iat): $(echo "$DECODED_PAYLOAD" | jq -r '.iat | todate' 2>/dev/null || echo "N/A")"
   echo "Expires at (exp): $(echo "$DECODED_PAYLOAD" | jq -r '.exp | todate' 2>/dev/null || echo "N/A")"
+}
 
+docker_throttle() {
+  local action="$1"
+  local target="$2"
+
+  case "$action" in
+    status)
+      printf "%-15s %-25s %-15s\n" "CONTAINER ID" "NAME" "CPU LIMIT"
+      echo "------------------------------------------------------------"
+      docker ps --format "{{.ID}}" | while read -r id; do
+        name=$(docker inspect --format '{{.Name}}' "$id" 2>/dev/null | sed 's/\///' || echo "Unknown")
+        
+        # Check NanoCpus and CpuQuota/CpuPeriod for the truth
+        nano_cpus=$(docker inspect --format '{{.HostConfig.NanoCpus}}' "$id" 2>/dev/null || echo 0)
+        cpu_quota=$(docker inspect --format '{{.HostConfig.CpuQuota}}' "$id" 2>/dev/null || echo 0)
+        cpu_period=$(docker inspect --format '{{.HostConfig.CpuPeriod}}' "$id" 2>/dev/null || echo 0)
+
+        # Priority of interpretation:
+        # 1. CpuQuota = -1 means Unlimited
+        # 2. NanoCpus > 0 is the limit
+        # 3. CpuQuota > 0 is the limit
+        # 4. Otherwise Unlimited
+        
+        if [ "$cpu_quota" -eq -1 ]; then
+          limit="Unlimited"
+        elif [ -n "$nano_cpus" ] && [ "$nano_cpus" -gt 0 ] 2>/dev/null; then
+          limit=$(awk "BEGIN {printf \"%.2f\", $nano_cpus / 1000000000}")
+        elif [ -n "$cpu_quota" ] && [ "$cpu_quota" -gt 0 ] && [ -n "$cpu_period" ] && [ "$cpu_period" -gt 0 ] 2>/dev/null; then
+          limit=$(awk "BEGIN {printf \"%.2f\", $cpu_quota / $cpu_period}")
+        else
+          limit="Unlimited"
+        fi
+        printf "%-15s %-25s %-15s\n" "$id" "$name" "$limit"
+      done
+      ;;
+
+    set)
+      # Use IDs to avoid naming conflicts
+      local ids=${target:-$(docker ps -q)}
+      [ -z "$ids" ] && echo "No containers to throttle." && return
+      
+      echo "Applying 0.10 CPU limit..."
+      # We use CpuQuota and CpuPeriod directly to allow easy unsetting via --cpu-quota -1
+      docker update --cpu-period 100000 --cpu-quota 10000 $ids > /dev/null
+      echo "Done."
+      ;;
+
+    remove)
+      local ids=${target:-$(docker ps -q)}
+      [ -z "$ids" ] && echo "No containers to reset." && return
+      
+      echo "Removing CPU limits (Resetting to Host Default)..."
+      # To truly remove limits, we set cpu-quota to -1.
+      # Setting --cpus 0 is often ignored if NanoCpus was previously set.
+      docker update --cpu-quota -1 --cpu-shares 1024 $ids > /dev/null
+      echo "Done."
+      ;;
+
+    *)
+      echo "Usage: docker-throttle {status|set|remove} [container_name]"
+      ;;
+  esac
+}
+
+# Truncate Symfony logs and clear dev cache
+# Usage: clean_symfony_dev [project_root]
+# If no path is provided, uses current directory
+clean_symfony_dev() {
+    local project_root="${1:-.}"
+    
+    if [ ! -f "${project_root}/symfony.lock" ]; then
+        echo "Error: symfony.lock not found in ${project_root}" >&2
+        exit 1
+    fi
+    
+    echo "Cleaning Symfony development environment..."
+    
+    # Truncate log files in var/log
+    if [ -d "${project_root}/var/log" ]; then
+        echo "Truncating log files in ${project_root}/var/log..."
+        find "${project_root}/var/log" -type f -name "*.log" -exec truncate -s 0 {} \;
+        echo "Log files truncated."
+    else
+        echo "Warning: ${project_root}/var/log directory not found."
+    fi
+    
+    # Delete files from var/cache/dev
+    if [ -d "${project_root}/var/cache/dev" ]; then
+        echo "Deleting files from ${project_root}/var/cache/dev..."
+        rm -rf "${project_root}/var/cache/dev"/*
+        echo "Dev cache cleared."
+    else
+        echo "Warning: ${project_root}/var/cache/dev directory not found."
+    fi
+    
+    echo "Cleanup complete!"
+}
+
+# Rename file in order to be shared according to company standards
+# Usage: rename_company_file <filename>
+rename_company_file() {
+	local original_file="$1"
+	
+	if [[ -z "$original_file" ]] || [[ ! -f "$original_file" ]]; then
+		echo "Error: Please provide a valid file path"
+		return 1
+	fi
+	
+	# Extract directory and filename
+	local dir="$(dirname "$original_file")"
+	local filename="$(basename "$original_file")"
+	
+	# Step 1 - Select department using fzf
+	local departments=(
+		"ADM:Administrative"
+		"ISMS:Information Security Management System"
+		"HR:People & Culture"
+		"PMO:Project Management Office"
+		"DAP:Data Protection"
+		"FIN:Finance"
+		"MKT:Marketing"
+		"PAR:Partnership"
+		"ITT:Information Technology – Technical"
+		"ITP:Information Technology – Product"
+		"SWI:Commercial"
+		"CSP:Customer Support"
+	)
+	
+	local dept_selection
+	dept_selection=$(printf '%s\n' "${departments[@]}" | fzf --prompt="Select Department: " --height=40%)
+	
+	if [[ -z "$dept_selection" ]]; then
+		echo "Department selection cancelled"
+		return 1
+	fi
+	
+	local dept_code="${dept_selection%%:*}"
+	
+	# Step 2 - Select confidentiality using fzf
+	local confidentiality_levels=(
+		"P:Public"
+		"I:Internal"
+		"C:Confidential"
+		"S:Secret"
+	)
+	
+	local conf_selection
+	conf_selection=$(printf '%s\n' "${confidentiality_levels[@]}" | fzf --prompt="Select Confidentiality: " --height=40%)
+	
+	if [[ -z "$conf_selection" ]]; then
+		echo "Confidentiality selection cancelled"
+		return 1
+	fi
+	
+	local conf_code="${conf_selection%%:*}"
+	
+	# Step 3 - Rename the file
+	local new_filename="${dept_code}_${conf_code}_${filename}"
+	local new_filepath="${dir}/${new_filename}"
+	
+	# Create a copy with the new name
+	if cp "$original_file" "$new_filepath"; then
+		echo "File copied and renamed successfully:"
+		echo "Original: $original_file"
+		echo "New: $new_filepath"
+	else
+		echo "Error: Failed to copy and rename file"
+		return 1
+	fi
 }
