@@ -26,7 +26,8 @@ base_install() {
     imagemagick redis-tools sqlite3 libsqlite3-dev libmysqlclient-dev \
     net-tools nmap dnsutils lsof \
     openjdk-21-jre openjdk-21-jdk \
-    pipx
+    pipx \
+    wl-clipboard
   
   export PATH=$HOME/.local/bin:$PATH
   

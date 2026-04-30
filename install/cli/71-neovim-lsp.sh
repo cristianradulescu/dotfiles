@@ -74,7 +74,7 @@ lsp_install() {
   echo "Installing XML Language Server..."
   local LEMMINX_VERSION
   LEMMINX_VERSION=$(github_latest redhat-developer/vscode-xml)
-  curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux.zip"
+  curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux-x86_64.zip"
   mkdir -p ~/lsp/lemminx && unzip -o /tmp/lemminx.zip -d ~/lsp/lemminx
   rm -f /tmp/lemminx.zip
   ln -sf ~/lsp/lemminx/lemminx-linux ~/lsp/bin/lemminx

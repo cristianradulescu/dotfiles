@@ -15,7 +15,12 @@ docker_install() {
     | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
   sudo apt update
   
-  sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+  sudo apt install -y docker-ce=5:28.5.2-1~ubuntu.24.04~noble docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+  
+  # In case older versions are required
+  #sudo apt install --allow-downgrades docker-ce=5:28.5.2-1~ubuntu.24.04~noble
+  #sudo apt-mark hold docker-ce
+
   sudo usermod -aG docker ${USER}
   echo '{"log-driver":"json-file","log-opts":{"max-size":"10m","max-file":"5"}}' | sudo tee /etc/docker/daemon.json
   sudo usermod -aG dialout ${USER}

@@ -69,6 +69,10 @@ gnome_setup() {
   if [ -f ~/.local/share/gnome-shell/extensions/clipboard-indicator@tudmotu.com/schemas/org.gnome.shell.extensions.clipboard-indicator.gschema.xml ]; then
     sudo cp ~/.local/share/gnome-shell/extensions/clipboard-indicator@tudmotu.com/schemas/org.gnome.shell.extensions.clipboard-indicator.gschema.xml /usr/share/glib-2.0/schemas/
   fi
+  if [ -f ~/.local/share/gnome-shell/extensions/tactile@lundal.io/schemas/org.gnome.shell.extensions.tactile.gschema.xml ]; then
+    sudo cp ~/.local/share/gnome-shell/extensions/tactile@lundal.io/schemas/org.gnome.shell.extensions.tactile.gschema.xml /usr/share/glib-2.0/schemas/
+  fi
+
   sudo glib-compile-schemas /usr/share/glib-2.0/schemas/ 2>/dev/null || true
   
   # Configure Space Bar
@@ -86,7 +90,16 @@ gnome_setup() {
   gsettings set org.gnome.shell.extensions.clipboard-indicator next-entry "[]" 2>/dev/null || true
   gsettings set org.gnome.shell.extensions.clipboard-indicator prev-entry "[]" 2>/dev/null || true
   gsettings set org.gnome.shell.extensions.clipboard-indicator private-mode-binding "[]" 2>/dev/null || true
-  
+ 
+  # Configure Tactile
+  gesttings set org.gnome.shell.extensions.tactile layout-2-col-2 0
+  gesttings set org.gnome.shell.extensions.tactile layout-2-col-3 0
+  gesttings set org.gnome.shell.extensions.tactile layout-2-row-1 0
+  gesttings set org.gnome.shell.extensions.tactile layout-2-row-2 0
+  gesttings set org.gnome.shell.extensions.tactile layout-3-col-1 3
+  gesttings set org.gnome.shell.extensions.tactile layout-3-col-3 0
+  gesttings set org.gnome.shell.extensions.tactile layout-3-row-1 3
+
   echo "✓ $PACKAGE_NAME configured successfully"
 }
 

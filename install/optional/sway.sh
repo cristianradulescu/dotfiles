@@ -8,7 +8,7 @@ sway_install() {
   echo "Installing $PACKAGE_NAME..."
   
   sudo apt install -y sway swaybg swayidle swaylock \
-    waybar fuzzel mako-notifier grim slurp wl-clipboard cliphist brightnessctl
+    waybar fuzzel mako-notifier grim slurp cliphist brightnessctl
 
   sudo usermod -aG input,video $USER
   
