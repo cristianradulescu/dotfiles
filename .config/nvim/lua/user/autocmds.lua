@@ -240,6 +240,18 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- ============================================================================
+-- MarkdownWrap — enable word wrap for markdown files
+-- ============================================================================
+local markdown_wrap_group = vim.api.nvim_create_augroup("MarkdownWrap", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = markdown_wrap_group,
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.wrap = true
+  end,
+})
+
+-- ============================================================================
 -- FixJsonConceal — keep JSON files readable
 -- Neovim's default conceallevel hides quotes around JSON keys/values, which
 -- makes files hard to edit. Force it to 0 for all JSON variants.
