@@ -1,6 +1,6 @@
 -- Override config from nvim-lspconfig
 vim.lsp.config("lua_ls", {
-  -- cmd = { vim.fn.expand("~/lsp/bin/lua-language-server") },
+  cmd = { vim.fn.expand("~/lsp/bin/lua-language-server") },
   settings = {
     Lua = {
       workspace = {

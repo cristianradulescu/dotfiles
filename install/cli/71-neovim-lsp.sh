@@ -74,7 +74,7 @@ lsp_install() {
   echo "Installing XML Language Server..."
   local LEMMINX_VERSION
   LEMMINX_VERSION=$(github_latest redhat-developer/vscode-xml)
-  curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux-x86_64.zip"
+  curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux.zip"
   mkdir -p ~/lsp/lemminx && unzip -o /tmp/lemminx.zip -d ~/lsp/lemminx
   rm -f /tmp/lemminx.zip
   ln -sf ~/lsp/lemminx/lemminx-linux ~/lsp/bin/lemminx
@@ -85,6 +85,17 @@ lsp_install() {
   make build
   ln -sf ~/lsp/php-diagls/php-diagls ~/lsp/bin/
   cd ~
+
+  # [LSP] phpantom
+  echo "Installing phpantom Language Server..."
+  local PHPANTOM_VERSION
+  PHPANTOM_VERSION=$(github_latest AJenbo/phpantom_lsp)
+  curl -sLo /tmp/phpantom.tar.gz "https://github.com/AJenbo/phpantom_lsp/releases/download/${PHPANTOM_VERSION}/phpantom_lsp-x86_64-unknown-linux-gnu.tar.gz"
+  mkdir -p ~/lsp/phpantom
+  tar xfp /tmp/phpantom.tar.gz -C ~/lsp/phpantom
+  ln -sf ~/lsp/phpantom/phpantom_lsp ~/lsp/bin/
+  rm -f /tmp/phpantom.tar.gz
+
 
   # [FORMATTER] djlint, sqlfluff, lsp-devtools
   pipx install --force djlint
@@ -121,8 +132,16 @@ lsp_update() {
   local LEMMINX_VERSION
   LEMMINX_VERSION=$(github_latest redhat-developer/vscode-xml)
   curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux.zip"
-  unzip -o /tmp/lemminx.zip -d ~/lsp/lemminx
-  rm -f /tmp/lemminx.zip
+  mkdir -p ~/lsp/lua-language-server
+  tar xfp /tmp/luals.tar.gz -C ~/lsp/lua-language-server
+  rm -f /tmp/luals.tar.gz
+
+  # [LSP] phpantom
+  local PHPANTOM_VERSION
+  PHPANTOM_VERSION=$(github_latest AJenbo/phpantom_lsp)
+  curl -sLo /tmp/phpantom.tar.gz "https://github.com/AJenbo/phpantom_lsp/releases/download/${PHPANTOM_VERSION}/phpantom_lsp-x86_64-unknown-linux-gnu.tar.gz"
+  tar xfp /tmp/phpantom.tar.gz -C ~/lsp/phpantom
+  rm -f /tmp/phpantom.tar.gz
 
   # Node-based servers: npm update
   cd ~/lsp && npm update && cd ~

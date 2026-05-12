@@ -22,7 +22,7 @@ vim.g.fileexplorer = "NeoTree"
 
 -- Active PHP LSP server(s). Options: "intelephense", "phpactor"
 -- Multiple servers can be enabled at once, e.g. {"intelephense", "phpactor"}
-vim.g.php_lsp = { "intelephense" }
+vim.g.php_lsp = { "phpactor" }
 
 -- ============================================================================
 -- UI
