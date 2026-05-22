@@ -337,9 +337,11 @@ launch_windows() {
 
   # Detect display scale (supports Sway and GNOME)
   detect_scale() {
-    if command -v swaymsg &>/dev/null; then
-      SWAY_SCALE=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused == true) | .scale')
-      echo "$SWAY_SCALE" | awk '{print int($1 * 100)}'
+    if [[ "$XDG_CURRENT_DESKTOP" != *"GNOME"* ]]; then
+      if command -v swaymsg &>/dev/null; then
+        SWAY_SCALE=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused == true) | .scale')
+        echo "$SWAY_SCALE" | awk '{print int($1 * 100)}'
+      fi
     elif command -v gsettings &>/dev/null; then
       FACTOR=$(gsettings get org.gnome.desktop.interface scaling-factor 2>/dev/null | tr -d "uint32 ")
       echo $(( ${FACTOR:-1} * 100 ))
@@ -358,7 +360,7 @@ launch_windows() {
   # If scale is less than 130%, don't set any scale (use default 100)
 
   # Connect with RDP in fullscreen (auto-detects resolution)
-  xfreerdp3 /u:"$WIN_USER" /p:"$WIN_PASS" /v:127.0.0.1:3389 -grab-keyboard /sound /microphone /cert:ignore /title:"Windows VM" /dynamic-resolution /gfx:AVC444 /floatbar:sticky:off,default:visible,show:fullscreen $RDP_SCALE
+  xfreerdp3 /u:"$WIN_USER" /p:"$WIN_PASS" /v:127.0.0.1:3389 -grab-keyboard /sound /microphone /cert:ignore /title:"Windows VM" /dynamic-resolution /floatbar:sticky:off,default:visible,show:fullscreen $RDP_SCALE
 
   # After RDP closes, stop the container unless --keep-alive was specified
   if [ "$KEEP_ALIVE" = false ]; then
