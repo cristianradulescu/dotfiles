@@ -100,6 +100,7 @@ Example [reverse_tunnel.sh](./reverse_tunnel.sh)
 
 | Parameter | Description |
 |-----------|-------------|
+| `-4` | Force IPv4 |
 | `-v` | Verbose mode for debugging connection issues |
 | `-R 1080` | Create a reverse tunnel, exposing local SOCKS proxy on port 1080 of the remote host |
 | `-N` | Don't execute remote commands, just forward ports |
