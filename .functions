@@ -128,7 +128,7 @@ clean_symfony_dev() {
     # Truncate log files in var/log
     if [ -d "${project_root}/var/log" ]; then
         echo "Truncating log files in ${project_root}/var/log..."
-        find "${project_root}/var/log" -type f -name "*.log" -exec truncate -s 0 {} \;
+        sudo find "${project_root}/var/log" -type f -name "*.log" -exec truncate -s 0 {} \;
         echo "Log files truncated."
     else
         echo "Warning: ${project_root}/var/log directory not found."
@@ -137,7 +137,7 @@ clean_symfony_dev() {
     # Delete files from var/cache/dev
     if [ -d "${project_root}/var/cache/dev" ]; then
         echo "Deleting files from ${project_root}/var/cache/dev..."
-        rm -rf "${project_root}/var/cache/dev"/*
+        sudo rm -rf "${project_root}/var/cache/dev"/*
         echo "Dev cache cleared."
     else
         echo "Warning: ${project_root}/var/cache/dev directory not found."
