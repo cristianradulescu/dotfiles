@@ -36,12 +36,6 @@ export EDITOR='nvim'
 [ -f "$HOME/dotfiles/.aliases" ] && source "$HOME/dotfiles/.aliases"
 [ -f "$HOME/dotfiles/.functions" ] && source "$HOME/dotfiles/.functions"
 
-# Gemini API key
-[ -f "$HOME/.codecompanion/gemini" ] && export GEMINI_API_KEY=$(cat "$HOME/.codecompanion/gemini")
-
-# Open AI API key
-[ -f "$HOME/.codecompanion/openai" ] && export OPENAI_API_KEY=$(cat "$HOME/.codecompanion/openai")
-
 # Work profile (sensitive data that cannot be commited)
 [[ ! -f ~/.zshrc_work ]] || source ~/.zshrc_work
 

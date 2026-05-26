@@ -11,9 +11,6 @@ vim.g.maplocalleader = " "
 -- They are read by plugin specs and keymaps to activate the selected backend.
 -- ============================================================================
 
--- Enable/disable GitHub Copilot inline suggestions (requires copilot.lua)
-vim.g.copilot_enabled = false
-
 -- Fuzzy finder backend. Options: "FzfLua", "Snacks"
 vim.g.picker = "FzfLua"
 

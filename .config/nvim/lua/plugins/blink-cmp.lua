@@ -12,15 +12,6 @@ return {
   "saghen/blink.cmp",
   -- friendly-snippets provides a curated set of VSCode-style snippets for
   -- many languages, loaded automatically by blink's snippet source.
-  dependencies = {
-    -- GitHub Copilot completion source for blink.cmp
-    {
-      "giuxtaposition/blink-cmp-copilot",
-      cond = function()
-        return vim.g.copilot_enabled
-      end,
-    },
-  },
   version = "1.*",
   config = function(_, opts)
     require("blink.cmp").setup(opts)
@@ -62,21 +53,9 @@ return {
           -- so that manually invoking completion (<C-Space>) always queries the LSP.
           min_keyword_length = 0,
         },
-        copilot = {
-          name = "copilot",
-          module = "blink-cmp-copilot",
-          score_offset = 100,
-          async = true,
-        },
       },
-      -- Enable copilot source when available (controlled by vim.g.copilot_enabled)
       default = function()
-        local enabled_sources = { "lsp", "path", "snippets", "buffer" }
-        if vim.g.copilot_enabled then
-          enabled_sources = vim.tbl_deep_extend("force", enabled_sources, { "copilot" })
-        end
-
-        return enabled_sources
+        return { "lsp", "path", "snippets", "buffer" }
       end,
     },
 
