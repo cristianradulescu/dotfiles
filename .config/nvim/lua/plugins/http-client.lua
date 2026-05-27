@@ -19,6 +19,7 @@ local http_client = {
 return {
   {
     "mistweaverco/kulala.nvim",
+    version = "v5.3.4",
     ft   = "http",
     opts = {
       -- Show both response headers and body by default
