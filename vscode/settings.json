@@ -3,6 +3,9 @@
   "workbench.iconTheme": "catppuccin-mocha",
   "workbench.editor.enablePreview": false,
   "workbench.activityBar.location": "top",
+  "workbench.editorAssociations": {
+    "*.md": "vscode.markdown.preview.editor"
+  },
   "editor.fontFamily": "'JetBrainsMonoNL Nerd Font'",
   "editor.fontSize": 12,
   "editor.lineHeight": 1.6,
@@ -17,7 +20,7 @@
   "catppuccin.italicKeywords": false,
   "redhat.telemetry.enabled": false,
   "php.suggest.basic": false,
-  "phpactor.path": "/opt/phpactor-unstable/bin/phpactor",
+  "phpactor.path": "/home/cristian/lsp/phpactor/bin/phpactor",
   "window.commandCenter": false,
   "workbench.layoutControl.enabled": false,
   "vim.foldfix": true,

@@ -104,6 +104,24 @@ vim.opt.splitright = true  -- Vertical splits open to the right
 vim.opt.splitbelow = true  -- Horizontal splits open below
 
 -- ============================================================================
+-- Diff mode
+-- Used for `git mergetool`, fugitive's Gdiffsplit/Gvdiffsplit, and any
+-- :diffthis session. Aligns similar lines within a hunk (linematch) and
+-- highlights only the changed characters within a line (inline:char),
+-- instead of highlighting the whole line — closer to the JetBrains-style
+-- diff view.
+-- ============================================================================
+vim.opt.diffopt = {
+  "internal",
+  "filler",
+  "closeoff",
+  "algorithm:histogram",
+  "indent-heuristic",
+  "linematch:60",
+  "inline:char",
+}
+
+-- ============================================================================
 -- Search
 -- ============================================================================
 
