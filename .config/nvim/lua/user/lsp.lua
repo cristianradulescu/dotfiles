@@ -64,7 +64,10 @@ end
 vim.api.nvim_create_autocmd("LspAttach", {
   group    = vim.api.nvim_create_augroup("lsp_on_attach", {}),
   callback = function(args)
-    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client then
+      return
+    end
 
     -- Phpactor-specific: expose a command to trigger a full workspace reindex.
     -- Useful after running composer install/update in a PHP project.
@@ -93,9 +96,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 vim.api.nvim_create_autocmd("LspAttach", {
   group    = vim.api.nvim_create_augroup("lsp_document_highlight", {}),
   callback = function(args)
-    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-
-    if not client.server_capabilities.documentHighlightProvider then
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client or not client.server_capabilities.documentHighlightProvider then
       return
     end
 
@@ -103,7 +105,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
       buffer   = args.buf,
       desc     = "Highlight references to symbol under cursor",
       callback = function()
-        vim.lsp.buf.document_highlight()
+        local clients = vim.lsp.get_clients({ bufnr = 0 })
+        for _, c in ipairs(clients) do
+          if c.server_capabilities.documentHighlightProvider then
+            vim.lsp.buf.document_highlight()
+            return
+          end
+        end
       end,
     })
 
