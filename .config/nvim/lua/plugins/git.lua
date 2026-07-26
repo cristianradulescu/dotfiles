@@ -1,9 +1,12 @@
--- Git tooling — three complementary plugins:
+-- Git tooling — four complementary plugins:
 --
 --   vim-fugitive   full Git UI (:Git, :Git blame, push/pull/rebase, etc.)
 --   diffview.nvim  side-by-side diff viewer and per-file commit history timeline
 --   gitsigns.nvim  gutter signs for added/changed/deleted lines, inline blame,
 --                  and hunk-level staging/resetting
+--   mergetool      three-way merge conflict resolution
+--                  (github.com/cristianradulescu/mergetool) — aligned
+--                  ours/result/theirs panes instead of raw conflict markers
 --
 -- Keymaps:
 --   Fugitive / Diffview (global):
@@ -20,6 +23,14 @@
 --     <leader>ghR   reset the entire buffer to its HEAD state
 --     <leader>ghs   stage / unstage the hunk under the cursor
 --     ]c / [c       jump to the next / previous hunk (works in diff mode too)
+--
+--   Mergetool (global):
+--     <leader>gm    resolve the current file's conflict (reads base/ours/theirs
+--                   from the git index — the file must actually be unmerged);
+--                   opens a new tab with three panes. Inside that tab:
+--                     ]c / [c   jump to the next / previous conflict
+--                     co / ct   accept ours / theirs for the conflict at the cursor
+--                     :w        save — stages the file (git add) once resolved
 return {
   -- Full-featured Git UI; use :Git <command> for anything not keybound
   { "tpope/vim-fugitive" },
@@ -72,6 +83,36 @@ return {
         end,
       })
     end,
+  },
+
+  -- Three-way merge conflict resolution. Rust core + native mlua module, so
+  -- it needs a `cargo build` after install/update; lazy.nvim's `build` hook
+  -- runs that in the plugin's own directory automatically. The plugin's Lua
+  -- loader then finds target/release (or target/debug) there on its own.
+  --
+  -- NOTE: this table must come before the bare `vim.keymap.set(...)` calls
+  -- below. Those calls return nil, which — sitting bare in this array
+  -- literal — leaves nil holes partway through the table; `ipairs` (which
+  -- lazy.nvim's spec loader uses to walk this returned list) stops at the
+  -- first nil, so anything appended *after* those calls is invisible to
+  -- lazy.nvim even though it's still a real, addressable table entry.
+  {
+    "cristianradulescu/mergetool",
+    build = "cargo build --workspace --release",
+    keys = {
+      {
+        "<leader>gm",
+        function()
+          local path = vim.fn.expand("%:p")
+          local cwd = vim.fn.expand("%:p:h")
+          local ok, err = pcall(require("mergetool.resolve").resolve, path, cwd)
+          if not ok then
+            vim.notify("mergetool: " .. tostring(err), vim.log.levels.ERROR)
+          end
+        end,
+        desc = "Resolve merge conflict (mergetool)",
+      },
+    },
   },
 
   -- Diffview keymaps registered globally (not buffer-local) because diffview
