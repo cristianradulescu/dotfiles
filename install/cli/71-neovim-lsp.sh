@@ -74,10 +74,10 @@ lsp_install() {
   echo "Installing XML Language Server..."
   local LEMMINX_VERSION
   LEMMINX_VERSION=$(github_latest redhat-developer/vscode-xml)
-  curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux.zip"
+  curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux-x86_64.zip"
   mkdir -p ~/lsp/lemminx && unzip -o /tmp/lemminx.zip -d ~/lsp/lemminx
   rm -f /tmp/lemminx.zip
-  ln -sf ~/lsp/lemminx/lemminx-linux ~/lsp/bin/lemminx
+  ln -sf ~/lsp/lemminx/lemminx-linux-x86_64 ~/lsp/bin/lemminx
 
   # [LSP] php-diagls
   echo "Installing PHP Diagnostics Language Server..."
@@ -89,8 +89,8 @@ lsp_install() {
   # [LSP] phpantom
   echo "Installing phpantom Language Server..."
   local PHPANTOM_VERSION
-  PHPANTOM_VERSION=$(github_latest AJenbo/phpantom_lsp)
-  curl -sLo /tmp/phpantom.tar.gz "https://github.com/AJenbo/phpantom_lsp/releases/download/${PHPANTOM_VERSION}/phpantom_lsp-x86_64-unknown-linux-gnu.tar.gz"
+  PHPANTOM_VERSION=$(github_latest PHPantom-dev/phpantom_lsp)
+  curl -sLo /tmp/phpantom.tar.gz "https://github.com/PHPantom-dev/phpantom_lsp/releases/download/${PHPANTOM_VERSION}/phpantom_lsp-x86_64-unknown-linux-gnu.tar.gz"
   mkdir -p ~/lsp/phpantom
   tar xfp /tmp/phpantom.tar.gz -C ~/lsp/phpantom
   ln -sf ~/lsp/phpantom/phpantom_lsp ~/lsp/bin/
@@ -115,12 +115,17 @@ lsp_update() {
   echo "Updating $PACKAGE_NAME..."
 
   # Git-based servers: pull + rebuild
+  echo "Updating vscode-php-debug..."
   cd ~/lsp/vscode-php-debug && git pull && npm install && npm run build && cd ~
-  cd ~/lsp/phpactor          && git pull && composer install --no-dev --optimize-autoloader && cd ~
+  echo "Updating phpactor..."
+  cd ~/lsp/phpactor && git pull && composer install --no-dev --optimize-autoloader && cd ~
+  echo "Updating yamlls..."
   cd ~/lsp/yaml-language-server && git pull && npm install && npm run build && cd ~
-  cd ~/lsp/php-diagls        && git pull && make build && cd ~
+  echo "Updating phpdiagls..."
+  cd ~/lsp/php-diagls && git pull && make build && cd ~
 
   # LuaLS: re-download latest
+  echo "Updating luals..."
   local LUALS_VERSION
   LUALS_VERSION=$(github_latest LuaLS/lua-language-server)
   curl -sLo /tmp/luals.tar.gz "https://github.com/LuaLS/lua-language-server/releases/download/${LUALS_VERSION}/lua-language-server-${LUALS_VERSION}-linux-x64.tar.gz"
@@ -129,35 +134,44 @@ lsp_update() {
   rm -f /tmp/luals.tar.gz
 
   # lemminx: re-download latest
+  echo "Updating lemminx..."
   local LEMMINX_VERSION
   LEMMINX_VERSION=$(github_latest redhat-developer/vscode-xml)
-  curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux.zip"
-  mkdir -p ~/lsp/lua-language-server
-  tar xfp /tmp/luals.tar.gz -C ~/lsp/lua-language-server
-  rm -f /tmp/luals.tar.gz
+  curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux-x86_64.zip"
+  mkdir -p ~/lsp/lemminx
+  unzip -o /tmp/lemminx.zip -d ~/lsp/lemminx/
+  rm -f /tmp/lemminx.zip
 
   # [LSP] phpantom
+  echo "Updating phpantom..."
   local PHPANTOM_VERSION
-  PHPANTOM_VERSION=$(github_latest AJenbo/phpantom_lsp)
-  curl -sLo /tmp/phpantom.tar.gz "https://github.com/AJenbo/phpantom_lsp/releases/download/${PHPANTOM_VERSION}/phpantom_lsp-x86_64-unknown-linux-gnu.tar.gz"
+  PHPANTOM_VERSION=$(github_latest PHPantom-dev/phpantom_lsp)
+  curl -sLo /tmp/phpantom.tar.gz "https://github.com/PHPantom-dev/phpantom_lsp/releases/download/${PHPANTOM_VERSION}/phpantom_lsp-x86_64-unknown-linux-gnu.tar.gz"
   tar xfp /tmp/phpantom.tar.gz -C ~/lsp/phpantom
   rm -f /tmp/phpantom.tar.gz
 
   # Node-based servers: npm update
+  echo "Updating node based LSPs..."
   cd ~/lsp && npm update && cd ~
 
   # DockerLS: re-install via Go
+  echo "Updating dockerls..."
   go install github.com/docker/docker-language-server/cmd/docker-language-server@latest
 
   # Python formatters
+  echo "Updating djlint..."
   pipx upgrade djlint
+  echo "Updating sqlfluff..."
   pipx upgrade sqlfluff
+  echo "Updating lsp-devtool..."
   pipx upgrade lsp-devtools
 
   # Stylua
+  echo "Updating stylua..."
   cargo install stylua
 
   # [TREESITTER]
+  echo "Updating treesitter..."
   cargo install --locked tree-sitter-cli
 
   echo "✓ $PACKAGE_NAME updated successfully"
