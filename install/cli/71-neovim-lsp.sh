@@ -13,17 +13,25 @@ lsp_clone_or_pull() {
 }
 
 lsp_install() {
-  echo "Installing $PACKAGE_NAME..."
   mkdir -p ~/lsp/bin
 
   # [DAP] PHP Debug Adapter
-  echo "Installing PHP Debug Adapter..."
+  section "Installing PHP Debug Adapter..."
   lsp_clone_or_pull https://github.com/xdebug/vscode-php-debug ~/lsp/vscode-php-debug
-  npm install && npm run build
+  # --ignore-scripts: devDependency @vscode/vsce pulls in keytar/@vscode/vsce-sign
+  # (used only for `vsce package`, which we never run), whose install scripts
+  # trigger npm's allow-scripts warning and aren't needed for `npm run build`.
+  npm install --ignore-scripts
+  # Bypass `npm run build`: since this repo lives under ~/lsp, tsc's module
+  # resolution also picks up ~/lsp/node_modules/@types/node (pulled in by
+  # sql-language-server's pg client), which conflicts with this repo's own
+  # pinned @types/node@16 (non-generic vs. generic Buffer) and fails the
+  # build with TS2315. --skipLibCheck avoids checking either .d.ts.
+  npm run copyfiles && npx tsc -p . --skipLibCheck
   cd ~
 
   # [LSP] Phpactor
-  echo "Installing Phpactor..."
+  section "Installing Phpactor..."
   lsp_clone_or_pull https://github.com/phpactor/phpactor ~/lsp/phpactor
   composer install --no-dev --optimize-autoloader
   ln -sf ~/lsp/phpactor/bin/phpactor ~/lsp/bin/
@@ -31,7 +39,7 @@ lsp_install() {
   cd ~
 
   # [LSP] LuaLS
-  echo "Installing Lua Language Server..."
+  section "Installing Lua Language Server..."
   local LUALS_VERSION
   LUALS_VERSION=$(github_latest LuaLS/lua-language-server)
   curl -sLo /tmp/luals.tar.gz "https://github.com/LuaLS/lua-language-server/releases/download/${LUALS_VERSION}/lua-language-server-${LUALS_VERSION}-linux-x64.tar.gz"
@@ -41,7 +49,7 @@ lsp_install() {
   rm -f /tmp/luals.tar.gz
 
   # [LSP] Node-based language servers
-  echo "Installing Node-based language servers..."
+  section "Installing Node-based language servers..."
   cd ~/lsp
   npm i intelephense \
     bash-language-server \
@@ -60,18 +68,18 @@ lsp_install() {
   cd ~
 
   # [LSP] DockerLS
-  echo "Installing Docker Language Server..."
+  section "Installing Docker Language Server..."
   go install github.com/docker/docker-language-server/cmd/docker-language-server@latest
 
   # [LSP] YAMLLS
-  echo "Installing YAML Language Server..."
+  section "Installing YAML Language Server..."
   lsp_clone_or_pull https://github.com/redhat-developer/yaml-language-server ~/lsp/yaml-language-server
   npm install && npm run build
   ln -sf ~/lsp/yaml-language-server/bin/yaml-language-server ~/lsp/bin/
   cd ~
 
   # [LSP] lemminx (XML)
-  echo "Installing XML Language Server..."
+  section "Installing XML Language Server..."
   local LEMMINX_VERSION
   LEMMINX_VERSION=$(github_latest redhat-developer/vscode-xml)
   curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux-x86_64.zip"
@@ -80,14 +88,14 @@ lsp_install() {
   ln -sf ~/lsp/lemminx/lemminx-linux-x86_64 ~/lsp/bin/lemminx
 
   # [LSP] php-diagls
-  echo "Installing PHP Diagnostics Language Server..."
+  section "Installing PHP Diagnostics Language Server..."
   lsp_clone_or_pull https://github.com/cristianradulescu/php-diagls ~/lsp/php-diagls
   make build
   ln -sf ~/lsp/php-diagls/php-diagls ~/lsp/bin/
   cd ~
 
   # [LSP] phpantom
-  echo "Installing phpantom Language Server..."
+  section "Installing phpantom Language Server..."
   local PHPANTOM_VERSION
   PHPANTOM_VERSION=$(github_latest PHPantom-dev/phpantom_lsp)
   curl -sLo /tmp/phpantom.tar.gz "https://github.com/PHPantom-dev/phpantom_lsp/releases/download/${PHPANTOM_VERSION}/phpantom_lsp-x86_64-unknown-linux-gnu.tar.gz"
@@ -98,34 +106,38 @@ lsp_install() {
 
 
   # [FORMATTER] djlint, sqlfluff, lsp-devtools
+  section "Installing Python formatters (djlint, sqlfluff, lsp-devtools)..."
   pipx install --force djlint
   pipx install --force sqlfluff
   pipx install --force lsp-devtools
 
   # [FORMATTER] Stylua
+  section "Installing Stylua..."
   cargo install stylua
 
   # [TREESITTER]
+  section "Installing tree-sitter-cli..."
   cargo install --locked tree-sitter-cli
 
-  echo "✓ $PACKAGE_NAME installed successfully"
+  log_ok "$PACKAGE_NAME installed successfully"
 }
 
 lsp_update() {
-  echo "Updating $PACKAGE_NAME..."
-
   # Git-based servers: pull + rebuild
-  echo "Updating vscode-php-debug..."
-  cd ~/lsp/vscode-php-debug && git pull && npm install && npm run build && cd ~
-  echo "Updating phpactor..."
+  section "Updating PHP Debug Adapter..."
+  cd ~/lsp/vscode-php-debug && git pull && npm install --ignore-scripts && npm run copyfiles && npx tsc -p . --skipLibCheck && cd ~
+
+  section "Updating Phpactor..."
   cd ~/lsp/phpactor && git pull && composer install --no-dev --optimize-autoloader && cd ~
-  echo "Updating yamlls..."
+
+  section "Updating YAML Language Server..."
   cd ~/lsp/yaml-language-server && git pull && npm install && npm run build && cd ~
-  echo "Updating phpdiagls..."
+
+  section "Updating PHP Diagnostics Language Server..."
   cd ~/lsp/php-diagls && git pull && make build && cd ~
 
   # LuaLS: re-download latest
-  echo "Updating luals..."
+  section "Updating Lua Language Server..."
   local LUALS_VERSION
   LUALS_VERSION=$(github_latest LuaLS/lua-language-server)
   curl -sLo /tmp/luals.tar.gz "https://github.com/LuaLS/lua-language-server/releases/download/${LUALS_VERSION}/lua-language-server-${LUALS_VERSION}-linux-x64.tar.gz"
@@ -134,7 +146,7 @@ lsp_update() {
   rm -f /tmp/luals.tar.gz
 
   # lemminx: re-download latest
-  echo "Updating lemminx..."
+  section "Updating XML Language Server..."
   local LEMMINX_VERSION
   LEMMINX_VERSION=$(github_latest redhat-developer/vscode-xml)
   curl -sLo /tmp/lemminx.zip "https://github.com/redhat-developer/vscode-xml/releases/download/${LEMMINX_VERSION}/lemminx-linux-x86_64.zip"
@@ -143,7 +155,7 @@ lsp_update() {
   rm -f /tmp/lemminx.zip
 
   # [LSP] phpantom
-  echo "Updating phpantom..."
+  section "Updating phpantom Language Server..."
   local PHPANTOM_VERSION
   PHPANTOM_VERSION=$(github_latest PHPantom-dev/phpantom_lsp)
   curl -sLo /tmp/phpantom.tar.gz "https://github.com/PHPantom-dev/phpantom_lsp/releases/download/${PHPANTOM_VERSION}/phpantom_lsp-x86_64-unknown-linux-gnu.tar.gz"
@@ -151,15 +163,15 @@ lsp_update() {
   rm -f /tmp/phpantom.tar.gz
 
   # Node-based servers: npm update
-  echo "Updating node based LSPs..."
-  cd ~/lsp && npm update && cd ~
+  section "Updating Node-based language servers..."
+  cd ~/lsp && npm update --ignore-scripts && cd ~
 
   # DockerLS: re-install via Go
-  echo "Updating dockerls..."
+  section "Updating Docker Language Server..."
   go install github.com/docker/docker-language-server/cmd/docker-language-server@latest
 
   # Python formatters
-  echo "Updating djlint..."
+  section "Updating Python formatters (djlint, sqlfluff, lsp-devtools)..."
   pipx upgrade djlint
   echo "Updating sqlfluff..."
   pipx upgrade sqlfluff
@@ -167,14 +179,14 @@ lsp_update() {
   pipx upgrade lsp-devtools
 
   # Stylua
-  echo "Updating stylua..."
+  section "Updating Stylua..."
   cargo install stylua
 
   # [TREESITTER]
-  echo "Updating treesitter..."
+  section "Updating tree-sitter-cli..."
   cargo install --locked tree-sitter-cli
 
-  echo "✓ $PACKAGE_NAME updated successfully"
+  log_ok "$PACKAGE_NAME updated successfully"
 }
 
 main() {
