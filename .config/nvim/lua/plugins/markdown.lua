@@ -4,12 +4,11 @@
 --
 -- Active in three contexts:
 --   markdown           regular .md files
---   codecompanion      AI chat window (renders assistant responses)
 --   blink-cmp-documentation  completion documentation popups
 return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
     opts = {},
-    ft   = { "markdown", "codecompanion", "blink-cmp-documentation" },
+    ft   = { "markdown", "blink-cmp-documentation" },
   },
 }
