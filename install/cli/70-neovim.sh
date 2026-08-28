@@ -26,6 +26,7 @@ neovim_build_install() {
   git checkout "v$VERSION"
   echo "Building Neovim (this may take a while)..."
   make clean
+  rm -rf .deps
   make CMAKE_BUILD_TYPE=RelWithDebInfo
   cd build
   cpack -G DEB
