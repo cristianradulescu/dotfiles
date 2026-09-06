@@ -17,16 +17,62 @@
 -- those windows get a context-appropriate statusline instead of the default.
 return {
   "nvim-lualine/lualine.nvim",
-  event        = "VeryLazy",
+  event = "VeryLazy",
   dependencies = { "nvim-tree/nvim-web-devicons" },
-  config       = function()
+  config = function()
+    local macro_blink = { on = false, timer = nil }
+
+    local function macro_recording_component()
+      local reg = vim.fn.reg_recording()
+      if reg == "" then
+        return ""
+      end
+      return "● REC @" .. reg
+    end
+
+    local function macro_recording_color()
+      if vim.fn.reg_recording() == "" then
+        return { fg = "#665c54" } -- won't be shown anyway (component returns "")
+      end
+      if macro_blink.on then
+        return { fg = "#ff3333", bg = "#3c1f1f", bold = true }
+      else
+        return { fg = "#661111", bg = "#1e1e1e", bold = true }
+      end
+    end
+
+    local function start_blink()
+      macro_blink.timer = vim.uv.new_timer()
+      macro_blink.timer:start(
+        0,
+        400,
+        vim.schedule_wrap(function()
+          macro_blink.on = not macro_blink.on
+          require("lualine").refresh()
+        end)
+      )
+    end
+
+    local function stop_blink()
+      if macro_blink.timer then
+        macro_blink.timer:stop()
+        macro_blink.timer:close()
+        macro_blink.timer = nil
+      end
+      macro_blink.on = false
+      require("lualine").refresh()
+    end
+
+    vim.api.nvim_create_autocmd("RecordingEnter", { callback = start_blink })
+    vim.api.nvim_create_autocmd("RecordingLeave", { callback = stop_blink })
+
     require("lualine").setup({
       options = {
         -- No separator characters between components or sections
         component_separators = "",
-        section_separators   = "",
+        section_separators = "",
         -- Hide the statusline in neo-tree (it has its own winbar)
-        disabled_filetypes   = { statusline = { "neo-tree" } },
+        disabled_filetypes = { statusline = { "neo-tree" } },
       },
 
       sections = {
@@ -34,7 +80,9 @@ return {
         lualine_a = {
           {
             "mode",
-            fmt = function(str) return str:sub(1, 1) end,
+            fmt = function(str)
+              return str:sub(1, 1)
+            end,
           },
         },
 
@@ -56,7 +104,7 @@ return {
               -- Replace /home/<user> with ~ first.
               local function full_path()
                 local p = vim.fn.substitute(current_path, "\\/home\\/\\w*", "~", "")
-                local parts     = vim.fn.split(p, "/")
+                local parts = vim.fn.split(p, "/")
                 local new_parts = {}
                 for i, v in pairs(parts) do
                   new_parts[i] = (i < vim.fn.len(parts)) and vim.fn.slice(v, 0, 3) or v
@@ -67,14 +115,14 @@ return {
               return vim.fn.len(current_path) > 30 and parent_only() or full_path()
             end,
             separator = "",
-            padding   = { right = 1, left = 1 },
+            padding = { right = 1, left = 1 },
             -- Inherit the foreground colour from the Normal highlight group so
             -- the component blends with the colourscheme automatically.
-            color     = require("user.functions").fg("Normal"),
+            color = require("user.functions").fg("Normal"),
           },
           {
             "filename",
-            path    = 1,  -- show path relative to cwd
+            path = 1, -- show path relative to cwd
             padding = { right = 0, left = 0 },
           },
         },
@@ -114,14 +162,17 @@ return {
             end,
           },
           {
-            "branch", fmt = function(str)
+            "branch",
+            fmt = function(str)
               local max_length = 17
               return #str > max_length and str:sub(1, max_length) .. "..." or str
-            end
+            end,
           },
         },
 
-        lualine_y = {},
+        lualine_y = {
+          { macro_recording_component, color = macro_recording_color },
+        },
         lualine_z = {},
       },
 
