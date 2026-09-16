@@ -1,12 +1,15 @@
 theme = Catppuccin Mocha
 
-# Cursor
-cursor-style = block
-cursor-style-blink = false
-shell-integration-features = no-cursor
-
 env = TERM=xterm-256color
 
+# Window
+maximize = true
+gtk-titlebar-hide-when-maximized = false
+gtk-wide-tabs = false
+
+# Cursor
+cursor-style = bar
+cursor-style-blink = true
 shell-integration-features = no-cursor,title
 
 link-url = true
@@ -14,6 +17,7 @@ link-url = true
 font-family = "JetBrainsMonoNL Nerd Font"
 font-size = 12
 adjust-cell-height = 4
+bold-color = bright
 
 mouse-hide-while-typing = true
 copy-on-select = true
@@ -22,3 +26,11 @@ scrollback-limit = 50000
 
 window-vsync = true
 
+# Keybindings
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+shift+q=quit
+keybind = shift+page_up=scroll_page_up
+keybind = shift+page_down=scroll_page_down
+keybind = ctrl+equal=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+0=reset_font_size
