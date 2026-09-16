@@ -108,7 +108,8 @@ lsp_install() {
   # [FORMATTER] djlint, sqlfluff, lsp-devtools
   section "Installing Python formatters (djlint, sqlfluff, lsp-devtools)..."
   pipx install --force djlint
-  pipx install --force sqlfluff
+  # pipx install --force sqlfluff
+  pipx install --force git+https://github.com/cristianradulescu/sqlfluff.git
   pipx install --force lsp-devtools
 
   # [FORMATTER] Stylua
@@ -174,7 +175,8 @@ lsp_update() {
   section "Updating Python formatters (djlint, sqlfluff, lsp-devtools)..."
   pipx upgrade djlint
   echo "Updating sqlfluff..."
-  pipx upgrade sqlfluff
+  #pipx upgrade sqlfluff
+  pipx reinstall sqlfluff
   echo "Updating lsp-devtool..."
   pipx upgrade lsp-devtools
 

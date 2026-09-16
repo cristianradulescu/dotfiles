@@ -1,0 +1,32 @@
+[sqlfluff]
+dialect = mysql
+templater = jinja
+max_line_length = 100
+processes = 0
+ignore = parsing,templating
+exclude_rules = AL01,AL05,AM05,ST09
+
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 2
+
+[sqlfluff:layout:type:comma]
+line_position = trailing
+
+[sqlfluff:layout:type:binary_operator]
+line_position = leading
+
+[sqlfluff:layout:type:comparison_operator]
+line_position = leading
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = upper
+
+[sqlfluff:rules:capitalisation.identifiers]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.literals]
+capitalisation_policy = upper
