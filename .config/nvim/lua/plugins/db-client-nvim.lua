@@ -14,6 +14,7 @@
 return {
   "cristianradulescu/abcql.nvim",
   dependencies = { "nvim-lua/plenary.nvim" },
+  build = "make build",
   config = function()
     require("abcql").setup()
 
