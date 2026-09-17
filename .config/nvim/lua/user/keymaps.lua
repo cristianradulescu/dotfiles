@@ -20,11 +20,7 @@
 --   Search
 --     <Esc>                clear search highlight and return to normal mode
 --
---   Terminal
---     <leader>th           open a horizontal terminal split
---     <leader>tv           open a vertical terminal split
---     <leader>tt           open a terminal in a new tab
---     <Esc>                exit terminal insert mode (maps to <C-\><C-n>)
+--   Terminal keymaps live in terminal.lua
 
 -- Prevent <Space> from moving the cursor when used as the leader key
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
@@ -78,22 +74,3 @@ vim.keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv",        { desc = "Move selection
 -- highlighted on screen.
 vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear search highlight" })
 
--- ============================================================================
--- Terminal
--- ============================================================================
-
--- Exit terminal insert mode with <Esc> instead of the default <C-\><C-n>,
--- which is awkward to type.
-vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-
--- Navigate from terminal mode to other splits without needing to exit insert
--- mode first — each mapping exits terminal mode then moves to the split.
-vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Terminal: go to left window" })
-vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j", { desc = "Terminal: go to lower window" })
-vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", { desc = "Terminal: go to upper window" })
-vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", { desc = "Terminal: go to right window" })
-
--- Open terminals in different layouts
-vim.keymap.set("n", "<leader>th", ":split | terminal<CR>",  { desc = "Terminal in horizontal split" })
-vim.keymap.set("n", "<leader>tv", ":vsplit | terminal<CR>", { desc = "Terminal in vertical split" })
-vim.keymap.set("n", "<leader>tt", ":tabnew | terminal<CR>", { desc = "Terminal in new tab" })

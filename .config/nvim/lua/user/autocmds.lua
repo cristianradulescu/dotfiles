@@ -21,7 +21,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     local lines = vim.api.nvim_buf_get_lines(buf, 0, 32, false)
 
     local has_tabs = false
-    local space_counts = {}  -- leading-space lengths from each indented line
+    local space_counts = {} -- leading-space lengths from each indented line
 
     for _, line in ipairs(lines) do
       -- A tab anywhere in the leading whitespace → treat the file as tab-indented
@@ -41,7 +41,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     if has_tabs then
       -- Tab-indented file: disable expandtab and let shiftwidth=0 defer to tabstop
       vim.bo[buf].expandtab = false
-      vim.bo[buf].shiftwidth = 0  -- 0 means "use tabstop value"
+      vim.bo[buf].shiftwidth = 0 -- 0 means "use tabstop value"
       return
     end
 
@@ -64,7 +64,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     for i = 2, #space_counts do
       indent_width = gcd(indent_width, space_counts[i])
       if indent_width == 1 then
-        break  -- GCD can't go below 1; stop early
+        break -- GCD can't go below 1; stop early
       end
     end
 
@@ -76,10 +76,10 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     -- Cap at 8 to guard against pathological files with huge indent widths
     indent_width = math.min(indent_width, 8)
 
-    vim.bo[buf].expandtab    = true
-    vim.bo[buf].shiftwidth   = indent_width
-    vim.bo[buf].tabstop      = indent_width
-    vim.bo[buf].softtabstop  = indent_width
+    vim.bo[buf].expandtab = true
+    vim.bo[buf].shiftwidth = indent_width
+    vim.bo[buf].tabstop = indent_width
+    vim.bo[buf].softtabstop = indent_width
   end,
 })
 
@@ -168,7 +168,7 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
   group = session_group,
   desc = "Save session on exit",
   callback = function()
-    local session_dir  = vim.fn.getcwd() .. "/.nvim"
+    local session_dir = vim.fn.getcwd() .. "/.nvim"
     local session_file = session_dir .. "/session.vim"
 
     if vim.fn.isdirectory(session_dir) == 0 then
@@ -185,7 +185,7 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 vim.api.nvim_create_autocmd("VimEnter", {
   group = session_group,
   desc = "Restore session on start",
-  nested = true,  -- allow other autocmds (e.g. LSP attach) to fire during source
+  nested = true, -- allow other autocmds (e.g. LSP attach) to fire during source
   callback = function()
     local session_file = vim.fn.getcwd() .. "/.nvim/session.vim"
 
@@ -262,29 +262,5 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = { "json", "jsonc", "json5" },
   callback = function()
     vim.opt_local.conceallevel = 0
-  end,
-})
-
--- ============================================================================
--- Terminal — quality-of-life tweaks for the built-in terminal
--- ============================================================================
-
--- Enter insert mode immediately when focusing a terminal buffer so keystrokes
--- are sent to the shell rather than treated as Normal-mode commands.
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "term://*",
-  callback = function()
-    vim.cmd("startinsert")
-  end,
-})
-
--- Hide line numbers and the sign column in terminal buffers; they have no
--- meaning there and just take up horizontal space.
-vim.api.nvim_create_autocmd("TermOpen", {
-  pattern = "*",
-  callback = function()
-    vim.opt_local.number         = false
-    vim.opt_local.relativenumber = false
-    vim.opt_local.signcolumn     = "no"
   end,
 })

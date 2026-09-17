@@ -9,8 +9,10 @@
 --   4. lsp       — enables LSP servers and sets up LspAttach autocmds; runs
 --                  after plugins so blink.cmp capabilities are already registered
 --   5. keymaps   — base keymaps that don't depend on any plugin being loaded
+--   6. terminal  — built-in terminal autocmds, keymaps, and helpers
 require("user.autocmds")
 require("user.options")
 require("user.lazy")
 require("user.lsp")
 require("user.keymaps")
+require("user.terminal")
