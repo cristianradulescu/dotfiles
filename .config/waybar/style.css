@@ -37,54 +37,123 @@
 
 /* --- The Bar Itself --- */
 window#waybar {
-    background-color: shade(@base, 0.9);
+    background: transparent;
     color: @text;
-    transition-property: background-color;
-    transition-duration: .5s;
 }
 
-/* --- All Modules --- */
+tooltip {
+    background-color: @base;
+    border: 2px solid @lavender;
+    border-radius: 10px;
+}
+
+/* --- All Modules (pills) --- */
 #workspaces,
+#mode,
+#window,
 #clock,
-#battery,
+#custom-notification,
+#idle_inhibitor,
+#tray,
+#bluetooth,
 #network,
 #pulseaudio,
-#tray,
-#sway-language,
-#sway-mode {
-    padding: 5px 10px;
-    margin: 5px 0px; /* 5px top/bottom margin, 0px left/right */
-}
-
-/* --- Specific Modules --- */
-#workspaces button {
-    color: @lavender;
-    padding: 0 5px;
-}
-
-#workspaces button.focused {
-    color: @blue;
-    background-color: @surface0;
+#power-profiles-daemon,
+#battery {
+    background-color: alpha(@base, 0.9);
+    border: 2px solid @surface0;
     border-radius: 10px;
+    padding: 2px 12px;
+    margin: 2px 0;
+}
+
+/* --- Workspaces --- */
+#workspaces {
+    padding: 2px 4px;
+}
+
+#workspaces button {
+    color: @overlay1;
+    padding: 0 6px;
+    border-radius: 8px;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 #workspaces button:hover {
-    background-color: @surface1;
-    border-radius: 10px;
+    background: @surface1;
+    color: @text;
 }
 
-#clock {
-    background-color: @surface0;
-    border-radius: 10px;
+#workspaces button.visible {
+    color: @text;
+}
+
+#workspaces button.focused {
+    background-color: @lavender;
+    color: @crust;
+}
+
+#workspaces button.urgent {
+    background-color: @red;
+    color: @crust;
+}
+
+/* --- Specific Modules --- */
+#mode {
+    background-color: @peach;
+    border-color: @peach;
+    color: @crust;
     font-weight: bold;
 }
 
-#battery.charging, #battery.plugged {
-    color: @green;
+#clock {
+    color: @lavender;
+    font-weight: bold;
 }
 
-#battery.warning:not(.charging) {
+#window {
+    color: @subtext1;
+}
+
+window#waybar.empty #window {
+    background: transparent;
+    border-color: transparent;
+}
+
+#custom-notification   { color: @text; }
+#idle_inhibitor        { color: @overlay1; }
+#network               { color: @sapphire; }
+#bluetooth             { color: @blue; }
+#pulseaudio            { color: @mauve; }
+#power-profiles-daemon { color: @teal; }
+#battery               { color: @green; }
+
+#network.disconnected,
+#bluetooth.off,
+#bluetooth.disabled {
     color: @red;
+}
+
+#custom-notification.dnd {
+    color: @red;
+}
+
+#idle_inhibitor.activated {
+    color: @crust;
+    background-color: @yellow;
+    border-color: @yellow;
+}
+
+#pulseaudio.muted {
+    color: @overlay1;
+}
+
+#power-profiles-daemon.performance { color: @peach; }
+#power-profiles-daemon.power-saver { color: @green; }
+
+#battery.warning:not(.charging) {
+    color: @peach;
 }
 
 #battery.critical:not(.charging) {
@@ -96,21 +165,9 @@ window#waybar {
     animation-direction: alternate;
 }
 
-#network.disconnected {
-    color: @red;
+@keyframes blink {
+    to {
+        background-color: @red;
+        color: @crust;
+    }
 }
-
-#pulseaudio.muted {
-    color: @subtext0;
-}
-
-#bluetooth.off {
-    color: @red;
-}
-
-#tray {
-    background-color: @surface0;
-    margin-right: 5px;
-    border-radius: 10px;
-}
-

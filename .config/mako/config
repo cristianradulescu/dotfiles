@@ -1,20 +1,26 @@
 anchor=top-right
-default-timeout=1000
+default-timeout=5000
 width=420
 outer-margin=20
 padding=10,15
 border-size=2
+border-radius=10
 max-icon-size=32
 font=JetBrainsMono Nerd Font 14px
 text-color=#cdd6f4
 border-color=#b4befe
 background-color=#1e1e2e
+progress-color=over #b4befe55
 
 [mode=do-not-disturb]
 invisible=true
 
-[mode=do-not-disturb app-name=notify-send]
+[mode=do-not-disturb app-name=osd]
 invisible=false
+
+[urgency=low]
+border-color=#45475a
 
 [urgency=critical]
 default-timeout=0
+border-color=#fab387

@@ -1,15 +1,23 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 37,
+  "height": 36, // pills are 32px; 2px slack top/bottom so borders aren't clipped at fractional scales
+  "margin-top": 4,
+  "margin-left": 10, // matches sway gaps outer + inner
+  "margin-right": 10,
+  "spacing": 6,
   "modules-left": [
-    "sway/workspaces"
+    "sway/workspaces",
+    "sway/mode",
+    "sway/window"
   ],
   "modules-center": [
     "clock"
   ],
   "modules-right": [
     "tray",
+    "custom/notification",
+    "idle_inhibitor",
     "bluetooth",
     "network",
     "pulseaudio",
@@ -20,9 +28,32 @@
     "format": "{:%Y-%m-%d  %H:%M}",
     "tooltip-format": "<tt>{calendar}</tt>"
   },
+  "sway/window": {
+    "format": "{title}",
+    "max-length": 60
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "󰅶",
+      "deactivated": "󰾪"
+    },
+    "tooltip-format-activated": "Idle inhibitor: on (no auto-lock)",
+    "tooltip-format-deactivated": "Idle inhibitor: off"
+  },
+  "custom/notification": {
+    "exec": "makoctl mode | grep -q do-not-disturb && echo '{\"text\": \"󰂛\", \"class\": \"dnd\", \"tooltip\": \"Do not disturb: on\"}' || echo '{\"text\": \"󰂚\", \"tooltip\": \"Do not disturb: off\"}'",
+    "return-type": "json",
+    "interval": "once",
+    "signal": 8,
+    "on-click": "makoctl mode -t do-not-disturb && pkill -RTMIN+8 waybar"
+  },
   "sway/workspaces": {
     "disable-scroll": true,
-    "all-outputs": true
+    "all-outputs": true,
+    "persistent-workspaces": {
+      "*": 5
+    }
   },
   "battery": {
     "states": {

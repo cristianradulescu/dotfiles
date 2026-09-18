@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+#
+# Adjust volume/brightness and show a mako popup with a progress bar.
+# Popups share a sync tag so each key press replaces the previous one.
+#
+# Usage: osd-notify volume-up|volume-down|volume-mute|mic-mute|brightness-up|brightness-down
+
+notify() { # <title> [value]
+  local args=(-a osd -t 1000 -h string:x-canonical-private-synchronous:osd)
+  [[ -n "${2:-}" ]] && args+=(-h "int:value:$2")
+  notify-send "${args[@]}" "$1"
+}
+
+show_volume() {
+  local out vol icon
+  out=$(wpctl get-volume @DEFAULT_AUDIO_SINK@)
+  vol=$(awk '{printf "%d", $2 * 100 + 0.5}' <<< "$out")
+  if [[ "$out" == *MUTED* ]]; then
+    notify "󰝟  Muted" "$vol"
+    return
+  fi
+  if (( vol < 34 )); then icon="󰕿"; elif (( vol < 67 )); then icon="󰖀"; else icon="󰕾"; fi
+  notify "$icon  Volume $vol%" "$vol"
+}
+
+show_mic() {
+  if [[ "$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)" == *MUTED* ]]; then
+    notify "󰍭  Microphone muted"
+  else
+    notify "󰍬  Microphone on"
+  fi
+}
+
+show_brightness() {
+  local val icon
+  val=$(brightnessctl -m | awk -F, '{gsub("%", "", $4); print $4}')
+  if (( val < 34 )); then icon="󰃞"; elif (( val < 67 )); then icon="󰃟"; else icon="󰃠"; fi
+  notify "$icon  Brightness $val%" "$val"
+}
+
+case "${1:-}" in
+  volume-up)
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
+    wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+
+    show_volume
+    ;;
+  volume-down)
+    wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+    show_volume
+    ;;
+  volume-mute)
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+    show_volume
+    ;;
+  mic-mute)
+    wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+    show_mic
+    ;;
+  brightness-up)
+    brightnessctl -q set 5%+
+    show_brightness
+    ;;
+  brightness-down)
+    brightnessctl -q set 5%-
+    show_brightness
+    ;;
+  *)
+    echo "Usage: $(basename "$0") volume-up|volume-down|volume-mute|mic-mute|brightness-up|brightness-down" >&2
+    exit 1
+    ;;
+esac

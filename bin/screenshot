@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# Take a screenshot into a temp file and open it in grabnotate for
+# annotation. Copy or save from grabnotate; the temp file is removed
+# once grabnotate has loaded it.
+#
+# Usage: screenshot full|area
+#   full  entire screen
+#   area  selected area
+
+grabnotate=~/.local/bin/grabnotate
+# Catppuccin Mocha selection: dimmed background, lavender border
+slurp_args=(-d -b 1e1e2e88 -c b4befeff -s b4befe22 -w 2)
+
+if [[ ! -x "$grabnotate" ]]; then
+  notify-send -a osd -u critical "Screenshot" "grabnotate is not installed"
+  exit 1
+fi
+
+grim_args=()
+case "${1:-}" in
+  full)
+    ;;
+  area)
+    geometry=$(slurp "${slurp_args[@]}") || exit 0 # selection cancelled
+    grim_args=(-g "$geometry")
+    ;;
+  *)
+    echo "Usage: $(basename "$0") full|area" >&2
+    exit 1
+    ;;
+esac
+
+file=$(mktemp -p /tmp --suffix=.png screenshot-XXXXXX)
+trap 'rm -f "$file"' EXIT
+
+grim "${grim_args[@]}" "$file" || exit 1
+"$grabnotate" --file "$file"
