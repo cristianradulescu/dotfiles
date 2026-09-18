@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 
-declare -A TIMEZONES
+# Ordered list of "LABEL=TZ" entries shown in the tmux status bar
+zones=("RO=Europe/Bucharest")
 
-TIMEZONES["RO"]="Europe/Bucharest"
-
-if [ -f $HOME/.zshrc_work ]; then
-  TIMEZONES["SW"]="Europe/Zurich"
-  TIMEZONES["UTC"]="UTC"
+if [ -f "$HOME/.zshrc_work" ]; then
+  zones+=("SW=Europe/Zurich" "UTC=UTC")
 fi
 
-echo -n $(TZ="UTC" date +%Y-%m-%d)" "
-for TIMEZONE_COUNTRY in "${!TIMEZONES[@]}"; do
-  echo -n "["$(TZ="${TIMEZONES[$TIMEZONE_COUNTRY]}" date +%H:%M)" $TIMEZONE_COUNTRY] "
+printf '%s ' "$(TZ=UTC date +%F)"
+for z in "${zones[@]}"; do
+  printf '[%s %s] ' "$(TZ="${z#*=}" date +%H:%M)" "${z%%=*}"
 done
