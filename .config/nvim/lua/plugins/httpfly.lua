@@ -4,7 +4,4 @@
 -- Only loaded for http filetypes (see ftdetect/http.lua).
 return {
   "cristianradulescu/httpfly.nvim",
-  opts = {
-    output_style = "markdown",
-  },
 }
