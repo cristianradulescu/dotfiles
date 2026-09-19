@@ -135,7 +135,15 @@ window#waybar.empty #window {
     color: @red;
 }
 
-#custom-notification.dnd {
+#custom-notification.notification,
+#custom-notification.inhibited-notification {
+    color: @lavender;
+}
+
+#custom-notification.dnd-none,
+#custom-notification.dnd-notification,
+#custom-notification.dnd-inhibited-none,
+#custom-notification.dnd-inhibited-notification {
     color: @red;
 }
 

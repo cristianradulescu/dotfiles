@@ -153,7 +153,7 @@ bindgesture swipe:3:left workspace next
     bindsym $mod+Return exec $term
 
     # Kill focused window
-    bindsym $mod+Shift+q kill
+    bindsym $mod+q kill
 
     # Start your launcher
     bindsym $mod+d exec $menu
@@ -339,6 +339,11 @@ include /etc/sway/config.d/*
 # [Ubuntu 24.04] Import env into systemd user and DBus so apps inherit variables
 # exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP SWAYSOCK
 # exec_always env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP SWAYSOCK
+
+# Notifications (swaync)
+exec swaync
+bindsym $mod+n exec swaync-client -t -sw
+bindsym $mod+Shift+n exec swaync-client -d -sw
 
 # Clipboard history (cliphist + wl-clipboard)
 bindsym $mod+Shift+v exec cliphist list | fuzzel --dmenu --prompt "󰅌  " --width 80 --lines 15 | cliphist decode | wl-copy

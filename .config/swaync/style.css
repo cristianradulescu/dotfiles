@@ -1,0 +1,130 @@
+/* Catppuccin Mocha overrides, matching waybar/fuzzel (swaync loads /etc/xdg/swaync/style.css first) */
+
+:root {
+  --cc-bg: rgba(30, 30, 46, 0.95);                /* base */
+  --noti-border-color: #b4befe;                   /* lavender */
+  --noti-bg: 30, 30, 46;                          /* base (rgb triplet) */
+  --noti-bg-alpha: 0.95;
+  --noti-bg-darker: #181825;                      /* mantle */
+  --noti-bg-hover: #313244;                       /* surface0 */
+  --noti-bg-focus: rgba(49, 50, 68, 0.6);         /* surface0 */
+  --noti-close-bg: #313244;                       /* surface0 */
+  --noti-close-bg-hover: #45475a;                 /* surface1 */
+  --text-color: #cdd6f4;                          /* text */
+  --text-color-disabled: #6c7086;                 /* overlay0 */
+  --bg-selected: #b4befe;                         /* lavender */
+  --notification-icon-size: 40px;
+  --notification-group-icon-size: 24px;
+  --border: 2px solid var(--noti-border-color);
+  --border-radius: 10px;
+  --notification-shadow: none;
+  --font-size-body: 13px;
+  --font-size-summary: 14px;
+}
+
+* {
+  font-family: "JetBrainsMono Nerd Font";
+}
+
+/* --- Popups & list entries --- */
+.notification-row .notification-background {
+  padding: 4px 0;
+}
+
+.notification-row .notification-background .notification.low {
+  border-color: #45475a;                          /* surface1 */
+}
+
+.notification-row .notification-background .notification.critical {
+  border-color: #fab387;                          /* peach */
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .summary {
+  font-weight: bold;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .time,
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .body {
+  color: #a6adc8;                                 /* subtext0 */
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .time {
+  font-size: var(--font-size-body);
+}
+
+/* OSD (bin/osd-notify) progress bar */
+progressbar trough {
+  background: #313244;                            /* surface0 */
+  border-radius: 4px;
+  min-height: 6px;
+}
+
+progressbar progress {
+  background: #b4befe;                            /* lavender */
+  border-radius: 4px;
+  min-height: 6px;
+}
+
+.notification-row .notification-background .notification .notification-action > button {
+  background: #313244;
+  color: var(--text-color);
+  border-radius: 8px;
+}
+
+.notification-row .notification-background .notification .notification-action > button:hover {
+  background: #45475a;
+}
+
+.floating-notifications .notification-row .notification-background {
+  padding: 4px 10px;
+}
+
+/* --- Control center --- */
+.control-center {
+  border: 2px solid #b4befe;                      /* lavender */
+  padding: 4px 8px;
+}
+
+.control-center .notification-row .notification-background .notification {
+  border-color: #313244;                          /* surface0, keep the panel calm */
+}
+
+.control-center .notification-row .notification-background .notification.critical {
+  border-color: #fab387;
+}
+
+.widget-title > label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #b4befe;
+}
+
+.widget-title > button {
+  background: #313244;
+  color: var(--text-color);
+  padding: 2px 10px;
+}
+
+.widget-title > button:hover {
+  background: #45475a;
+}
+
+.widget-dnd label {
+  font-size: 1rem;
+}
+
+.widget-dnd switch {
+  background: #313244;
+}
+
+.widget-dnd switch:checked {
+  background: #f38ba8;                            /* red, same as waybar's dnd icon */
+}
+
+.widget-dnd switch slider {
+  background: #cdd6f4;
+}
+
+.widget-mpris .widget-mpris-player {
+  border-radius: var(--border-radius);
+}

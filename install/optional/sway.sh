@@ -8,7 +8,7 @@ sway_install() {
   echo "Installing $PACKAGE_NAME..."
   
   sudo apt install -y sway swaybg swayidle swaylock \
-    waybar fuzzel mako-notifier grim slurp cliphist brightnessctl
+    waybar fuzzel sway-notification-center grim slurp cliphist brightnessctl
 
   sudo usermod -aG input,video $USER
   
@@ -22,8 +22,11 @@ sway_install() {
   ln -sf ~/dotfiles/.config/waybar/config.jsonc ~/.config/waybar/config.jsonc
   ln -sf ~/dotfiles/.config/waybar/style.css ~/.config/waybar/style.css
   
-  mkdir -p ~/.config/mako
-  ln -sf ~/dotfiles/.config/mako/config ~/.config/mako/config
+  # swaync replaces mako; both claim org.freedesktop.Notifications over D-Bus
+  sudo apt remove -y mako-notifier 2>/dev/null || true
+  mkdir -p ~/.config/swaync
+  ln -sf ~/dotfiles/.config/swaync/config.json ~/.config/swaync/config.json
+  ln -sf ~/dotfiles/.config/swaync/style.css ~/.config/swaync/style.css
   
   mkdir -p ~/.config/fuzzel
   ln -sf ~/dotfiles/.config/fuzzel/fuzzel.ini ~/.config/fuzzel/fuzzel.ini

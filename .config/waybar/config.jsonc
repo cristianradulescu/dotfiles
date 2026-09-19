@@ -43,11 +43,23 @@
     "tooltip-format-deactivated": "Idle inhibitor: off"
   },
   "custom/notification": {
-    "exec": "makoctl mode | grep -q do-not-disturb && echo '{\"text\": \"󰂛\", \"class\": \"dnd\", \"tooltip\": \"Do not disturb: on\"}' || echo '{\"text\": \"󰂚\", \"tooltip\": \"Do not disturb: off\"}'",
+    "exec": "swaync-client -swb",
     "return-type": "json",
-    "interval": "once",
-    "signal": 8,
-    "on-click": "makoctl mode -t do-not-disturb && pkill -RTMIN+8 waybar"
+    "format": "{icon}",
+    "format-icons": {
+      "none": "󰂚",
+      "notification": "󱅫",
+      "dnd-none": "󰂛",
+      "dnd-notification": "󰂛",
+      "inhibited-none": "󰂚",
+      "inhibited-notification": "󱅫",
+      "dnd-inhibited-none": "󰂛",
+      "dnd-inhibited-notification": "󰂛"
+    },
+    "tooltip": false,
+    "escape": true,
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw"
   },
   "sway/workspaces": {
     "disable-scroll": true,

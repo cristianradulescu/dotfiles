@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 #
-# Adjust volume/brightness and show a mako popup with a progress bar.
+# Adjust volume/brightness and show a notification popup with a progress bar.
 # Popups share a sync tag so each key press replaces the previous one.
 #
 # Usage: osd-notify volume-up|volume-down|volume-mute|mic-mute|brightness-up|brightness-down
 
 notify() { # <title> [value]
-  local args=(-a osd -t 1000 -h string:x-canonical-private-synchronous:osd)
+  local args=(-a osd -t 1000 -h string:x-canonical-private-synchronous:osd
+    -h boolean:SWAYNC_BYPASS_DND:true -h boolean:transient:true)
   [[ -n "${2:-}" ]] && args+=(-h "int:value:$2")
   notify-send "${args[@]}" "$1"
 }
