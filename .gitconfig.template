@@ -26,7 +26,7 @@
   # On Linux, keep LF line endings in the repository (don't convert to CRLF)
   autocrlf = input
   # Global gitignore file for files you want to ignore in all repositories
-  excludesfile = /home/cristianradulescu/.gitignore
+  excludesfile = /home/cristian/.gitignore
 
 [user]
   email = 
@@ -118,3 +118,10 @@
   rbi = rebase -i
   rbc = rebase --continue
   rba = rebase --abort
+
+[init]
+  defaultBranch = main
+
+# Conditional include for repositories in a specific directory
+#[includeIf "gitdir:<path_to_directory>"]
+#  path = ~/.gitconfig-<custom_config_file_suffix>

@@ -1,12 +1,21 @@
-# vim:ft=sh ts=2 sw=2 sts=2
-alias ls='ls --color=always'
-alias ll='ls -alh --color=always'
+# vim:ft=zsh ts=2 sw=2 sts=2
 
+# use colors by default
+alias ls='ls --color=always'
 alias grep='grep --color'
 alias ip='ip -c'
 
-# Docker
+# ls all files and dirs, with details and human readable sizes
+alias ll='ls -alh'
+# ls sort by size
+alias lls='ls -alhS'
+# ls sort by modification time
+alias llt='ls -alht'
+
 alias dc='docker compose'
 
-# Neovim
 alias nvimconfig='cd ~/.config/nvim && nvim'
+
+# History - show the whole history instead of only the last 16 entries
+alias history='fc -l 1'
+

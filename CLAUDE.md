@@ -58,5 +58,5 @@ There's no unit test framework — validation is either `bash -n <script>` synta
 - `.config/` — app configs symlinked into `~/.config` (nvim, tmux, waybar, sway, zed, wezterm, etc.). `.config/nvim` is the largest (Lua-based Neovim config under `lua/user/`, `lua/plugins/`, `lsp/`).
 - `install/cli/`, `install/gui/`, `install/optional/` — one script per installable package, see contract above.
 - `dev-setup/` — auxiliary dev tooling not tied to the installer framework (PHP Makefile, phpactor tweaks, a local reverse-proxy setup).
-- `zsh/themes/cr.zsh-theme` — custom oh-my-zsh theme, loaded via `.zshrc`'s `ZSH_CUSTOM`.
+- `.zshrc` — standalone zsh config (no plugin framework): history, completion, key bindings, terminal title and the custom prompt are all defined inline; plugins (autosuggestions, syntax highlighting) come from apt. Aliases live in `.aliases`, shell functions in `.functions`.
 - `bin/` — scripts added to `$PATH` by `.zshrc`, including the `dotfiles` CLI itself.
