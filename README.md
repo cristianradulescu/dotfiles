@@ -46,7 +46,7 @@ Install packages individually without running the full installer:
 ```bash
 cd ~/dotfiles
 source install/cli/60-lazygit.sh
-source install/gui/30-wezterm.sh
+source install/gui/30-alacritty.sh
 ```
 
 ## Desktop Environments
