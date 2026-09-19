@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+"""Waybar clock: emits JSON with the time and a tooltip holding the current
+month's calendar plus upcoming Romanian public holidays.
+
+Holidays come from the Nager.Date API, fetched once per year and cached under
+$XDG_CACHE_HOME/waybar-clock."""
+import calendar
+import json
+import os
+import urllib.request
+from datetime import date, datetime
+from pathlib import Path
+
+API = "https://date.nager.at/api/v3/PublicHolidays/{year}/RO"
+CACHE_DIR = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "waybar-clock"
+UPCOMING = 6
+
+
+def holidays(year):
+    cache = CACHE_DIR / f"holidays-RO-{year}.json"
+    if not cache.exists():
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        with urllib.request.urlopen(API.format(year=year), timeout=5) as response:
+            cache.write_bytes(response.read())
+    return {date.fromisoformat(h["date"]): h["localName"] for h in json.loads(cache.read_text())}
+
+
+def month_calendar(today, marked):
+    lines = [f"<b>{today.strftime('%B %Y').center(20)}</b>", "Mo Tu We Th Fr Sa Su"]
+    for week in calendar.Calendar(0).monthdayscalendar(today.year, today.month):
+        cells = []
+        for day in week:
+            if not day:
+                cells.append("  ")
+                continue
+            text = f"{day:2d}"
+            if day == today.day:
+                text = f"<span color='#1e1e2e' bgcolor='#b4befe'><b>{text}</b></span>"
+            elif date(today.year, today.month, day) in marked:
+                text = f"<span color='#f38ba8'><b>{text}</b></span>"
+            cells.append(text)
+        lines.append(" ".join(cells))
+    return "\n".join(lines)
+
+
+def main():
+    now = datetime.now()
+    today = now.date()
+    all_holidays = holidays(today.year)
+    upcoming = sorted((d, n) for d, n in all_holidays.items() if d >= today)[:UPCOMING]
+
+    lines = [f"<b>{now.astimezone().strftime('%A, %d %B %Y (UTC%:z)')}</b>", "", month_calendar(today, all_holidays), "", "<b>Upcoming holidays</b>"]
+    for d, name in upcoming:
+        delta = (d - today).days
+        when = "today" if delta == 0 else "tomorrow" if delta == 1 else f"in {delta}d"
+        lines.append(f"{d.strftime('%a %d %b')}  {name} <i>({when})</i>")
+
+    print(json.dumps({
+        "text": now.strftime("%Y-%m-%d  %H:%M"),
+        "tooltip": "<tt>" + "\n".join(lines).replace("&", "&amp;") + "</tt>",
+    }))
+
+
+main()

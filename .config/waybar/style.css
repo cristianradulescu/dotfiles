@@ -51,7 +51,7 @@ tooltip {
 #workspaces,
 #mode,
 #window,
-#clock,
+#custom-clock,
 #custom-notification,
 #idle_inhibitor,
 #tray,
@@ -107,7 +107,7 @@ tooltip {
     font-weight: bold;
 }
 
-#clock {
+#custom-clock {
     color: @lavender;
     font-weight: bold;
 }

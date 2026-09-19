@@ -12,7 +12,7 @@
     "sway/window"
   ],
   "modules-center": [
-    "clock"
+    "custom/clock"
   ],
   "modules-right": [
     "tray",
@@ -24,9 +24,10 @@
     "power-profiles-daemon",
     "battery"
   ],
-  "clock": {
-    "format": "{:%Y-%m-%d  %H:%M}",
-    "tooltip-format": "<tt>{calendar}</tt>"
+  "custom/clock": {
+    "exec": "~/dotfiles/bin/waybar-clock",
+    "return-type": "json",
+    "interval": 30
   },
   "sway/window": {
     "format": "{title}",
@@ -76,7 +77,7 @@
     "format-wifi": "",
     "format-ethernet": "󰈀",
     "format-disconnected": "󰖪",
-    "tooltip-format": "Name:\t{essid}\nDev:\t{ifname}\nIP:\t{ipaddr}\nGw:\t{gwaddr}\nPow:\t{signalStrength}%"
+    "tooltip-format": "<b>{essid}</b>\n\nDev:\t{ifname}\nIP:\t{ipaddr}\nGw:\t{gwaddr}\nPow:\t{signalStrengthApp} ({signalStrength})%"
   },
   "pulseaudio": {
     "format": "{icon} {volume}% {format_source}",
