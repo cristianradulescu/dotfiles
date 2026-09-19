@@ -4,7 +4,7 @@
 # annotation. Copy or save from grabnotate; the temp file is removed
 # once grabnotate has loaded it.
 #
-# Usage: screenshot full|area
+# Usage: sway-screenshot full|area
 #   full  entire screen
 #   area  selected area
 

@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# Keyboard-driven power menu for sway, shown via fuzzel.
+# The first entry (Lock) is the least destructive, so pressing Enter
+# by accident is harmless; Esc cancels. Reboot and shutdown ask for
+# confirmation, with "No" preselected.
+
+lock_image=~/dotfiles/backgrounds/waves.png
+
+# Nerd Font (Material Design) icons, as escapes so they survive editing
+icon_prompt=$'\U000F0906'   # power-standby
+icon_lock=$'\U000F033E'     # lock
+icon_logout=$'\U000F0343'   # logout
+icon_suspend=$'\U000F0904'  # power-sleep
+icon_reboot=$'\U000F0709'   # restart
+icon_shutdown=$'\U000F0425' # power
+icon_no=$'\U000F0156'       # close
+icon_yes=$'\U000F012C'      # check
+
+menu() {
+  local prompt=$1 lines=$2
+  fuzzel --dmenu --prompt "$prompt  " --lines "$lines" --width 24
+}
+
+confirm() {
+  local action=$1 icon=$2
+  printf '%s\n' "$icon_no  No" "$icon_yes  Yes, $action" |
+    menu "$icon $action?" 2 | grep -q 'Yes'
+}
+
+choice=$(printf '%s\n' \
+  "$icon_lock  Lock" \
+  "$icon_logout  Logout" \
+  "$icon_suspend  Suspend" \
+  "$icon_reboot  Reboot" \
+  "$icon_shutdown  Shutdown" |
+  menu "$icon_prompt" 5) || exit 0 # cancelled
+
+case "$choice" in
+  *Lock) swaylock -f --indicator-idle-visible --image "$lock_image" ;;
+  *Logout) swaymsg exit ;;
+  *Suspend) systemctl suspend ;;
+  *Reboot) confirm reboot "$icon_reboot" && systemctl reboot ;;
+  *Shutdown) confirm shutdown "$icon_shutdown" && systemctl poweroff ;;
+esac

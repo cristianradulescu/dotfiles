@@ -168,8 +168,8 @@ bindgesture swipe:3:left workspace next
     # Reload the configuration file
     bindsym $mod+Shift+c reload
 
-    # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    # Power menu: lock, logout, suspend, reboot, shutdown
+    bindsym $mod+Shift+e exec ~/dotfiles/bin/sway-powermenu
 
     # Lock the screen
     bindsym $mod+Control+l exec swaylock \
@@ -178,8 +178,8 @@ bindgesture swipe:3:left workspace next
         --image $default_bg
 
     # Screenshots (opened in grabnotate for annotation)
-    bindsym Print exec ~/dotfiles/bin/screenshot full
-    bindsym $mod+Print exec ~/dotfiles/bin/screenshot area
+    bindsym Print exec ~/dotfiles/bin/sway-screenshot full
+    bindsym $mod+Print exec ~/dotfiles/bin/sway-screenshot area
 #
 # Moving around:
 #
@@ -295,16 +295,16 @@ bindsym $mod+r mode "resize"
 #
 # Brightness control
 #
-bindsym --locked XF86MonBrightnessUp exec ~/dotfiles/bin/osd-notify brightness-up
-bindsym --locked XF86MonBrightnessDown exec ~/dotfiles/bin/osd-notify brightness-down
+bindsym --locked XF86MonBrightnessUp exec ~/dotfiles/bin/sway-osd-notify brightness-up
+bindsym --locked XF86MonBrightnessDown exec ~/dotfiles/bin/sway-osd-notify brightness-down
 #
 # Volume control
 #
 # Use wpctl to adjust volume in PipeWire.
-bindsym --locked XF86AudioRaiseVolume exec ~/dotfiles/bin/osd-notify volume-up
-bindsym --locked XF86AudioLowerVolume exec ~/dotfiles/bin/osd-notify volume-down
-bindsym --locked XF86AudioMute exec ~/dotfiles/bin/osd-notify volume-mute
-bindsym --locked XF86AudioMicMute exec ~/dotfiles/bin/osd-notify mic-mute
+bindsym --locked XF86AudioRaiseVolume exec ~/dotfiles/bin/sway-osd-notify volume-up
+bindsym --locked XF86AudioLowerVolume exec ~/dotfiles/bin/sway-osd-notify volume-down
+bindsym --locked XF86AudioMute exec ~/dotfiles/bin/sway-osd-notify volume-mute
+bindsym --locked XF86AudioMicMute exec ~/dotfiles/bin/sway-osd-notify mic-mute
 
 #
 # Status Bar:

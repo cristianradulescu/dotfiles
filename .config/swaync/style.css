@@ -52,7 +52,7 @@
   font-size: var(--font-size-body);
 }
 
-/* OSD (bin/osd-notify) progress bar */
+/* OSD (bin/sway-osd-notify) progress bar */
 progressbar trough {
   background: #313244;                            /* surface0 */
   border-radius: 4px;
