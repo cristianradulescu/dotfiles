@@ -89,7 +89,8 @@
     "format-wifi": "",
     "format-ethernet": "󰈀",
     "format-disconnected": "󰖪",
-    "tooltip-format": "<b>{essid}</b>\n\nDev:\t{ifname}\nIP:\t{ipaddr}\nGw:\t{gwaddr}\nPow:\t{signalStrengthApp} ({signalStrength})%"
+    "tooltip-format": "<b>{essid}</b>\n\nDev:\t{ifname}\nIP:\t{ipaddr}\nGw:\t{gwaddr}\nPow:\t{signalStrengthApp} ({signalStrength})%",
+    "on-click": "nm-connection-editor"
   },
   "pulseaudio": {
     "format": "{icon} {volume}% {format_source}",
