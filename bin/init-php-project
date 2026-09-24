@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Initialize the current directory as a plain PHP project for the Neovim
+# setup in ~/dotfiles/.config/nvim:
+#
+#   .editorconfig   indentation rules (4 spaces for PHP), picked up natively by
+#                   Neovim; <leader>cf re-indents the buffer accordingly
+#   .git            root marker phpactor needs to start (workspace_required)
+#
+# Usage: mkdir my-project && cd my-project && init-php-project && nvim index.php
+#
+# Safe to re-run: existing files are left untouched.
+
+set -euo pipefail
+
+DOTFILES_DIR="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  sed -n '3,12p' "$0" | sed 's/^# \{0,1\}//'
+  exit 0
+fi
+
+# write_file <path>: writes stdin to <path> unless it already exists
+write_file() {
+  local path="$1"
+  if [ -e "$path" ]; then
+    echo "  skip    $path (exists)"
+    cat >/dev/null
+  else
+    cat >"$path"
+    echo "  create  $path"
+  fi
+}
+
+echo "Initializing PHP project in $(pwd)"
+
+write_file .editorconfig <"$DOTFILES_DIR/dev-setup/.editorconfig"
+
+if [ ! -d .git ]; then
+  git init -q
+  echo "  create  .git"
+fi
+
+write_file .gitignore <<'EOF'
+/vendor/
+EOF
+
+echo
+echo "Done. Run: nvim index.php"

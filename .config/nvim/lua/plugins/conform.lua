@@ -1,6 +1,7 @@
 -- conform.nvim — formatter dispatcher
 -- Runs external formatters per filetype and falls back to the LSP formatter
 -- when no dedicated tool is configured (lsp_fallback = true in the keymap).
+-- If neither is available, the keymap re-indents with `=` instead.
 -- vim.opt.formatexpr is pointed at conform in options.lua so that `gq` also
 -- uses it.
 --
@@ -50,7 +51,21 @@ return {
         -- timeout_ms: conform's sync path defaults to 1000ms, too tight for
         -- some formatters' cold start; only the value passed here applies
         -- (a per-formatter timeout_ms config has no effect on the sync path).
-        require("conform").format({ async = false, lsp_fallback = true, quiet = false, timeout_ms = 10000 })
+        local formatted = require("conform").format({ async = false, lsp_fallback = true, quiet = false, timeout_ms = 10000 })
+
+        -- No formatter or LSP formatter available (e.g. plain PHP projects):
+        -- re-indent with `=` instead, which follows indentexpr and the
+        -- shiftwidth/expandtab set by .editorconfig. Visual mode re-indents
+        -- the selection only, otherwise the whole buffer.
+        if not formatted then
+          if vim.fn.mode():match("^[vV\22]") then
+            vim.cmd("normal! =")
+          else
+            local view = vim.fn.winsaveview()
+            vim.cmd("normal! gg=G")
+            vim.fn.winrestview(view)
+          end
+        end
       end,
       mode = "",
       desc = "Format code (with Conform)",
