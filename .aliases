@@ -15,6 +15,7 @@ alias llt='ls -alht'
 alias dc='docker compose'
 
 alias nvimconfig='cd ~/.config/nvim && nvim'
+alias swayconfig='cd ~/.config/sway && nvim'
 
 # History - show the whole history instead of only the last 16 entries
 alias history='fc -l 1'
