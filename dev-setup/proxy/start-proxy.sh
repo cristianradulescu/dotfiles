@@ -35,8 +35,8 @@ show_status() {
         echo -e "  ${RED}✗ Not detected on 127.0.0.1:${SOCKS_PORT}${NC}"
     fi
 
-    # Check system proxy
-    echo -e "\n${YELLOW}System Proxy:${NC}"
+    # Check system proxy (GNOME)
+    echo -e "\n${YELLOW}System Proxy (GNOME):${NC}"
     PROXY_MODE=$(gsettings get org.gnome.system.proxy mode)
     PROXY_URL=$(gsettings get org.gnome.system.proxy autoconfig-url)
     echo -e "  Mode: ${PROXY_MODE}"
@@ -45,6 +45,15 @@ show_status() {
         echo -e "  ${GREEN}✓ Configured correctly${NC}"
     else
         echo -e "  ${RED}✗ Not configured for PAC file${NC}"
+    fi
+
+    # Check systemd user session environment
+    echo -e "\n${YELLOW}Systemd User Session Environment:${NC}"
+    if systemctl --user show-environment 2>/dev/null | grep -q "http_proxy="; then
+        systemctl --user show-environment 2>/dev/null | grep -E "http_proxy=|https_proxy=|all_proxy=|no_proxy=|PROXY_PAC_URL=" | sed 's/^/  /'
+        echo -e "  ${GREEN}✓ Proxy vars in systemd user session${NC}"
+    else
+        echo -e "  ${RED}✗ Proxy vars not in systemd user session${NC}"
     fi
 
     # Check PAC file server
@@ -97,6 +106,9 @@ show_status() {
 cleanup() {
     echo -e "\n${YELLOW}Shutting down...${NC}"
 
+    # Stop systemd user service
+    systemctl --user stop proxy-env.service 2>/dev/null || true
+
     # Kill all background processes
     jobs -p | xargs -r kill 2>/dev/null
 
@@ -108,6 +120,30 @@ cleanup() {
 }
 
 trap cleanup SIGINT SIGTERM
+
+push_proxy_env_to_systemd() {
+    local http_proxy="socks5://localhost:${SOCKS_PORT}"
+    local https_proxy="socks5://localhost:${SOCKS_PORT}"
+    local all_proxy="socks5://localhost:${SOCKS_PORT}"
+    local no_proxy="localhost,127.0.0.1,::1"
+    local PROXY_PAC_URL="http://localhost:${PAC_PORT}/proxy.pac"
+
+    # Export to systemd user session for graphical apps
+    systemctl --user import-environment \
+        http_proxy \
+        https_proxy \
+        all_proxy \
+        no_proxy \
+        PROXY_PAC_URL 2>/dev/null || true
+
+    # Update D-Bus activation environment
+    dbus-update-activation-environment --systemd \
+        http_proxy \
+        https_proxy \
+        all_proxy \
+        no_proxy \
+        PROXY_PAC_URL 2>/dev/null || true
+}
 
 # Handle command line arguments
 case "${1:-}" in
@@ -161,6 +197,17 @@ echo -e "\n${YELLOW}Configuring system proxy...${NC}"
 gsettings set org.gnome.system.proxy mode 'auto'
 gsettings set org.gnome.system.proxy autoconfig-url "http://localhost:${PAC_PORT}/proxy.pac"
 echo -e "${GREEN}✓ System proxy configured${NC}"
+
+# Push proxy environment variables to systemd user session for graphical apps
+echo -e "\n${YELLOW}Pushing proxy environment to systemd user session...${NC}"
+push_proxy_env_to_systemd
+echo -e "${GREEN}✓ Proxy environment pushed to systemd user session${NC}"
+
+# Start systemd user service for graphical session
+echo -e "\n${YELLOW}Starting systemd user service for graphical session...${NC}"
+systemctl --user start proxy-env.service 2>/dev/null || true
+systemctl --user enable proxy-env.service 2>/dev/null || true
+echo -e "${GREEN}✓ Systemd user service started${NC}"
 
 # Rebind SOCKS port to all interfaces
 echo -e "\n${YELLOW}Rebinding SOCKS port to all interfaces...${NC}"

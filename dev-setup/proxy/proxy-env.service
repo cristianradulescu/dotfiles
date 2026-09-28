@@ -1,0 +1,14 @@
+[Unit]
+Description=Proxy Environment Variables for Graphical Session
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/home/cristian/dotfiles/dev-setup/proxy/proxy-env-setup.sh
+Environment=DISPLAY=:0
+Environment=WAYLAND_DISPLAY=wayland-0
+
+[Install]
+WantedBy=graphical-session.target

@@ -261,6 +261,84 @@ When you press Ctrl+C:
 
 ---
 
+## SwayWM Support
+
+The proxy setup works on SwayWM (Wayland) in addition to GNOME. Since Sway doesn't run `gnome-settings-daemon`, the GNOME `gsettings` proxy configuration doesn't propagate to applications. Instead, proxy environment variables are pushed to the systemd user session so graphical apps (browsers launched via app launcher/fuzzel/waybar) inherit them.
+
+### How it Works on Sway
+
+1. **`start-proxy.sh`** configures GNOME `gsettings` (for GNOME compatibility) AND pushes proxy env vars to systemd user session
+2. **Systemd user service** (`proxy-env.service`) runs `proxy-env-setup.sh` to export vars to the graphical session
+3. **Sway config** has `exec_always` lines to re-import vars on every Sway reload
+4. **Graphical apps** (Chrome, Chromium, Firefox) launched via app menu get `PROXY_PAC_URL`, `http_proxy`, `https_proxy`, `all_proxy`, `no_proxy` from systemd/D-Bus
+5. **CLI tools** in the terminal running `start-proxy.sh` do NOT get env vars (by design). Use `--proxy` flag with curl or run in the same terminal.
+
+### Installation for Sway
+
+```bash
+# Install the proxy environment package (sets up systemd service)
+dotfiles install 90-proxy-env
+
+# Start proxy (run in a terminal, keep it open)
+./start-proxy.sh
+```
+
+### Sway Configuration
+
+The following is automatically added to `~/.config/sway/config` by the dotfiles:
+
+```bash
+# Import proxy env vars into systemd user and DBus for graphical apps
+exec_always systemctl --user import-environment http_proxy https_proxy all_proxy no_proxy PROXY_PAC_URL
+exec_always dbus-update-activation-environment --systemd http_proxy https_proxy all_proxy no_proxy PROXY_PAC_URL
+```
+
+### Files Added for Sway Support
+
+| File | Purpose |
+|------|---------|
+| `dev-setup/proxy/proxy-env-setup.sh` | Helper script to push proxy vars to systemd user session |
+| `dev-setup/proxy/proxy-env.service` | Systemd user service for persistence across graphical logins |
+| `install/cli/90-proxy-env.sh` | Dotfiles package to install the service |
+
+### Status Check on Sway
+
+```bash
+./start-proxy.sh status
+```
+
+Shows:
+- Reverse SSH Tunnel status
+- System Proxy (GNOME gsettings)
+- **Systemd User Session Environment** - verifies proxy vars are in systemd session
+- PAC File Server
+- SOCKS Rebind
+- Port Forwards
+- VPN Connectivity
+
+### Cleanup
+
+Press `Ctrl+C` in the `start-proxy.sh` terminal:
+- Stops systemd user service
+- Kills background processes (socat, python)
+- Resets GNOME proxy to "none"
+
+### Troubleshooting on Sway
+
+**Browser not using proxy:**
+1. Run `./start-proxy.sh status` - verify "Systemd User Session Environment" shows ✓
+2. Restart browser completely (close all windows)
+3. Check `systemctl --user show-environment | grep -E 'http_proxy|PROXY_PAC_URL'`
+4. Reload Sway config: `Mod+Shift+c`
+
+**Service not starting on login:**
+```bash
+systemctl --user enable proxy-env.service
+systemctl --user daemon-reload
+```
+
+---
+
 ## Usage
 
 ### On Remote Laptop (VPN Machine)
