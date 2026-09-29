@@ -9,7 +9,10 @@
   "modules-left": [
     "sway/workspaces",
     "sway/mode",
-    "sway/window"
+    "sway/window",
+    "hyprland/workspaces",
+    "hyprland/submap",
+    "hyprland/window"
   ],
   "modules-center": [
     "custom/clock"
@@ -32,6 +35,15 @@
   "sway/window": {
     "format": "{title}",
     "max-length": 60
+  },
+  "hyprland/window": {
+    "format": "{title}",
+    "max-length": 60,
+    "separate-outputs": true
+  },
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true
   },
   "idle_inhibitor": {
     "format": "{icon}",

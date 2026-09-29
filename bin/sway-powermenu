@@ -37,8 +37,20 @@ choice=$(printf '%s\n' \
   menu "$icon_prompt" 5) || exit 0 # cancelled
 
 case "$choice" in
-  *Lock) swaylock -f --indicator-idle-visible --image "$lock_image" ;;
-  *Logout) swaymsg exit ;;
+  *Lock)
+    if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
+      pidof hyprlock || hyprlock
+    else
+      swaylock -f --indicator-idle-visible --image "$lock_image"
+    fi
+    ;;
+  *Logout)
+    if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
+      hyprctl dispatch exit
+    else
+      swaymsg exit
+    fi
+    ;;
   *Suspend) systemctl suspend ;;
   *Reboot) confirm reboot "$icon_reboot" && systemctl reboot ;;
   *Shutdown) confirm shutdown "$icon_shutdown" && systemctl poweroff ;;
