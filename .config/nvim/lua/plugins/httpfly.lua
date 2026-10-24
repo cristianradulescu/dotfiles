@@ -4,4 +4,6 @@
 -- Only loaded for http filetypes (see ftdetect/http.lua).
 return {
   "cristianradulescu/httpfly.nvim",
+  ft = "http",
+  build = "make build",
 }
