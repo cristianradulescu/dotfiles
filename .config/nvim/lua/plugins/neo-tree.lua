@@ -1,6 +1,5 @@
 -- neo-tree.nvim — tree-style file explorer
 -- Active when vim.g.fileexplorer == "NeoTree" (set in options.lua).
--- The alternative explorer is Snacks (see snacks.lua.disabled).
 --
 -- Notable configuration choices:
 --   - Only the "filesystem" source is enabled (no buffers/git-status tabs)
@@ -22,7 +21,7 @@ return {
     "nvim-tree/nvim-web-devicons", -- file-type icons
     "MunifTanjim/nui.nvim",        -- UI component library (popups, splits)
   },
-  -- Close the tree when this plugin is deactivated (e.g. switching to Snacks)
+  -- Close the tree when this plugin is deactivated
   deactivate = function()
     vim.cmd("Neotree close")
   end,

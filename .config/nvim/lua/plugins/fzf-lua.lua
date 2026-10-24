@@ -1,6 +1,5 @@
 -- fzf-lua — fuzzy finder for files, buffers, grep, LSP, and more
 -- Active when vim.g.picker == "FzfLua" (set in options.lua).
--- The alternative picker is Snacks (see snacks.lua.disabled).
 --
 -- All picker keymaps are registered through user.keymaps-picker so that the
 -- same logical bindings work regardless of which picker backend is active.

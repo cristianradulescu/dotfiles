@@ -1,7 +1,7 @@
 -- keymaps-picker — picker-agnostic keymap wiring
 --
 -- This module decouples keymap definitions from the specific picker backend
--- (fzf-lua or Snacks). Each function registers one logical keymap by calling
+-- (e.g. fzf-lua). Each function registers one logical keymap by calling
 -- the appropriate method on whatever picker object is passed in.
 --
 -- Usage pattern (from a picker plugin's config function):
@@ -10,7 +10,7 @@
 --   keymaps.goto_definition(fzflua, "lsp_definitions", {})
 --
 -- This means swapping the picker backend only requires changing the arguments
--- passed to these functions (done in fzf-lua.lua and snacks.lua.disabled),
+-- passed to these functions (done in fzf-lua.lua),
 -- not editing the keymap bindings themselves.
 --
 -- Keymap reference:
@@ -155,7 +155,7 @@ function M.goto_typedef(picker, picker_func, picker_func_params)
 end
 
 --- Trigger code actions.
--- When picker is nil (e.g. Snacks, which uses the native vim.ui.select),
+-- When picker is nil (for a picker that uses the native vim.ui.select),
 -- falls back to vim.lsp.buf.code_action() directly.
 function M.code_action(picker, picker_func, picker_func_params)
   vim.keymap.set("n", "<leader>ca", function()

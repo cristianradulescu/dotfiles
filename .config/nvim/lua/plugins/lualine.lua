@@ -13,7 +13,7 @@
 --   - If longer, shows only the immediate parent directory name
 --
 -- Statusline is hidden for neo-tree windows (they have their own header bar).
--- Extensions are enabled for fugitive, lazy, quickfix, and nvim-dap-ui so
+-- Extensions are enabled for fugitive, lazy, and quickfix so
 -- those windows get a context-appropriate statusline instead of the default.
 return {
   "nvim-lualine/lualine.nvim",
@@ -176,7 +176,7 @@ return {
         lualine_z = {},
       },
 
-      extensions = { "fugitive", "lazy", "quickfix", "nvim-dap-ui" },
+      extensions = { "fugitive", "lazy", "quickfix" },
     })
   end,
 }

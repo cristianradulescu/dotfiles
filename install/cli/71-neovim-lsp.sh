@@ -15,21 +15,6 @@ lsp_clone_or_pull() {
 lsp_install() {
   mkdir -p ~/lsp/bin
 
-  # [DAP] PHP Debug Adapter
-  section "Installing PHP Debug Adapter..."
-  lsp_clone_or_pull https://github.com/xdebug/vscode-php-debug ~/lsp/vscode-php-debug
-  # --ignore-scripts: devDependency @vscode/vsce pulls in keytar/@vscode/vsce-sign
-  # (used only for `vsce package`, which we never run), whose install scripts
-  # trigger npm's allow-scripts warning and aren't needed for `npm run build`.
-  npm install --ignore-scripts
-  # Bypass `npm run build`: since this repo lives under ~/lsp, tsc's module
-  # resolution also picks up ~/lsp/node_modules/@types/node (pulled in by
-  # sql-language-server's pg client), which conflicts with this repo's own
-  # pinned @types/node@16 (non-generic vs. generic Buffer) and fails the
-  # build with TS2315. --skipLibCheck avoids checking either .d.ts.
-  npm run copyfiles && npx tsc -p . --skipLibCheck
-  cd ~
-
   # [LSP] Phpactor
   section "Installing Phpactor..."
   lsp_clone_or_pull https://github.com/phpactor/phpactor ~/lsp/phpactor
@@ -125,9 +110,6 @@ lsp_install() {
 
 lsp_update() {
   # Git-based servers: pull + rebuild
-  section "Updating PHP Debug Adapter..."
-  cd ~/lsp/vscode-php-debug && git pull && npm install --ignore-scripts && npm run copyfiles && npx tsc -p . --skipLibCheck && cd ~
-
   section "Updating Phpactor..."
   cd ~/lsp/phpactor && git pull && composer install --no-dev --optimize-autoloader && cd ~
 

@@ -11,10 +11,10 @@ vim.g.maplocalleader = " "
 -- They are read by plugin specs and keymaps to activate the selected backend.
 -- ============================================================================
 
--- Fuzzy finder backend. Options: "FzfLua", "Snacks"
+-- Fuzzy finder backend. Options: "FzfLua"
 vim.g.picker = "FzfLua"
 
--- File explorer backend. Options: "NeoTree", "Snacks"
+-- File explorer backend. Options: "NeoTree"
 vim.g.fileexplorer = "NeoTree"
 
 -- Active PHP LSP server(s). Options: "intelephense", "phpactor"
