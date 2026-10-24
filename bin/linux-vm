@@ -2,7 +2,7 @@
 
 # Linux VM manager using qemux/qemu Docker container
 # https://github.com/qemus/qemu
-# Supports Sway WM and GNOME
+# Supports GNOME
 
 COMPOSE_FILE="$HOME/.config/linux-vm/docker-compose.yml"
 
@@ -94,17 +94,15 @@ check_prerequisites() {
   fi
 }
 
-# Detect display scale (supports Sway and GNOME)
+# Detect display scale (supports GNOME)
 detect_scale() {
-  if command -v swaymsg &>/dev/null; then
-    SWAY_SCALE=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused == true) | .scale')
-    echo "$SWAY_SCALE" | awk '{print int($1 * 100)}'
-  elif command -v gsettings &>/dev/null; then
-    FACTOR=$(gsettings get org.gnome.desktop.interface scaling-factor 2>/dev/null | tr -d "uint32 ")
-    echo $(( ${FACTOR:-1} * 100 ))
-  else
-    echo 100
+  local factor=1
+  if command -v gsettings &>/dev/null; then
+    # Output is "uint32 N"; 0 means auto
+    factor=$(gsettings get org.gnome.desktop.interface scaling-factor 2>/dev/null | awk '{print $2}')
+    [[ "$factor" =~ ^[1-9][0-9]*$ ]] || factor=1
   fi
+  echo $(( factor * 100 ))
 }
 
 install_linux() {

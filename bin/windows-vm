@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Adapted from Omarchy for Ubuntu 24.04
+# Adapted from Omarchy for Ubuntu
 # https://github.com/basecamp/omarchy/blob/master/bin/omarchy-windows-vm
-# Supports Sway WM and GNOME
+# Supports GNOME
 
 COMPOSE_FILE="$HOME/.config/windows/docker-compose.yml"
 
@@ -89,6 +89,17 @@ check_prerequisites() {
     echo "   Required: ${REQUIRED_SPACE}GB (${DISK_SIZE_GB}GB disk + 10GB for Windows image)"
     exit 1
   fi
+}
+
+# Detect display scale (supports GNOME)
+detect_scale() {
+  local factor=1
+  if command -v gsettings &>/dev/null; then
+    # Output is "uint32 N"; 0 means auto
+    factor=$(gsettings get org.gnome.desktop.interface scaling-factor 2>/dev/null | awk '{print $2}')
+    [[ "$factor" =~ ^[1-9][0-9]*$ ]] || factor=1
+  fi
+  echo $(( factor * 100 ))
 }
 
 install_windows() {
@@ -335,20 +346,6 @@ launch_windows() {
 
   print_box "Connecting to Windows VM" "" "$LIFECYCLE"
 
-  # Detect display scale (supports Sway and GNOME)
-  detect_scale() {
-    if [[ "$XDG_CURRENT_DESKTOP" != *"GNOME"* ]]; then
-      if command -v swaymsg &>/dev/null; then
-        SWAY_SCALE=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused == true) | .scale')
-        echo "$SWAY_SCALE" | awk '{print int($1 * 100)}'
-      fi
-    elif command -v gsettings &>/dev/null; then
-      FACTOR=$(gsettings get org.gnome.desktop.interface scaling-factor 2>/dev/null | tr -d "uint32 ")
-      echo $(( ${FACTOR:-1} * 100 ))
-    else
-      echo 100
-    fi
-  }
   SCALE_PERCENT=$(detect_scale)
 
   RDP_SCALE=""

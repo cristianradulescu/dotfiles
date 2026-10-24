@@ -1,6 +1,6 @@
 # My Dotfiles Setup
 
-Personal dotfiles repository for setting up a development environment on **Ubuntu 24.04 LTS / 25.10**
+Personal dotfiles repository for setting up a development environment on **Ubuntu 26.04 LTS**
 
 ## Quick Start
 
@@ -51,6 +51,5 @@ source install/gui/30-alacritty.sh
 
 ## Desktop Environments
 
-- **Primary**: Gnome (Ubuntu default)
-- **Alternative**: Sway (Wayland compositor)
+- Gnome (Ubuntu default)
 

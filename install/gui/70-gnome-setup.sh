@@ -21,6 +21,18 @@ gnome_setup() {
   
   gsettings set org.gnome.mutter center-new-windows true
   gsettings set org.gnome.desktop.calendar show-weekdate true
+
+  # Public holidays in the top bar calendar (re-run at login to roll over years)
+  mkdir -p ~/.config/autostart
+  cat > ~/.config/autostart/gnome-holidays.desktop <<EOF
+[Desktop Entry]
+Type=Application
+Name=GNOME Holidays
+Exec=$HOME/dotfiles/bin/gnome-holidays
+NoDisplay=true
+X-GNOME-Autostart-enabled=true
+EOF
+  ~/dotfiles/bin/gnome-holidays || true
   gsettings set org.gnome.desktop.interface show-battery-percentage true
   
   # Keybindings

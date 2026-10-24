@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""GNOME holidays: publishes Romanian public holidays as a read-only calendar
+in evolution-data-server, so they show up in the GNOME Shell clock/calendar
+dropdown (dot on the day + event listed) next to any other calendars.
+
+Holidays come from the Nager.Date API for the current and next year and are
+written to an .ics file under $XDG_DATA_HOME/gnome-holidays. The script is
+idempotent and only hits the network when a year is missing, so it's cheap to
+run at every login."""
+import json
+import os
+import subprocess
+import urllib.request
+import zlib
+from datetime import date, timedelta
+from pathlib import Path
+
+API = "https://date.nager.at/api/v3/PublicHolidays/{year}/RO"
+DATA_DIR = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share")) / "gnome-holidays"
+SOURCES_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "evolution/sources"
+ICS = DATA_DIR / "holidays-RO.ics"
+SOURCE = SOURCES_DIR / "gnome-holidays-ro.source"
+COLOR = "#f38ba8"
+
+
+def holidays(year):
+    cache = DATA_DIR / f"holidays-RO-{year}.json"
+    if not cache.exists():
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        with urllib.request.urlopen(API.format(year=year), timeout=5) as response:
+            cache.write_bytes(response.read())
+    return [(date.fromisoformat(h["date"]), h["localName"]) for h in json.loads(cache.read_text())]
+
+
+def write_ics(years):
+    lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//dotfiles//gnome-holidays//EN", "X-WR-CALNAME:Romanian Holidays"]
+    for year in years:
+        for day, name in holidays(year):
+            lines += [
+                "BEGIN:VEVENT",
+                f"UID:holiday-ro-{day.isoformat()}-{zlib.crc32(name.encode()):08x}@gnome-holidays",
+                f"DTSTAMP:{day.strftime('%Y%m%d')}T000000Z",
+                f"DTSTART;VALUE=DATE:{day.strftime('%Y%m%d')}",
+                f"DTEND;VALUE=DATE:{(day + timedelta(days=1)).strftime('%Y%m%d')}",
+                f"SUMMARY:{name.replace(',', chr(92) + ',').replace(';', chr(92) + ';')}",
+                "TRANSP:TRANSPARENT",
+                "CATEGORIES:Holidays",
+                "END:VEVENT",
+            ]
+    lines.append("END:VCALENDAR")
+    tmp = ICS.with_suffix(".tmp")
+    tmp.write_text("\r\n".join(lines) + "\r\n")
+    tmp.replace(ICS)
+
+
+def write_source():
+    """Writes the EDS source file and asks the registry to reload it; returns
+    early if it's already up to date."""
+    content = f"""[Data Source]
+DisplayName=Romanian Holidays
+Enabled=true
+Parent=local-stub
+
+[Calendar]
+BackendName=local
+Color={COLOR}
+Selected=true
+
+[Local Backend]
+CustomFile=file://{ICS}
+Writable=false
+"""
+    # EDS adds its own keys (Order, Refresh...) when it saves the file, so only
+    # rewrite it when our custom file setting is missing.
+    if SOURCE.exists() and content.split("\n\n")[-1] in SOURCE.read_text():
+        return
+    SOURCES_DIR.mkdir(parents=True, exist_ok=True)
+    SOURCE.write_text(content)
+    subprocess.run(["gdbus", "call", "--session", "--dest", "org.gnome.evolution.dataserver.Sources5",
+                    "--object-path", "/org/gnome/evolution/dataserver/SourceManager",
+                    "--method", "org.gnome.evolution.dataserver.SourceManager.Reload"],
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def main():
+    years = [date.today().year, date.today().year + 1]
+    marker = DATA_DIR / "years"
+    if not ICS.exists() or not marker.exists() or marker.read_text().split() != [str(y) for y in years]:
+        write_ics(years)
+        marker.write_text(" ".join(map(str, years)))
+    write_source()
+
+
+main()
