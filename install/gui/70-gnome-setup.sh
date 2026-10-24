@@ -24,9 +24,11 @@ gnome_setup() {
   gsettings set org.gnome.desktop.interface show-battery-percentage true
   
   # Keybindings
-  gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>Up']"
-  gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift>F11']"
-  gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']"
+  gsettings set org.gnome.desktop.wm.keybindings toggle-maximized "['<Super>m']"
+  gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Super>f']"
+  gsettings set org.gnome.shell.keybindings focus-active-notification "[]"
+  gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>n']"
+  gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>l']"
   
   for i in {1..9}; do
     gsettings set org.gnome.shell.keybindings switch-to-application-$i "[]"
@@ -56,18 +58,17 @@ gnome_setup() {
   pipx install gnome-extensions-cli --system-site-packages
   gsettings set org.gnome.shell disable-user-extensions false
   gnome-extensions disable ding@rastersoft.com 2>/dev/null || true
+  gnome-extensions disable tiling-assistant@ubuntu.com 2>/dev/null || true
+  gnome-extensions disable web-search-provider@ubuntu.com 2>/dev/null || true
+  gnome-extensions disable snapd-search-provider@canonical.com 2>/dev/null || true
   
   echo "Installing Gnome extensions..."
   gext install windowIsReady_Remover@nunofarruca@gmail.com 2>/dev/null || true
   gext install space-bar@luchrioh 2>/dev/null || true
-  gext install clipboard-indicator@tudmotu.com 2>/dev/null || true
   
   # Compile gsettings schemas
   if [ -f ~/.local/share/gnome-shell/extensions/space-bar@luchrioh/schemas/org.gnome.shell.extensions.space-bar.gschema.xml ]; then
     sudo cp ~/.local/share/gnome-shell/extensions/space-bar@luchrioh/schemas/org.gnome.shell.extensions.space-bar.gschema.xml /usr/share/glib-2.0/schemas/
-  fi
-  if [ -f ~/.local/share/gnome-shell/extensions/clipboard-indicator@tudmotu.com/schemas/org.gnome.shell.extensions.clipboard-indicator.gschema.xml ]; then
-    sudo cp ~/.local/share/gnome-shell/extensions/clipboard-indicator@tudmotu.com/schemas/org.gnome.shell.extensions.clipboard-indicator.gschema.xml /usr/share/glib-2.0/schemas/
   fi
   if [ -f ~/.local/share/gnome-shell/extensions/tactile@lundal.io/schemas/org.gnome.shell.extensions.tactile.gschema.xml ]; then
     sudo cp ~/.local/share/gnome-shell/extensions/tactile@lundal.io/schemas/org.gnome.shell.extensions.tactile.gschema.xml /usr/share/glib-2.0/schemas/
@@ -80,25 +81,17 @@ gnome_setup() {
   gsettings set org.gnome.shell.extensions.space-bar.shortcuts enable-activate-workspace-shortcuts false 2>/dev/null || true
   gsettings set org.gnome.shell.extensions.space-bar.shortcuts enable-move-to-workspace-shortcuts true 2>/dev/null || true
   gsettings set org.gnome.shell.extensions.space-bar.shortcuts open-menu "@as []" 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.space-bar.shortcuts activate-empty-key "@as []" 2>/dev/null || true
   
-  # Configure Clipboard Indicator
-  gsettings set org.gnome.shell.extensions.clipboard-indicator history-size 100 2>/dev/null || true
-  gsettings set org.gnome.shell.extensions.clipboard-indicator show-on-startup true 2>/dev/null || true
-  gsettings set org.gnome.shell.extensions.clipboard-indicator clear-on-boot false 2>/dev/null || true
-  gsettings set org.gnome.shell.extensions.clipboard-indicator toggle-menu "['<Super>v']" 2>/dev/null || true
-  gsettings set org.gnome.shell.extensions.clipboard-indicator clear-history "[]" 2>/dev/null || true
-  gsettings set org.gnome.shell.extensions.clipboard-indicator next-entry "[]" 2>/dev/null || true
-  gsettings set org.gnome.shell.extensions.clipboard-indicator prev-entry "[]" 2>/dev/null || true
-  gsettings set org.gnome.shell.extensions.clipboard-indicator private-mode-binding "[]" 2>/dev/null || true
- 
   # Configure Tactile
-  gesttings set org.gnome.shell.extensions.tactile layout-2-col-2 0
-  gesttings set org.gnome.shell.extensions.tactile layout-2-col-3 0
-  gesttings set org.gnome.shell.extensions.tactile layout-2-row-1 0
-  gesttings set org.gnome.shell.extensions.tactile layout-2-row-2 0
-  gesttings set org.gnome.shell.extensions.tactile layout-3-col-1 3
-  gesttings set org.gnome.shell.extensions.tactile layout-3-col-3 0
-  gesttings set org.gnome.shell.extensions.tactile layout-3-row-1 3
+  gsettings set org.gnome.shell.extensions.tactile layout-2-col-2 0
+  gsettings set org.gnome.shell.extensions.tactile layout-2-col-3 0
+  gsettings set org.gnome.shell.extensions.tactile layout-2-row-1 0
+  gsettings set org.gnome.shell.extensions.tactile layout-2-row-2 0
+  gsettings set org.gnome.shell.extensions.tactile layout-3-col-1 3
+  gsettings set org.gnome.shell.extensions.tactile layout-3-col-3 0
+  gsettings set org.gnome.shell.extensions.tactile layout-3-row-1 3
+  gsettings set org.gnome.shell.extensions.tactile gap-size 8
 
   echo "✓ $PACKAGE_NAME configured successfully"
 }
