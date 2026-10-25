@@ -6,7 +6,7 @@ firefox_install() {
   echo "Installing $PACKAGE_NAME..."
 
   sudo snap remove --purge firefox
-  sudo apt remove --purge firefox
+  sudo apt remove --purge -y firefox
 
   if [ -f /etc/apt/sources.list.d/mozilla.sources ]; then
     echo "Mozilla apt source already configured, skipping"
@@ -27,9 +27,7 @@ EOF
 Package: *
 Pin: origin packages.mozilla.org
 Pin-Priority: 1000
-EOF
 
-    sudo tee /etc/apt/preferences.d/mozilla > /dev/null << EOF
 Package: firefox
 Pin: release o=Ubuntu
 Pin-Priority: -1

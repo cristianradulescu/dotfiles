@@ -38,6 +38,7 @@ EOF
   # Keybindings
   gsettings set org.gnome.desktop.wm.keybindings toggle-maximized "['<Super>m']"
   gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Super>f']"
+  gsettings set org.gnome.desktop.wm.keybindings close "['<Super>q']"
   gsettings set org.gnome.shell.keybindings focus-active-notification "[]"
   gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>n']"
   gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>l']"
@@ -77,6 +78,7 @@ EOF
   echo "Installing Gnome extensions..."
   gext install windowIsReady_Remover@nunofarruca@gmail.com 2>/dev/null || true
   gext install space-bar@luchrioh 2>/dev/null || true
+  gext install tactile@lundal.io 2>/dev/null || true
   
   # Compile gsettings schemas
   if [ -f ~/.local/share/gnome-shell/extensions/space-bar@luchrioh/schemas/org.gnome.shell.extensions.space-bar.gschema.xml ]; then
@@ -96,14 +98,14 @@ EOF
   gsettings set org.gnome.shell.extensions.space-bar.shortcuts activate-empty-key "@as []" 2>/dev/null || true
   
   # Configure Tactile
-  gsettings set org.gnome.shell.extensions.tactile layout-2-col-2 0
-  gsettings set org.gnome.shell.extensions.tactile layout-2-col-3 0
-  gsettings set org.gnome.shell.extensions.tactile layout-2-row-1 0
-  gsettings set org.gnome.shell.extensions.tactile layout-2-row-2 0
-  gsettings set org.gnome.shell.extensions.tactile layout-3-col-1 3
-  gsettings set org.gnome.shell.extensions.tactile layout-3-col-3 0
-  gsettings set org.gnome.shell.extensions.tactile layout-3-row-1 3
-  gsettings set org.gnome.shell.extensions.tactile gap-size 8
+  gsettings set org.gnome.shell.extensions.tactile layout-2-col-2 0 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.tactile layout-2-col-3 0 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.tactile layout-2-row-1 0 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.tactile layout-2-row-2 0 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.tactile layout-3-col-1 3 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.tactile layout-3-col-3 0 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.tactile layout-3-row-1 3 2>/dev/null || true
+  gsettings set org.gnome.shell.extensions.tactile gap-size 8 2>/dev/null || true
 
   echo "✓ $PACKAGE_NAME configured successfully"
 }
