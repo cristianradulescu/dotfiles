@@ -7,6 +7,7 @@ TERM = "xterm-256color"
 [window]
 # opacity = 0.9
 startup_mode = "Maximized"
+dynamic_padding = true # spread leftover pixels evenly instead of a gap at the bottom
 # decorations = "None"
 
 [scrolling]
@@ -14,12 +15,11 @@ history = 50000
 
 [font]
 normal = { family = "JetBrainsMonoNL Nerd Font", style = "Regular" }
-# normal = { family = "Hack Nerd Font", style = "Regular" }
-size = 14
+size = 12
 # Letter spacing (default=0)
 offset.x = 0
 # Line spacing (default=0)
-offset.y = 4 # equivalent of `line_height = 1.2` on other apps
+offset.y = 4 # ≈ `line_height`
 
 [cursor]
 style = { shape = "Beam", blinking = "Always" }
