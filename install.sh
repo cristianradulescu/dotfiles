@@ -9,17 +9,23 @@ set -e
 
 DOTFILES_DIR="$HOME/dotfiles"
 
-# Check if dotfiles already exists
+# Check if dotfiles already exists; if so, offer to continue with the existing copy
 if [ -d "$DOTFILES_DIR" ]; then
   echo "Dotfiles repo already exists in $DOTFILES_DIR"
-  exit 1 
-fi
-
-# Clone dotfiles repository
-sudo apt install git && \
-  cd "$HOME" && \
-  git clone https://github.com/cristianradulescu/dotfiles && \
+  printf "Continue installation using the existing repo? [y/N]: "
+  read -r reply < /dev/tty
+  if [[ ! "$reply" =~ ^[Yy]$ ]]; then
+    echo "Aborting."
+    exit 1
+  fi
   cd "$DOTFILES_DIR"
+else
+  # Clone dotfiles repository
+  sudo apt install git && \
+    cd "$HOME" && \
+    git clone https://github.com/cristianradulescu/dotfiles && \
+    cd "$DOTFILES_DIR"
+fi
 
 # ---------------------------------------------------------------------------
 # Dev stack selection (asked once, exported for cli.sh to consume)
