@@ -24,6 +24,29 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Docker daemon proxy is a one-time config in /etc/docker/daemon.json (see PROXY.md),
+# this only reports whether it points at the SOCKS tunnel.
+check_docker_daemon_proxy() {
+    if ! command -v docker > /dev/null 2>&1; then
+        echo -e "  ${YELLOW}- Docker not installed, skipping${NC}"
+        return
+    fi
+
+    local https_proxy
+    if ! https_proxy=$(docker info --format '{{.HTTPSProxy}}' 2>/dev/null); then
+        echo -e "  ${RED}✗ Docker daemon not reachable${NC}"
+        return
+    fi
+
+    if [[ "$https_proxy" =~ :${SOCKS_PORT}/?$ ]]; then
+        echo -e "  ${GREEN}✓ HTTPS proxy: ${https_proxy}${NC}"
+    elif [[ -n "$https_proxy" ]]; then
+        echo -e "  ${YELLOW}! HTTPS proxy is ${https_proxy} (expected port ${SOCKS_PORT})${NC}"
+    else
+        echo -e "  ${RED}✗ Not configured (see PROXY.md: Configure Docker Daemon Proxy)${NC}"
+    fi
+}
+
 show_status() {
     echo -e "${YELLOW}=== Proxy Status ===${NC}\n"
 
@@ -79,6 +102,10 @@ show_status() {
             echo -e "  ${RED}✗ ${DOMAIN}:${PORT} not forwarded${NC}"
         fi
     done
+
+    # Check Docker daemon proxy (used by docker login/pull/push)
+    echo -e "\n${YELLOW}Docker Daemon Proxy:${NC}"
+    check_docker_daemon_proxy
 
     # Check VPN connectivity (test through SOCKS proxy)
     echo -e "\n${YELLOW}VPN Connectivity:${NC}"
@@ -138,8 +165,10 @@ fi
 echo -e "${GREEN}✓ Reverse SSH tunnel detected on port ${SOCKS_PORT}${NC}"
 
 # Kill any existing socat/python processes from previous runs
-pkill -f "socat.*TCP-LISTEN:${SOCKS_REBIND_PORT}" 2>/dev/null
-pkill -f "socat.*TCP-LISTEN:3031" 2>/dev/null
+pkill -f "socat.*TCP-LISTEN:${SOCKS_REBIND_PORT}," 2>/dev/null
+for target in "${FORWARD_TARGETS[@]}"; do
+    pkill -f "socat.*TCP-LISTEN:${target#*:}," 2>/dev/null
+done
 pkill -f "python3 -m http.server ${PAC_PORT}" 2>/dev/null
 
 # Start PAC file server
@@ -191,6 +220,10 @@ for target in "${FORWARD_TARGETS[@]}"; do
         echo -e "${RED}✗ Failed to forward ${DOMAIN}:${PORT}${NC}"
     fi
 done
+
+# Docker daemon proxy is configured once, just report it
+echo -e "\n${YELLOW}Checking Docker daemon proxy...${NC}"
+check_docker_daemon_proxy
 
 echo -e "\n${GREEN}=== Setup Complete ===${NC}"
 echo -e "\nServices running:"
