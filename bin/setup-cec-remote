@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+# Set up the Samsung TV remote (HDMI-CEC) to control Jellyfin in Firefox on a Raspberry Pi.
+# Idempotent: safe to run again.
+#
+# Overridable via env, e.g.:  PHYS_ADDR=2.0.0.0 ./setup-cec-remote
+set -euo pipefail
+
+CEC_DEV="${CEC_DEV:-0}"              # /dev/cec0 = HDMI0 (port next to USB-C power)
+OSD_NAME="${OSD_NAME:-RPi}"          # name shown in the TV's Anynet+ list
+PHYS_ADDR="${PHYS_ADDR:-}"           # TV input, e.g. 3.0.0.0 = HDMI 3 (auto-detected if TV is on)
+DEFAULT_PHYS_ADDR="3.0.0.0"
+BACK_KEY="${BACK_KEY:-KEY_BACK}"     # Firefox "browser back"; KEY_ESC is the alternative
+
+KEYMAP=/etc/rc_keymaps/cec-jellyfin.toml
+RC_MAPS=/etc/rc_maps.cfg
+RC_MAPS_LINE="*	rc-cec	${KEYMAP}"
+
+if [[ $EUID -ne 0 ]]; then
+    exec sudo --preserve-env=CEC_DEV,OSD_NAME,PHYS_ADDR,BACK_KEY "$0" "$@"
+fi
+
+log() { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
+
+log "Installing packages"
+apt-get update -qq
+apt-get install -y -qq v4l-utils ir-keytable
+
+if [[ -z "$PHYS_ADDR" ]]; then
+    detected=$(cec-ctl -d"$CEC_DEV" 2>/dev/null | awk -F': *' '/Physical Address/ {print $2; exit}')
+    if [[ -n "$detected" && "$detected" != "f.f.f.f" ]]; then
+        PHYS_ADDR="$detected"
+        log "Detected TV input physical address: $PHYS_ADDR"
+    else
+        PHYS_ADDR="$DEFAULT_PHYS_ADDR"
+        log "TV not detected (off?), using default physical address: $PHYS_ADDR"
+    fi
+fi
+
+log "Writing keymap $KEYMAP"
+mkdir -p "$(dirname "$KEYMAP")"
+cat > "$KEYMAP" <<EOF
+[[protocols]]
+name = "cec-jellyfin"
+protocol = "cec"
+[protocols.scancodes]
+0x00 = "KEY_ENTER"
+0x01 = "KEY_UP"
+0x02 = "KEY_DOWN"
+0x03 = "KEY_LEFT"
+0x04 = "KEY_RIGHT"
+0x0d = "${BACK_KEY}"
+
+# Set KEY_RESERVED ("emit nothing") for CEC’s Power, Power Toggle, Power Off, and Power On codes
+# to prevent CEC power or wake-up command which triggers the PI's power off popup.
+0x40 = "KEY_RESERVED"
+0x6b = "KEY_RESERVED"
+0x6c = "KEY_RESERVED"
+0x6d = "KEY_RESERVED"
+EOF
+
+log "Registering keymap in $RC_MAPS"
+touch "$RC_MAPS"
+if ! grep -qF "$KEYMAP" "$RC_MAPS"; then
+    # Insert before the first non-comment, non-empty line so it takes precedence.
+    tmp=$(mktemp)
+    awk -v line="$RC_MAPS_LINE" '
+        !done && $0 !~ /^[[:space:]]*(#|$)/ { print line; done=1 }
+        { print }
+        END { if (!done) print line }
+    ' "$RC_MAPS" > "$tmp"
+    cat "$tmp" > "$RC_MAPS"
+    rm -f "$tmp"
+fi
+
+log "Removing old udev registration rule (if any)"
+rm -f /etc/udev/rules.d/90-cec-register.rules
+
+log "Writing systemd units"
+cat > /etc/systemd/system/cec-register.service <<EOF
+[Unit]
+Description=Register Pi as HDMI-CEC playback device
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cec-ctl -d${CEC_DEV} --playback --osd-name ${OSD_NAME}
+ExecStart=-/usr/bin/cec-ctl -d${CEC_DEV} --active-source phys-addr=${PHYS_ADDR}
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat > /etc/systemd/system/cec-follower.service <<EOF
+[Unit]
+Description=HDMI-CEC follower (answers TV queries)
+After=cec-register.service
+Requires=cec-register.service
+
+[Service]
+ExecStart=/usr/bin/cec-follower -d${CEC_DEV}
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+log "Enabling and starting services"
+systemctl daemon-reload
+systemctl enable --now cec-register.service
+systemctl enable cec-follower.service
+systemctl restart cec-follower.service
+
+log "Applying keymap now"
+udevadm control --reload
+udevadm trigger --subsystem-match=input --action=add
+
+log "Done."
+cat <<EOF
+
+Manual steps:
+  - TV: Settings > General > External Device Manager > Anynet+ (HDMI-CEC) = On
+  - Jellyfin (in Firefox on the Pi): Profile > Display > Layout = TV, then reload
+Check:
+  cec-ctl -d${CEC_DEV} | grep -E "Physical|Logical Addresses|OSD"
+  ir-keytable -r | grep -E "0x0000 |0x000d "
+EOF
